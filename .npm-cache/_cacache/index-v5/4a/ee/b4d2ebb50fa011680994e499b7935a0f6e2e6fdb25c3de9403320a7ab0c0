@@ -1,0 +1,2 @@
+
+18cb3e95379d64c27087a16144a621a080ef586d	{"key":"make-fetch-happen:request-cache:http://registry.npmjs.org/eventemitter3","integrity":null,"time":1776315987358,"size":"0","metadata":{"time":1776315987358,"url":"http://registry.npmjs.org/eventemitter3","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/plain;charset=UTF-8","date":"Thu, 16 Apr 2026 05:06:28 GMT","location":"https://registry.npmjs.org/eventemitter3","vary":"Accept-Encoding"},"options":{"compress":true},"status":301}}

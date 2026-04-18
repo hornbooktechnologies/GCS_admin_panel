@@ -1,0 +1,2 @@
+
+f68bafd2ea726a3e1edb6fb1d0764224f73f936d	{"key":"make-fetch-happen:request-cache:http://registry.npmjs.org/lodash.isequal","integrity":null,"time":1776315982993,"size":"0","metadata":{"time":1776315982992,"url":"http://registry.npmjs.org/lodash.isequal","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/plain;charset=UTF-8","date":"Thu, 16 Apr 2026 05:06:24 GMT","location":"https://registry.npmjs.org/lodash.isequal","vary":"Accept-Encoding"},"options":{"compress":true},"status":301}}

@@ -1,0 +1,2 @@
+
+e87e93fef26a29a427554652d8a6763a1c78d5d9	{"key":"make-fetch-happen:request-cache:http://registry.npmjs.org/parchment","integrity":null,"time":1776315987359,"size":"0","metadata":{"time":1776315987359,"url":"http://registry.npmjs.org/parchment","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/plain;charset=UTF-8","date":"Thu, 16 Apr 2026 05:06:28 GMT","location":"https://registry.npmjs.org/parchment","vary":"Accept-Encoding"},"options":{"compress":true},"status":301}}

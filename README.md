@@ -1,1 +1,1 @@
-# GCS_admin_panel
+# GCS Hospital CRM Admin Panel
