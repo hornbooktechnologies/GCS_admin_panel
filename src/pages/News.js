@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { GripVertical, Image as ImageIcon, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useAuthStore } from "../context/AuthContext";
+import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
@@ -10,13 +11,14 @@ const News = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { showErrorToast, showSuccessToast } = useToast();
+  const canCreate = hasPermission(user, "news", "create");
   const [newsItems, setNewsItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isReordering, setIsReordering] = useState(false);
   const [draggedId, setDraggedId] = useState(null);
   const [dropTargetId, setDropTargetId] = useState(null);
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = hasPermission(user, "news", "list");
 
   const fetchNews = async () => {
     setIsLoading(true);
@@ -118,10 +120,14 @@ const News = () => {
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button type="button" className="rounded-xl" onClick={() => navigate("/news/new")}>
+          {canCreate && (
+
+            <Button type="button" className="rounded-xl" onClick={() => navigate("/news/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Add News
           </Button>
+
+          )}
         </div>
       </div>
 

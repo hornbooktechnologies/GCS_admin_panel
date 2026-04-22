@@ -12,6 +12,8 @@ import UserTable from "./UserTableBody";
 import { exportCSV } from "../../lib/utils/exportCSV";
 import { useNavigate } from "react-router-dom";
 import { requestHandler } from "../../lib/utils/network-client";
+import { useAuthStore } from "../../context/AuthContext";
+import { hasPermission } from "../../lib/utils/permissions";
 import CreateOrEditUserForm from "./CreateOrEditUserForm";
 import useToast from "../../hooks/useToast";
 import {
@@ -27,6 +29,8 @@ import {
 import ViewUserDialog from "./ViewUserDialog";
 
 const UsersList = () => {
+  const { user } = useAuthStore();
+  const canCreate = hasPermission(user, "users", "create");
   const [usersList, setUsersList] = useState({
     users: [],
     pagination: { current_page: 1, per_page: 10, total: 0, last_page: 1 },
@@ -207,21 +211,23 @@ const UsersList = () => {
             Manage users and their permissions
           </p>
         </div>
-        <Button
-          onClick={() => {
-            setFormMode("create");
-            setUserToEdit(undefined);
-            setIsCreateEditUserDialogOpen((prev) => !prev);
-          }}
-          className="h-10 px-4 sm:px-6 bg-primary hover:bg-primary-hover
-                    text-white font-semibold gap-2
-                    shadow-lg shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40
-                    hover:-translate-y-0.5 transition-all duration-200
-                    active:scale-95"
-        >
-          <UserPlus size={18} />
-          <span className="hidden sm:inline">Add User</span>
-        </Button>
+        {canCreate && (
+          <Button
+            onClick={() => {
+              setFormMode("create");
+              setUserToEdit(undefined);
+              setIsCreateEditUserDialogOpen((prev) => !prev);
+            }}
+            className="h-10 px-4 sm:px-6 bg-primary hover:bg-primary-hover
+                      text-white font-semibold gap-2
+                      shadow-lg shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40
+                      hover:-translate-y-0.5 transition-all duration-200
+                      active:scale-95"
+          >
+            <UserPlus size={18} />
+            <span className="hidden sm:inline">Add User</span>
+          </Button>
+        )}
       </div>
 
       {/* Table Card with Glass Effect */}
@@ -343,4 +349,3 @@ const UsersList = () => {
 };
 
 export default UsersList;
-

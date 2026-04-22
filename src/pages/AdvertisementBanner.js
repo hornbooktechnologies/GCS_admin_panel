@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button";
 import { FieldError } from "../components/ui/field";
 import { Input } from "../components/ui/input";
 import { useAuthStore } from "../context/AuthContext";
+import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
@@ -33,7 +34,7 @@ const AdvertisementBanner = () => {
   const [hasExistingBanner, setHasExistingBanner] = useState(false);
   const fileInputRef = useRef(null);
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = hasPermission(user, "advertisement-banner", "list");
 
   useEffect(() => {
     if (!form.image) {

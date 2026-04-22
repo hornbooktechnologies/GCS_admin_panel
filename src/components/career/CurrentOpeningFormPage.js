@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
 import { useAuthStore } from "../../context/AuthContext";
+import { hasPermission } from "../../lib/utils/permissions";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
 
@@ -19,8 +20,8 @@ const CurrentOpeningFormPage = ({ mode }) => {
   const [formErrors, setFormErrors] = useState({});
   const [isPageLoading, setIsPageLoading] = useState(mode === "edit");
   const [isSaving, setIsSaving] = useState(false);
-  const isAdmin = user?.role === "admin";
   const isEditMode = mode === "edit";
+  const isAdmin = hasPermission(user, "career", isEditMode ? "edit" : "create");
   const pageTitle = useMemo(() => (isEditMode ? "Edit Current Opening" : "Create Current Opening"), [isEditMode]);
 
   useEffect(() => {

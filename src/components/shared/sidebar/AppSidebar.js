@@ -4,6 +4,7 @@ import { ChevronDown, LogOut } from "lucide-react";
 import { cn } from "../../../lib/utils/utils";
 import { MenuItems } from "../../../lib/utils/menu";
 import { useAuthStore } from "../../../context/AuthContext";
+import { hasPermission } from "../../../lib/utils/permissions";
 import useMedia from "../../../hooks/useMedia";
 import { useLayout } from "../../../context/LayoutContext";
 import useToast from "../../../hooks/useToast";
@@ -21,23 +22,23 @@ const AppSidebar = () => {
   const { getIconUrl } = useMedia();
   const navigate = useNavigate();
   const { showSuccessToast } = useToast();
-  const [expandedGroups, setExpandedGroups] = useState({ Career: true });
+  const [expandedGroup, setExpandedGroup] = useState(null);
 
   // Filter menu items based on user role
   const visibleItems = useMemo(
     () =>
       MenuItems.filter((item) => {
-        if (!item.allowedRoles) {
-          return true;
+        if (item.moduleKey && !hasPermission(user, item.moduleKey, "list")) {
+          return false;
         }
-        return item.allowedRoles.includes(user?.role);
+        return !item.allowedRoles || item.allowedRoles.includes(user?.role) || Boolean(user?.permissions);
       }).map((item) => ({
         ...item,
         children: item.children?.filter((child) => {
-          if (!child.allowedRoles) {
-            return true;
+          if (child.moduleKey && !hasPermission(user, child.moduleKey, "list")) {
+            return false;
           }
-          return child.allowedRoles.includes(user?.role);
+          return !child.allowedRoles || child.allowedRoles.includes(user?.role) || Boolean(user?.permissions);
         }),
       })),
     [user?.role],
@@ -53,10 +54,7 @@ const AppSidebar = () => {
   };
 
   const toggleGroup = (title) => {
-    setExpandedGroups((current) => ({
-      ...current,
-      [title]: !current[title],
-    }));
+    setExpandedGroup((current) => (current === title ? null : title));
   };
 
   return (
@@ -106,7 +104,7 @@ const AppSidebar = () => {
                 (item.url !== "/" &&
                   location.pathname.startsWith(`${item.url}/`));
               const hasChildren = item.children && item.children.length > 0;
-              const isExpanded = expandedGroups[item.title] ?? isActive;
+              const isExpanded = expandedGroup === item.title;
               const Icon = item.icon;
 
               const handleNavClick = () => {

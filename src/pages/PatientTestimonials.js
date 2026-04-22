@@ -7,6 +7,7 @@ const PatientTestimonials = () => {
       title="Patient Testimonials"
       subtitle="Manage patient testimonial videos for GCS Hospital."
       endpoint="/patient-testimonials"
+      moduleKey="patient-testimonials"
       emptyTitle="No patient testimonials found"
       emptyDescription="Create your first patient testimonial entry."
     />

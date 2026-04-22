@@ -3,12 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { Image as ImageIcon, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
+import { hasPermission } from "../lib/utils/permissions";
+import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
 const Doctors = () => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { showErrorToast, showSuccessToast } = useToast();
+  const canCreate = hasPermission(user, "doctors", "create");
   const [doctors, setDoctors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,10 +56,14 @@ const Doctors = () => {
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button type="button" className="rounded-xl" onClick={() => navigate("/doctors/new")}>
+          {canCreate && (
+
+            <Button type="button" className="rounded-xl" onClick={() => navigate("/doctors/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Add Doctor
           </Button>
+
+          )}
         </div>
       </div>
 

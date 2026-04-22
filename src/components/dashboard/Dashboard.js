@@ -11,6 +11,10 @@ import {
   CalendarDays,
   Palmtree,
   UserCheck,
+  UserRound,
+  Microscope,
+  HeartHandshake,
+  Newspaper,
   CheckCircle,
   Gift,
   Cake,
@@ -35,6 +39,10 @@ const Dashboard = () => {
   const [dashboardStats, setDashboardStats] = useState({
     totalUsers: 0,
     totalEmployees: 0,
+    totalDoctors: 0,
+    totalSpecialities: 0,
+    totalSymptoms: 0,
+    totalBlogs: 0,
     pendingRequests: 0,
     totalHoliday: 0,
     currentMonthHoliday: 0,
@@ -86,6 +94,10 @@ const Dashboard = () => {
           setDashboardStats({
             totalUsers: data.total_users || 0,
             totalEmployees: data.total_employees || 0,
+            totalDoctors: data.total_doctors || 0,
+            totalSpecialities: data.total_specialities || 0,
+            totalSymptoms: data.total_symptoms || 0,
+            totalBlogs: data.total_blogs || 0,
             pendingRequests: data.pending_requests || 0,
             totalHoliday: data.total_holiday || 0,
             currentMonthHoliday: data.current_month_holiday || 0,
@@ -183,7 +195,7 @@ const Dashboard = () => {
   // Dynamic subtitle based on role
   const subtitle = isEmployee
     ? "Here's your leave summary and upcoming holidays."
-    : "Overview of leave requests, employees, and company holidays.";
+    : "Overview of hospital website content and users.";
 
   // Format date helper
   const formatDate = (dateString) => {
@@ -250,61 +262,52 @@ const Dashboard = () => {
 
   ];
 
-  // Admin/HR/Manager stats (Leave Management focused)
+  // Admin/HR/Manager stats
   const adminStats = [
     {
-      title: "Current Month Holidays",
-      value: dashboardStats.currentMonthHoliday.toString(),
-      icon: Calendar,
-      gradient: "from-pink-400 to-pink-600",
-      description: "This month",
-      bgClass: "bg-pink-50",
-      textClass: "text-pink-600",
-    },
-    {
-      title: "Pending Requests",
-      value: dashboardStats.pendingRequests.toString(),
-      icon: Clock,
-      gradient: "from-orange-400 to-orange-600",
-      description: "Awaiting approval",
-      isSpecial: true,
-    },
-    {
-      title: "Total Holidays",
-      value: dashboardStats.totalHoliday.toString(),
-      icon: Palmtree,
-      gradient: "from-blue-400 to-blue-600",
-      description: "Company holidays",
-      bgClass: "bg-blue-50",
+      title: "Total Doctor",
+      value: dashboardStats.totalDoctors.toString(),
+      icon: UserRound,
+      description: "Doctors listed",
+      path: "/doctors",
+      bgClass: "bg-emerald-50",
       textClass: "text-primary",
+    },
+    {
+      title: "Total Specialities",
+      value: dashboardStats.totalSpecialities.toString(),
+      icon: Microscope,
+      description: "Medical departments",
+      path: "/specialities",
+      bgClass: "bg-cyan-50",
+      textClass: "text-cyan-600",
     },
     {
       title: "Total Users",
       value: dashboardStats.totalUsers.toString(),
       icon: Users,
-      gradient: "from-purple-400 to-purple-600",
       description: "Registered users",
       path: "/users",
       bgClass: "bg-purple-50",
       textClass: "text-purple-600",
     },
     {
-      title: "Total Employees",
-      value: dashboardStats.totalEmployees.toString(),
-      icon: UserCheck,
-      gradient: "from-green-400 to-green-600",
-      description: "Active employees",
-      bgClass: "bg-green-50",
-      textClass: "text-green-600",
+      title: "Total Symptoms",
+      value: dashboardStats.totalSymptoms.toString(),
+      icon: HeartHandshake,
+      description: "Symptoms listed",
+      path: "/symptoms",
+      bgClass: "bg-rose-50",
+      textClass: "text-rose-600",
     },
     {
-      title: "Total Leave Requests",
-      value: dashboardStats.total_leave_request,
-      icon: CalendarDays,
-      gradient: "from-emerald-400 to-emerald-600",
-      description: "All time requests",
-      bgClass: "bg-teal-50",
-      textClass: "text-teal-600",
+      title: "Total Blogs",
+      value: dashboardStats.totalBlogs.toString(),
+      icon: Newspaper,
+      description: "Published articles",
+      path: "/blogs",
+      bgClass: "bg-amber-50",
+      textClass: "text-amber-600",
     },
   ];
 

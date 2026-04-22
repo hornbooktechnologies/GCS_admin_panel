@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ExternalLink, FileText, Image as ImageIcon, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useAuthStore } from "../context/AuthContext";
+import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
@@ -10,10 +11,11 @@ const Downloads = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { showErrorToast, showSuccessToast } = useToast();
+  const canCreate = hasPermission(user, "downloads", "create");
   const [downloads, setDownloads] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = hasPermission(user, "downloads", "list");
 
   const fetchDownloads = async () => {
     setIsLoading(true);
@@ -67,10 +69,14 @@ const Downloads = () => {
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button type="button" className="rounded-xl" onClick={() => navigate("/downloads/new")}>
+          {canCreate && (
+
+            <Button type="button" className="rounded-xl" onClick={() => navigate("/downloads/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Add Download
           </Button>
+
+          )}
         </div>
       </div>
 

@@ -22,7 +22,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/dialog";
+import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
+import { hasPermission } from "../lib/utils/permissions";
 import apiClient from "../lib/utils/network-client";
 
 const EMPTY_FORM = {
@@ -42,7 +44,9 @@ const ALLOWED_IMAGE_TYPES = [
 ];
 
 const Announcements = () => {
+  const { user } = useAuthStore();
   const { showErrorToast, showSuccessToast } = useToast();
+  const canCreate = hasPermission(user, "announcements", "create");
   const [announcements, setAnnouncements] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -322,10 +326,12 @@ const Announcements = () => {
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button type="button" className="rounded-xl" onClick={openCreateDialog}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Announcement
-          </Button>
+          {canCreate && (
+            <Button type="button" className="rounded-xl" onClick={openCreateDialog}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Announcement
+            </Button>
+          )}
         </div>
       </div>
 

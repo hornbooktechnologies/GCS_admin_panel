@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { useAuthStore } from "../context/AuthContext";
+import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
@@ -63,7 +64,8 @@ const Banners = () => {
   const [isDragOverUpload, setIsDragOverUpload] = useState(false);
   const fileInputRef = useRef(null);
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = hasPermission(user, "banners", "list");
+  const canCreate = hasPermission(user, "banners", "create");
 
   const dialogTitle = useMemo(
     () => (editingBanner ? "Edit Banner" : "Create Banner"),
@@ -367,14 +369,16 @@ const Banners = () => {
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button
-            type="button"
-            className="rounded-xl"
-            onClick={openCreateDialog}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Add Banner
-          </Button>
+          {canCreate && (
+            <Button
+              type="button"
+              className="rounded-xl"
+              onClick={openCreateDialog}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add Banner
+            </Button>
+          )}
         </div>
       </div>
 

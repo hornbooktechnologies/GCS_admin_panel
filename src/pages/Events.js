@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useAuthStore } from "../context/AuthContext";
+import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
@@ -18,10 +19,11 @@ const Events = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { showErrorToast, showSuccessToast } = useToast();
+  const canCreate = hasPermission(user, "events", "create");
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = hasPermission(user, "events", "list");
 
   const fetchEvents = async () => {
     setIsLoading(true);
@@ -92,7 +94,9 @@ const Events = () => {
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button
+          {canCreate && (
+
+            <Button
             type="button"
             className="rounded-xl"
             onClick={() => navigate("/events/new")}
@@ -100,6 +104,8 @@ const Events = () => {
             <Plus className="mr-2 h-4 w-4" />
             Add Event
           </Button>
+
+          )}
         </div>
       </div>
 

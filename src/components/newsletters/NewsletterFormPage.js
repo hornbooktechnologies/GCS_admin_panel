@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
 import { useAuthStore } from "../../context/AuthContext";
+import { hasPermission } from "../../lib/utils/permissions";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
 
@@ -47,8 +48,8 @@ const NewsletterFormPage = ({ mode }) => {
   const photoInputRef = useRef(null);
   const attachmentInputRef = useRef(null);
 
-  const isAdmin = user?.role === "admin";
   const isEditMode = mode === "edit";
+  const isAdmin = hasPermission(user, "newsletters", isEditMode ? "edit" : "create");
 
   const pageTitle = useMemo(
     () => (isEditMode ? "Edit Newsletter" : "Create Newsletter"),

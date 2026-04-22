@@ -101,6 +101,28 @@ const CreateOrEditUserForm = ({
     });
 
     const [showPassword, setShowPassword] = useState(false);
+    const [roles, setRoles] = useState([
+        { name: 'Admin', slug: 'admin' },
+        { name: 'Manager', slug: 'manager' },
+        { name: 'HR', slug: 'hr' },
+    ]);
+
+    useEffect(() => {
+        const fetchRoles = async () => {
+            const response = await requestHandler('/roles');
+            if (response.success) {
+                setRoles(
+                    (response.data.roles || [])
+                        .filter((role) => role.status === 'active')
+                        .map((role) => ({ name: role.name, slug: role.slug })),
+                );
+            }
+        };
+
+        if (isOpen) {
+            fetchRoles();
+        }
+    }, [isOpen]);
 
     useEffect(() => {
         if (type === 'edit' && editableUser) {
@@ -385,9 +407,11 @@ const CreateOrEditUserForm = ({
                                                         <SelectValue placeholder='Select Role' />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value='admin'>Admin</SelectItem>
-                                                        <SelectItem value='manager'>Manager</SelectItem>
-                                                        <SelectItem value='hr'>HR</SelectItem>
+                                                        {roles.map((role) => (
+                                                            <SelectItem key={role.slug} value={role.slug}>
+                                                                {role.name}
+                                                            </SelectItem>
+                                                        ))}
                                                     </SelectContent>
                                                 </Select>
                                             )}
@@ -464,4 +488,3 @@ const CreateOrEditUserForm = ({
 };
 
 export default CreateOrEditUserForm;
-

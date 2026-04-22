@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Image as ImageIcon, Mail, MapPin, Pencil, Phone, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { hasPermission } from "../lib/utils/permissions";
+import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
 const NodelOfficers = () => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { showErrorToast, showSuccessToast } = useToast();
+  const canCreate = hasPermission(user, "nodel-officers", "create");
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,10 +56,14 @@ const NodelOfficers = () => {
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button type="button" className="rounded-xl" onClick={() => navigate("/nodel-officers/new")}>
+          {canCreate && (
+
+            <Button type="button" className="rounded-xl" onClick={() => navigate("/nodel-officers/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Add Nodel Officer
           </Button>
+
+          )}
         </div>
       </div>
 

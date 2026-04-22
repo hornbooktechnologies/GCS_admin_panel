@@ -5,11 +5,13 @@ import {
   Route,
   Navigate,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 import { Toaster } from "sonner";
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
+import RolesPermissions from "./pages/RolesPermissions";
 import ActivityLogs from "./pages/ActivityLogs";
 import Banners from "./pages/Banners";
 import DoctorTestimonials from "./pages/DoctorTestimonials";
@@ -85,10 +87,81 @@ import SpecialityEdit from "./pages/SpecialityEdit";
 import Doctors from "./pages/Doctors";
 import DoctorCreate from "./pages/DoctorCreate";
 import DoctorEdit from "./pages/DoctorEdit";
+import Sympotms from "./pages/Sympotms";
+import SympotmCreate from "./pages/SympotmCreate";
+import SympotmEdit from "./pages/SympotmEdit";
 import PrivateRoute from "./components/guards/PrivateRoute";
 import SidebarWrapper from "./components/shared/sidebar/SidebarWrapper";
 import { AuthProvider, useAuthStore } from "./context/AuthContext";
 import { LayoutProvider } from "./context/LayoutContext";
+import { hasPermission } from "./lib/utils/permissions";
+
+const routePermissions = [
+  { prefix: "/dashboard", moduleKey: "dashboard", action: "list" },
+  { prefix: "/", moduleKey: "dashboard", action: "list", exact: true },
+  { prefix: "/users", moduleKey: "users", action: "list" },
+  { prefix: "/roles", moduleKey: "roles", action: "list" },
+  { prefix: "/permission", moduleKey: "roles", action: "list" },
+  { prefix: "/banners", moduleKey: "banners" },
+  { prefix: "/doctor-testimonials", moduleKey: "doctor-testimonials" },
+  { prefix: "/patient-testimonials", moduleKey: "patient-testimonials" },
+  { prefix: "/social-profiles", moduleKey: "social-profiles" },
+  { prefix: "/announcements", moduleKey: "announcements" },
+  { prefix: "/advertisement-banner", moduleKey: "advertisement-banner" },
+  { prefix: "/events", moduleKey: "events" },
+  { prefix: "/newsletters", moduleKey: "newsletters" },
+  { prefix: "/career", moduleKey: "career" },
+  { prefix: "/downloads", moduleKey: "downloads" },
+  { prefix: "/master/team-categories", moduleKey: "team-categories" },
+  { prefix: "/team", moduleKey: "team" },
+  { prefix: "/awards", moduleKey: "awards" },
+  { prefix: "/news", moduleKey: "news" },
+  { prefix: "/health-camps", moduleKey: "health-camps" },
+  { prefix: "/checkup-plans", moduleKey: "checkup-plans" },
+  { prefix: "/nodel-officers", moduleKey: "nodel-officers" },
+  { prefix: "/results", moduleKey: "results" },
+  { prefix: "/campus-life", moduleKey: "campus-life" },
+  { prefix: "/student-testimonials", moduleKey: "student-testimonials" },
+  { prefix: "/facilities", moduleKey: "facilities" },
+  { prefix: "/journals", moduleKey: "journals" },
+  { prefix: "/nursing-photo-gallery", moduleKey: "nursing-photo-gallery" },
+  { prefix: "/specialities", moduleKey: "specialities" },
+  { prefix: "/doctors", moduleKey: "doctors" },
+  { prefix: "/symptoms", moduleKey: "symptoms" },
+  { prefix: "/sympotms", moduleKey: "symptoms" },
+  { prefix: "/blogs", moduleKey: "blogs" },
+  { prefix: "/activity-logs", moduleKey: "activity-logs", action: "list" },
+];
+
+const getRouteAction = (pathname, fallback = "list") => {
+  if (pathname.endsWith("/new")) return "create";
+  if (pathname.endsWith("/edit")) return "edit";
+  return fallback;
+};
+
+const PermissionGate = ({ children }) => {
+  const { user } = useAuthStore();
+  const location = useLocation();
+  const permission = routePermissions.find((item) =>
+    item.exact ? location.pathname === item.prefix : location.pathname.startsWith(item.prefix),
+  );
+
+  if (!permission) return children;
+
+  const action = getRouteAction(location.pathname, permission.action);
+  if (hasPermission(user, permission.moduleKey, action)) {
+    return children;
+  }
+
+  return (
+    <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <h1 className="text-2xl font-bold text-slate-900">Access denied</h1>
+      <p className="mt-2 text-sm text-slate-500">
+        You do not have permission to access this module.
+      </p>
+    </div>
+  );
+};
 
 function AppContent() {
   const { tokens } = useAuthStore();
@@ -106,7 +179,9 @@ function AppContent() {
               element={
                 <PrivateRoute>
                   <SidebarWrapper>
-                    <Outlet />
+                    <PermissionGate>
+                      <Outlet />
+                    </PermissionGate>
                   </SidebarWrapper>
                 </PrivateRoute>
               }
@@ -229,12 +304,18 @@ function AppContent() {
               <Route path="/doctors" element={<Doctors />} />
               <Route path="/doctors/new" element={<DoctorCreate />} />
               <Route path="/doctors/:doctorId/edit" element={<DoctorEdit />} />
+              <Route path="/symptoms" element={<Sympotms />} />
+              <Route path="/symptoms/new" element={<SympotmCreate />} />
+              <Route path="/symptoms/:id/edit" element={<SympotmEdit />} />
+              <Route path="/sympotms" element={<Sympotms />} />
+              <Route path="/sympotms/new" element={<SympotmCreate />} />
+              <Route path="/sympotms/:id/edit" element={<SympotmEdit />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/blogs/new" element={<BlogCreate />} />
               <Route path="/blogs/:blogId/edit" element={<BlogEdit />} />
               <Route path="/activity-logs" element={<ActivityLogs />} />
-              <Route path="/roles" element={<Users />} />
-              <Route path="/permission" element={<Users />} />
+              <Route path="/roles" element={<RolesPermissions />} />
+              <Route path="/permission" element={<RolesPermissions />} />
             </Route>
           </Routes>
         </LayoutProvider>

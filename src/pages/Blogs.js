@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useAuthStore } from "../context/AuthContext";
+import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
@@ -19,13 +20,14 @@ const Blogs = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { showErrorToast, showSuccessToast } = useToast();
+  const canCreate = hasPermission(user, "blogs", "create");
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isReordering, setIsReordering] = useState(false);
   const [draggedBlogId, setDraggedBlogId] = useState(null);
   const [dropTargetBlogId, setDropTargetBlogId] = useState(null);
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = hasPermission(user, "blogs", "list");
 
   const fetchBlogs = async () => {
     setIsLoading(true);
@@ -151,7 +153,9 @@ const Blogs = () => {
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button
+          {canCreate && (
+
+            <Button
             type="button"
             className="rounded-xl"
             onClick={() => navigate("/blogs/new")}
@@ -159,6 +163,8 @@ const Blogs = () => {
             <Plus className="mr-2 h-4 w-4" />
             Add Blog
           </Button>
+
+          )}
         </div>
       </div>
 

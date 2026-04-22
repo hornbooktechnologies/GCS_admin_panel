@@ -77,7 +77,7 @@ const Login = () => {
   }, [restrictLogin]);
 
   return (
-    <div className="fixed inset-0 h-[100dvh] w-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-4">
+    <div className="fixed inset-0 h-[100dvh] w-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#e7f8f3] via-white to-[#d6f3eb] p-4">
       <div className="flex flex-col items-center w-full max-w-[420px] anima-fade-in gap-6 max-h-full overflow-y-auto custom-scrollbar">
         {/* Logo Section */}
         <div className="flex flex-col items-center gap-4 py-2 shrink-0">

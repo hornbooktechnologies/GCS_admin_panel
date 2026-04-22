@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ExternalLink, FileText, Image as ImageIcon, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { hasPermission } from "../lib/utils/permissions";
+import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
 const Specialities = () => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { showErrorToast, showSuccessToast } = useToast();
+  const canCreate = hasPermission(user, "specialities", "create");
   const [specialities, setSpecialities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,10 +55,14 @@ const Specialities = () => {
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button type="button" className="rounded-xl" onClick={() => navigate("/specialities/new")}>
+          {canCreate && (
+
+            <Button type="button" className="rounded-xl" onClick={() => navigate("/specialities/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Add Speciality
           </Button>
+
+          )}
         </div>
       </div>
 

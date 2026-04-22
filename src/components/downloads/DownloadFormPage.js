@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
 import { useAuthStore } from "../../context/AuthContext";
+import { hasPermission } from "../../lib/utils/permissions";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
 
@@ -24,8 +25,8 @@ const DownloadFormPage = ({ mode }) => {
   const imageInputRef = useRef(null);
   const pdfInputRef = useRef(null);
 
-  const isAdmin = user?.role === "admin";
   const isEditMode = mode === "edit";
+  const isAdmin = hasPermission(user, "downloads", isEditMode ? "edit" : "create");
   const pageTitle = useMemo(
     () => (isEditMode ? "Edit Download" : "Create Download"),
     [isEditMode],

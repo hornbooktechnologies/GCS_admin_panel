@@ -27,7 +27,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useAuthStore } from "../../context/AuthContext";
 import useToast from "../../hooks/useToast";
+import { hasPermission } from "../../lib/utils/permissions";
 import apiClient from "../../lib/utils/network-client";
 
 const EMPTY_FORM = {
@@ -40,10 +42,15 @@ const TestimonialsManager = ({
   title,
   subtitle,
   endpoint,
+  moduleKey,
   emptyTitle,
   emptyDescription,
 }) => {
+  const { user } = useAuthStore();
   const { showErrorToast, showSuccessToast } = useToast();
+  const canCreate = hasPermission(user, moduleKey, "create");
+  const canEdit = hasPermission(user, moduleKey, "edit");
+  const canDelete = hasPermission(user, moduleKey, "delete");
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -95,6 +102,10 @@ const TestimonialsManager = ({
   };
 
   const openEditDialog = (item) => {
+    if (!canEdit) {
+      return;
+    }
+
     setEditingItem(item);
     setForm({
       name: item.name || "",
@@ -171,6 +182,10 @@ const TestimonialsManager = ({
   };
 
   const handleDelete = async (item) => {
+    if (!canDelete) {
+      return;
+    }
+
     const confirmed = window.confirm(
       `Delete "${item.name}" from ${title.toLowerCase()}? This cannot be undone.`,
     );
@@ -265,10 +280,12 @@ const TestimonialsManager = ({
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
-          <Button type="button" className="rounded-xl" onClick={openCreateDialog}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add New
-          </Button>
+          {canCreate && (
+            <Button type="button" className="rounded-xl" onClick={openCreateDialog}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add New
+            </Button>
+          )}
         </div>
       </div>
 
@@ -365,24 +382,28 @@ const TestimonialsManager = ({
                     <ExternalLink className="mr-2 h-3.5 w-3.5" />
                     Open Video
                   </a>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="rounded-xl"
-                    onClick={() => openEditDialog(item)}
-                  >
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Edit
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="rounded-xl border-red-200 text-red-600 hover:bg-red-50"
-                    onClick={() => handleDelete(item)}
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete
-                  </Button>
+                  {canEdit && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="rounded-xl"
+                      onClick={() => openEditDialog(item)}
+                    >
+                      <Pencil className="mr-2 h-4 w-4" />
+                      Edit
+                    </Button>
+                  )}
+                  {canDelete && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="rounded-xl border-red-200 text-red-600 hover:bg-red-50"
+                      onClick={() => handleDelete(item)}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}

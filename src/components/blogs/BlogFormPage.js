@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
 import { useAuthStore } from "../../context/AuthContext";
+import { hasPermission } from "../../lib/utils/permissions";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
 
@@ -58,8 +59,8 @@ const BlogFormPage = ({ mode }) => {
   const thumbnailInputRef = useRef(null);
   const detailInputRef = useRef(null);
 
-  const isAdmin = user?.role === "admin";
   const isEditMode = mode === "edit";
+  const isAdmin = hasPermission(user, "blogs", isEditMode ? "edit" : "create");
 
   const pageTitle = useMemo(
     () => (isEditMode ? "Edit Blog" : "Create Blog"),
