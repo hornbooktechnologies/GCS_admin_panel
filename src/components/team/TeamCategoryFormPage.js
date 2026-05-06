@@ -4,15 +4,23 @@ import { ArrowLeft, LoaderCircle, Save } from "lucide-react";
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
+
+const EMPTY_FORM = {
+  title: "",
+  eyebrow: "",
+  heading: "",
+  layout_type: "grid",
+};
 
 const TeamCategoryFormPage = ({ mode }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { showErrorToast, showSuccessToast } = useToast();
-  const [title, setTitle] = useState("");
-  const [errorText, setErrorText] = useState("");
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [formErrors, setFormErrors] = useState({});
   const [isPageLoading, setIsPageLoading] = useState(mode === "edit");
   const [isSaving, setIsSaving] = useState(false);
   const isEditMode = mode === "edit";
@@ -34,7 +42,12 @@ const TeamCategoryFormPage = ({ mode }) => {
           navigate("/master/team-categories");
           return;
         }
-        setTitle(item.title || "");
+        setForm({
+          title: item.title || "",
+          eyebrow: item.eyebrow || "",
+          heading: item.heading || "",
+          layout_type: item.layout_type || "grid",
+        });
       } catch (err) {
         showErrorToast(err.response?.data?.message || "Failed to load team category");
         navigate("/master/team-categories");
@@ -46,20 +59,32 @@ const TeamCategoryFormPage = ({ mode }) => {
     fetchItem();
   }, [id, isEditMode, navigate, showErrorToast]);
 
+  const handleInputChange = (field, value) => {
+    setForm((current) => ({ ...current, [field]: value }));
+    setFormErrors((current) => ({ ...current, [field]: "" }));
+  };
+
   const handleSave = async (event) => {
     event.preventDefault();
-    if (!title.trim()) {
-      setErrorText("Title is required.");
+    if (!form.title.trim()) {
+      setFormErrors({ title: "Title is required." });
       return;
     }
 
     setIsSaving(true);
     try {
+      const payload = {
+        title: form.title.trim(),
+        eyebrow: form.eyebrow.trim(),
+        heading: form.heading.trim(),
+        layout_type: form.layout_type,
+      };
+
       if (isEditMode) {
-        await apiClient.put(`/team-categories/${id}`, { title: title.trim() });
+        await apiClient.put(`/team-categories/${id}`, payload);
         showSuccessToast("Team category updated successfully");
       } else {
-        await apiClient.post("/team-categories", { title: title.trim() });
+        await apiClient.post("/team-categories", payload);
         showSuccessToast("Team category created successfully");
       }
       navigate("/master/team-categories");
@@ -92,10 +117,35 @@ const TeamCategoryFormPage = ({ mode }) => {
       </div>
 
       <form onSubmit={handleSave} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-700">Title</label>
-          <Input value={title} onChange={(event) => { setTitle(event.target.value); setErrorText(""); }} className={`rounded-xl ${errorText ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
-          <FieldError>{errorText}</FieldError>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">Title</label>
+            <Input value={form.title} onChange={(event) => handleInputChange("title", event.target.value)} className={`rounded-xl ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <FieldError>{formErrors.title}</FieldError>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">Layout Type</label>
+            <Select value={form.layout_type} onValueChange={(value) => handleInputChange("layout_type", value)}>
+              <SelectTrigger className="rounded-xl">
+                <SelectValue placeholder="Select layout type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="grid">Grid</SelectItem>
+                <SelectItem value="featured">Featured</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">Eyebrow</label>
+            <Input value={form.eyebrow} onChange={(event) => handleInputChange("eyebrow", event.target.value)} className="rounded-xl" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">Heading</label>
+            <Input value={form.heading} onChange={(event) => handleInputChange("heading", event.target.value)} className="rounded-xl" />
+          </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">

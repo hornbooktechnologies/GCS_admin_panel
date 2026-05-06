@@ -92,7 +92,26 @@ const Team = () => {
                         </div>
                         <div>
                           <div className="text-sm font-semibold text-slate-800">{item.name}</div>
-                          <div className="line-clamp-2 text-sm text-slate-500" dangerouslySetInnerHTML={{ __html: item.description }} />
+                          {item.role_tag ? (
+                            <div className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-cyan-600">{item.role_tag}</div>
+                          ) : null}
+                          <div className="line-clamp-2 text-sm text-slate-500">
+                            {item.short_description || ""}
+                          </div>
+                          {(item.verification_value || item.affiliation_value) ? (
+                            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs font-medium text-slate-500">
+                              {item.verification_value ? (
+                                <span>
+                                  {item.verification_label || "Verification"}: {item.verification_value}
+                                </span>
+                              ) : null}
+                              {item.affiliation_value ? (
+                                <span>
+                                  {item.affiliation_label || "Affiliation"}: {item.affiliation_value}
+                                </span>
+                              ) : null}
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                     </td>

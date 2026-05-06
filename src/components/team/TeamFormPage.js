@@ -16,6 +16,18 @@ const EMPTY_FORM = {
   image: null,
   description: "",
   category_id: "",
+  short_description: "",
+  role_tag: "",
+  featured_title: "",
+  featured_description: "",
+  visionary_leadership_title: "",
+  visionary_leadership_description: "",
+  proven_expertise_title: "",
+  proven_expertise_description: "",
+  verification_label: "",
+  verification_value: "",
+  affiliation_label: "",
+  affiliation_value: "",
 };
 
 const quillModules = {
@@ -88,6 +100,18 @@ const TeamFormPage = ({ mode }) => {
           image: null,
           description: item.description || "",
           category_id: item.category_id || "",
+          short_description: item.short_description || "",
+          role_tag: item.role_tag || "",
+          featured_title: item.featured_title || "",
+          featured_description: item.featured_description || "",
+          visionary_leadership_title: item.visionary_leadership_title || "",
+          visionary_leadership_description: item.visionary_leadership_description || "",
+          proven_expertise_title: item.proven_expertise_title || "",
+          proven_expertise_description: item.proven_expertise_description || "",
+          verification_label: item.verification_label || "",
+          verification_value: item.verification_value || "",
+          affiliation_label: item.affiliation_label || "",
+          affiliation_value: item.affiliation_value || "",
         });
         setImagePreviewUrl(item.image_url || "");
       } catch (err) {
@@ -136,6 +160,18 @@ const TeamFormPage = ({ mode }) => {
       payload.append("subtitle", form.subtitle.trim());
       payload.append("description", form.description);
       payload.append("category_id", form.category_id);
+      payload.append("short_description", form.short_description.trim());
+      payload.append("role_tag", form.role_tag.trim());
+      payload.append("featured_title", form.featured_title.trim());
+      payload.append("featured_description", form.featured_description);
+      payload.append("visionary_leadership_title", form.visionary_leadership_title.trim());
+      payload.append("visionary_leadership_description", form.visionary_leadership_description);
+      payload.append("proven_expertise_title", form.proven_expertise_title.trim());
+      payload.append("proven_expertise_description", form.proven_expertise_description);
+      payload.append("verification_label", form.verification_label.trim());
+      payload.append("verification_value", form.verification_value.trim());
+      payload.append("affiliation_label", form.affiliation_label.trim());
+      payload.append("affiliation_value", form.affiliation_value.trim());
       if (form.image) payload.append("image", form.image);
 
       if (isEditMode) {
@@ -192,6 +228,16 @@ const TeamFormPage = ({ mode }) => {
               <Input value={form.subtitle} onChange={(event) => handleInputChange("subtitle", event.target.value)} className={`rounded-xl ${formErrors.subtitle ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.subtitle}</FieldError>
             </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">Role Tag</label>
+                <Input value={form.role_tag} onChange={(event) => handleInputChange("role_tag", event.target.value)} className="rounded-xl" placeholder="Chairman" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">Featured Title</label>
+                <Input value={form.featured_title} onChange={(event) => handleInputChange("featured_title", event.target.value)} className="rounded-xl" placeholder="Executive Chairman & Trustee" />
+              </div>
+            </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Team Category</label>
               <Select value={form.category_id} onValueChange={(value) => handleInputChange("category_id", value)}>
@@ -209,11 +255,75 @@ const TeamFormPage = ({ mode }) => {
               <FieldError>{formErrors.category_id}</FieldError>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700">Description</label>
+              <label className="text-sm font-semibold text-slate-700">Short Description</label>
+              <textarea value={form.short_description} onChange={(event) => handleInputChange("short_description", event.target.value)} rows={4} className="min-h-[110px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30" placeholder="Short excerpt for card/listing view..." />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Professional Profile</label>
               <div className={`overflow-hidden rounded-2xl border bg-white ${formErrors.description ? "border-red-300" : "border-slate-200"}`}>
                 <ReactQuill theme="snow" value={form.description} onChange={(value) => handleInputChange("description", value)} modules={quillModules} placeholder="Write description here..." />
               </div>
               <FieldError>{formErrors.description}</FieldError>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Featured Description</label>
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                <ReactQuill theme="snow" value={form.featured_description} onChange={(value) => handleInputChange("featured_description", value)} modules={quillModules} placeholder="Write featured section content here..." />
+              </div>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-slate-700">Visionary Leadership Title</label>
+                  <Input value={form.visionary_leadership_title} onChange={(event) => handleInputChange("visionary_leadership_title", event.target.value)} className="rounded-xl" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-slate-700">Visionary Leadership Description</label>
+                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                    <ReactQuill theme="snow" value={form.visionary_leadership_description} onChange={(value) => handleInputChange("visionary_leadership_description", value)} modules={quillModules} placeholder="Write visionary leadership content here..." />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-slate-700">Proven Expertise Title</label>
+                  <Input value={form.proven_expertise_title} onChange={(event) => handleInputChange("proven_expertise_title", event.target.value)} className="rounded-xl" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-slate-700">Proven Expertise Description</label>
+                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                    <ReactQuill theme="snow" value={form.proven_expertise_description} onChange={(value) => handleInputChange("proven_expertise_description", value)} modules={quillModules} placeholder="Write proven expertise content here..." />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+                <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">Verification Label</label>
+                    <Input value={form.verification_label} onChange={(event) => handleInputChange("verification_label", event.target.value)} className="rounded-xl" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">Verification Value</label>
+                    <Input value={form.verification_value} onChange={(event) => handleInputChange("verification_value", event.target.value)} className="rounded-xl" />
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+                <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">Affiliation Label</label>
+                    <Input value={form.affiliation_label} onChange={(event) => handleInputChange("affiliation_label", event.target.value)} className="rounded-xl" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">Affiliation Value</label>
+                    <Input value={form.affiliation_value} onChange={(event) => handleInputChange("affiliation_value", event.target.value)} className="rounded-xl" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

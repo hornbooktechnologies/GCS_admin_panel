@@ -77,13 +77,22 @@ const TeamCategories = () => {
               <thead className="bg-slate-50/80">
                 <tr>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Title</th>
+                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Heading</th>
+                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Layout</th>
                   <th className="px-5 py-4 text-right text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {items.map((item) => (
                   <tr key={item.id}>
-                    <td className="px-5 py-4 text-sm font-semibold text-slate-800">{item.title}</td>
+                    <td className="px-5 py-4">
+                      <div className="text-sm font-semibold text-slate-800">{item.title}</div>
+                      {item.eyebrow ? (
+                        <div className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-cyan-600">{item.eyebrow}</div>
+                      ) : null}
+                    </td>
+                    <td className="px-5 py-4 text-sm text-slate-600">{item.heading || "-"}</td>
+                    <td className="px-5 py-4 text-sm capitalize text-slate-600">{item.layout_type || "grid"}</td>
                     <td className="px-5 py-4">
                       <div className="flex justify-end gap-2">
                         <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/master/team-categories/${item.id}/edit`)}>
