@@ -288,7 +288,7 @@ const NewsletterFormPage = ({ mode }) => {
               <Input
                 value={form.title}
                 onChange={(event) => handleInputChange("title", event.target.value)}
-                placeholder="Hospital Newsletter Q1"
+                placeholder="Jan to June 2025"
                 className={`rounded-xl ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
               />
               <FieldError>{formErrors.title}</FieldError>

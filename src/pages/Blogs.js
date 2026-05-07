@@ -32,8 +32,8 @@ const Blogs = () => {
   const fetchBlogs = async () => {
     setIsLoading(true);
     try {
-      const response = await apiClient.get("/blogs");
-      setBlogs(response.data?.data?.blogs || []);
+      const response = await apiClient.get("/blogs?status=all&limit=100");
+      setBlogs(response.data?.data?.items || []);
     } catch (err) {
       showErrorToast(err.response?.data?.message || "Failed to load blog data");
     } finally {
@@ -236,9 +236,25 @@ const Blogs = () => {
                           <h2 className="truncate text-lg font-bold text-slate-800">
                             {blog.title}
                           </h2>
-                          <p className="mt-1 text-xs font-medium text-slate-500">
-                            Order: {blog.display_order ?? "-"}
-                          </p>
+                          <div className="mt-1 flex flex-wrap items-center gap-2">
+                            <p className="text-xs font-medium text-slate-500">
+                              Order: {blog.display_order ?? "-"}
+                            </p>
+                            <span
+                              className={`rounded px-2 py-0.5 text-[10px] font-black uppercase tracking-widest ${
+                                blog.status === "published"
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-amber-100 text-amber-700"
+                              }`}
+                            >
+                              {blog.status || "published"}
+                            </span>
+                            {blog.category ? (
+                              <span className="text-xs text-slate-400 font-medium">
+                                {blog.category}
+                              </span>
+                            ) : null}
+                          </div>
                         </div>
                       </div>
                     </div>

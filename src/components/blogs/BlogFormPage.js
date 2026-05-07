@@ -13,10 +13,13 @@ import apiClient from "../../lib/utils/network-client";
 
 const EMPTY_FORM = {
   title: "",
+  slug: "",
   description: "",
   author_name: "",
   author_designation: "",
   blog_date: "",
+  category: "",
+  status: "draft",
   thumbnail_image: null,
   detail_image: null,
 };
@@ -107,10 +110,13 @@ const BlogFormPage = ({ mode }) => {
 
         setForm({
           title: blog.title || "",
+          slug: blog.slug || "",
           description: blog.description || "",
           author_name: blog.author_name || "",
           author_designation: blog.author_designation || "",
           blog_date: blog.blog_date ? String(blog.blog_date).slice(0, 10) : "",
+          category: blog.category || "",
+          status: blog.status || "draft",
           thumbnail_image: null,
           detail_image: null,
         });
@@ -194,10 +200,15 @@ const BlogFormPage = ({ mode }) => {
   const createFormData = () => {
     const payload = new FormData();
     payload.append("title", form.title.trim());
+    if (form.slug.trim()) {
+      payload.append("slug", form.slug.trim());
+    }
     payload.append("description", form.description);
     payload.append("author_name", form.author_name.trim());
     payload.append("author_designation", form.author_designation.trim());
     payload.append("blog_date", form.blog_date);
+    payload.append("category", form.category.trim());
+    payload.append("status", form.status);
 
     if (form.thumbnail_image) {
       payload.append("thumbnail_image", form.thumbnail_image);
@@ -307,6 +318,37 @@ const BlogFormPage = ({ mode }) => {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">
+                  Custom Slug
+                </label>
+                <Input
+                  value={form.slug}
+                  onChange={(event) => handleInputChange("slug", event.target.value)}
+                  placeholder="optional-custom-slug"
+                  className="rounded-xl"
+                />
+                <p className="text-xs text-slate-500">
+                  Leave blank to auto-generate on create. Existing slugs stay stable unless you change this field.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">
+                  Category
+                </label>
+                <Input
+                  value={form.category}
+                  onChange={(event) =>
+                    handleInputChange("category", event.target.value)
+                  }
+                  placeholder="e.g. Medical Research"
+                  className="rounded-xl"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">
                   Author Name
                 </label>
                 <Input
@@ -338,15 +380,27 @@ const BlogFormPage = ({ mode }) => {
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Date</label>
-              <Input
-                type="date"
-                value={form.blog_date}
-                onChange={(event) =>
-                  handleInputChange("blog_date", event.target.value)
+                <Input
+                  type="date"
+                  value={form.blog_date}
+                  onChange={(event) =>
+                    handleInputChange("blog_date", event.target.value)
                 }
                 className={`rounded-xl ${formErrors.blog_date ? "border-red-300 focus-visible:ring-red-500" : ""}`}
               />
               <FieldError>{formErrors.blog_date}</FieldError>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Status</label>
+              <select
+                value={form.status}
+                onChange={(event) => handleInputChange("status", event.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700"
+              >
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
             </div>
 
             <div className="space-y-2">

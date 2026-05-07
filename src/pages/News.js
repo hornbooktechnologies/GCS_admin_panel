@@ -23,8 +23,8 @@ const News = () => {
   const fetchNews = async () => {
     setIsLoading(true);
     try {
-      const response = await apiClient.get("/news");
-      setNewsItems(response.data?.data?.news || []);
+      const response = await apiClient.get("/news?status=all&limit=100");
+      setNewsItems(response.data?.data?.items || []);
     } catch (err) {
       showErrorToast(err.response?.data?.message || "Failed to load news");
     } finally {
@@ -39,7 +39,7 @@ const News = () => {
   }, [isAdmin]);
 
   const handleDelete = async (item) => {
-    const confirmed = window.confirm(`Delete "${item.name}"? This cannot be undone.`);
+    const confirmed = window.confirm(`Delete "${item.title || item.name}"? This cannot be undone.`);
     if (!confirmed) return;
     try {
       await apiClient.delete(`/news/${item.id}`);
@@ -164,8 +164,12 @@ const News = () => {
               >
                 <div className="grid gap-0 md:grid-cols-[220px_1fr]">
                   <div className="bg-slate-100">
-                    {item.image_url ? (
-                      <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
+                    {item.thumbnail_image_url || item.image_url ? (
+                      <img
+                        src={item.thumbnail_image_url || item.image_url}
+                        alt={item.title || item.name}
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
                       <div className="flex h-full min-h-48 items-center justify-center text-slate-400">
                         <ImageIcon className="h-8 w-8" />
@@ -180,8 +184,12 @@ const News = () => {
                           <GripVertical className="h-4 w-4" />
                         </div>
                         <div className="min-w-0">
-                          <h2 className="truncate text-lg font-bold text-slate-800">{item.name}</h2>
-                          <p className="mt-1 text-xs font-medium text-slate-500">Order: {item.display_order ?? "-"}</p>
+                          <h2 className="truncate text-lg font-bold text-slate-800">
+                            {item.title || item.name}
+                          </h2>
+                          <p className="mt-1 text-xs font-medium text-slate-500">
+                            Order: {item.display_order ?? "-"} | Status: {item.status || "published"}
+                          </p>
                         </div>
                       </div>
                     </div>

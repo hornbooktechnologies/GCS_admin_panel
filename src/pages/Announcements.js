@@ -32,6 +32,7 @@ const EMPTY_FORM = {
   is_new: false,
   url: "",
   attachment: null,
+  category: "Notices",
 };
 
 const ALLOWED_PDF_TYPES = ["application/pdf"];
@@ -107,6 +108,7 @@ const Announcements = () => {
       is_new: !!Number(item.is_new),
       url: item.url || "",
       attachment: null,
+      category: item.category || "Notices",
     });
     setFormErrors({});
     setIsDialogOpen(true);
@@ -183,6 +185,7 @@ const Announcements = () => {
     payload.append("title", form.title.trim());
     payload.append("url", form.url.trim());
     payload.append("is_new", form.is_new ? "true" : "false");
+    payload.append("category", form.category);
 
     if (form.attachment) {
       if (ALLOWED_PDF_TYPES.includes(form.attachment.type)) {
@@ -393,6 +396,9 @@ const Announcements = () => {
                             New
                           </span>
                         ) : null}
+                        <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                          {item.category || "Notices"}
+                        </span>
                       </div>
                       <p className="mt-1 text-xs font-medium text-slate-500">
                         Order: {item.display_order ?? "-"}
@@ -523,6 +529,24 @@ const Announcements = () => {
                     className={`rounded-xl ${formErrors.url ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                   />
                   <FieldError>{formErrors.url}</FieldError>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-slate-700">
+                    Category
+                  </label>
+                  <select
+                    value={form.category}
+                    onChange={(event) =>
+                      handleInputChange("category", event.target.value)
+                    }
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700"
+                  >
+                    <option value="Notices">Notices</option>
+                    <option value="Admissions">Admissions</option>
+                    <option value="Opportunities">Opportunities</option>
+                    <option value="Events">Events</option>
+                  </select>
                 </div>
 
                 <label className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
