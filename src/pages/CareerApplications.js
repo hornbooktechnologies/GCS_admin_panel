@@ -5,14 +5,18 @@ import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
 const CareerApplications = () => {
-  const { showErrorToast } = useToast();
+  const { showErrorToast, showSuccessToast } = useToast();
   const [applications, setApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [updatingStatus, setUpdatingStatus] = useState(null);
 
-  const fetchApplications = async () => {
+  const fetchApplications = async (searchTerm = search) => {
     setIsLoading(true);
     try {
-      const response = await apiClient.get("/career/applications");
+      const params = new URLSearchParams({ limit: "200" });
+      if (searchTerm.trim()) params.set("search", searchTerm.trim());
+      const response = await apiClient.get(`/career/applications?${params.toString()}`);
       setApplications(response.data?.data?.applications || []);
     } catch (err) {
       showErrorToast(err.response?.data?.message || "Failed to load applications");
@@ -25,6 +29,21 @@ const CareerApplications = () => {
     fetchApplications();
   }, []);
 
+  const handleStatusChange = async (applicationId, newStatus) => {
+    setUpdatingStatus(applicationId);
+    try {
+      await apiClient.patch(`/career/applications/${applicationId}/status`, { status: newStatus });
+      showSuccessToast("Status updated");
+      setApplications((prev) =>
+        prev.map((a) => a.id === applicationId ? { ...a, status: newStatus } : a)
+      );
+    } catch (err) {
+      showErrorToast(err.response?.data?.message || "Failed to update status");
+    } finally {
+      setUpdatingStatus(null);
+    }
+  };
+
   return (
     <div className="max-w-[1600px] space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -32,10 +51,23 @@ const CareerApplications = () => {
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">Career Applications</h1>
           <p className="mt-1 text-sm font-medium text-slate-500">Review applications submitted from the frontend career form.</p>
         </div>
-        <Button type="button" variant="outline" className="rounded-xl" onClick={fetchApplications}>
-          <RefreshCw className="mr-2 h-4 w-4" />
-          Refresh
-        </Button>
+        <div className="flex flex-wrap gap-3 items-center">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && fetchApplications(search)}
+            placeholder="Search name, email, position..."
+            className="rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30 w-72"
+          />
+          <Button type="button" variant="outline" className="rounded-xl" onClick={() => fetchApplications(search)}>
+            Search
+          </Button>
+          <Button type="button" variant="outline" className="rounded-xl" onClick={() => fetchApplications()}>
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
@@ -51,6 +83,7 @@ const CareerApplications = () => {
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Applicant</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Position</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">City</th>
+                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Status</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Message</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Resume</th>
                 </tr>
@@ -66,6 +99,20 @@ const CareerApplications = () => {
                     </td>
                     <td className="px-5 py-4 text-sm text-slate-600">{item.position}</td>
                     <td className="px-5 py-4 text-sm text-slate-600">{item.city}</td>
+                    <td className="px-5 py-4 text-sm">
+                      <select
+                        value={item.status || "pending"}
+                        disabled={updatingStatus === item.id}
+                        onChange={(e) => handleStatusChange(item.id, e.target.value)}
+                        className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs text-slate-700 outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="reviewing">Reviewing</option>
+                        <option value="shortlisted">Shortlisted</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="hired">Hired</option>
+                      </select>
+                    </td>
                     <td className="px-5 py-4 text-sm text-slate-600"><div className="line-clamp-3">{item.message || "-"}</div></td>
                     <td className="px-5 py-4 text-sm text-slate-600">
                       <a href={item.resume_url} target="_blank" rel="noreferrer" className="inline-flex items-center rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">

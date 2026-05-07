@@ -78,6 +78,7 @@ const Specialities = () => {
                 <tr>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Speciality</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Category</th>
+                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Slug</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Main Banners</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Brochure</th>
                   <th className="px-5 py-4 text-right text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Actions</th>
@@ -104,6 +105,7 @@ const Specialities = () => {
                       </div>
                     </td>
                     <td className="px-5 py-4 text-sm capitalize text-slate-600">{item.category}</td>
+                    <td className="px-5 py-4 text-sm text-slate-600">{item.slug || "-"}</td>
                     <td className="px-5 py-4 text-sm text-slate-600">{item.main_banners?.length || 0} image(s)</td>
                     <td className="px-5 py-4 text-sm text-slate-600">
                       <a href={item.brochure_url} target="_blank" rel="noreferrer" className="inline-flex items-center rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">

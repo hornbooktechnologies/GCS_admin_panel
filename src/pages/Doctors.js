@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Image as ImageIcon, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import { hasPermission } from "../lib/utils/permissions";
 import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
@@ -15,12 +16,15 @@ const Doctors = () => {
   const canCreate = hasPermission(user, "doctors", "create");
   const [doctors, setDoctors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const fetchDoctors = async () => {
+  const fetchDoctors = async (searchValue = debouncedSearch) => {
     setIsLoading(true);
     try {
-      const response = await apiClient.get("/doctors");
-      setDoctors(response.data?.data?.doctors || []);
+      const query = searchValue ? `?search=${encodeURIComponent(searchValue)}&limit=100` : "?limit=100";
+      const response = await apiClient.get(`/doctors${query}`);
+      setDoctors(response.data?.data?.rows || []);
     } catch (err) {
       showErrorToast(err.response?.data?.message || "Failed to load doctors");
     } finally {
@@ -29,8 +33,27 @@ const Doctors = () => {
   };
 
   useEffect(() => {
-    fetchDoctors();
-  }, []);
+    const timer = setTimeout(() => setDebouncedSearch(search.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    fetchDoctors(debouncedSearch);
+  }, [debouncedSearch]);
+
+  const sortedDoctors = useMemo(
+    () =>
+      [...doctors].sort((a, b) => {
+        if (Boolean(a.is_hod) !== Boolean(b.is_hod)) {
+          return Number(Boolean(b.is_hod)) - Number(Boolean(a.is_hod));
+        }
+        if ((a.display_order ?? 0) !== (b.display_order ?? 0)) {
+          return (a.display_order ?? 0) - (b.display_order ?? 0);
+        }
+        return (a.name || "").localeCompare(b.name || "");
+      }),
+    [doctors],
+  );
 
   const handleDelete = async (item) => {
     const confirmed = window.confirm(`Delete "${item.name}"? This cannot be undone.`);
@@ -51,8 +74,14 @@ const Doctors = () => {
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">Doctors</h1>
           <p className="mt-1 text-sm font-medium text-slate-500">Manage doctor profiles and link them to one or more specialities.</p>
         </div>
-        <div className="flex gap-3">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={fetchDoctors}>
+        <div className="flex flex-col gap-3 md:flex-row">
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search by name or designation"
+            className="min-w-64 rounded-xl"
+          />
+          <Button type="button" variant="outline" className="rounded-xl" onClick={() => fetchDoctors(search.trim())}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
@@ -79,12 +108,14 @@ const Doctors = () => {
                 <tr>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Doctor</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Experience</th>
+                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">HOD</th>
+                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Order</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Specialities</th>
                   <th className="px-5 py-4 text-right text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {doctors.map((item) => (
+                {sortedDoctors.map((item) => (
                   <tr key={item.id}>
                     <td className="px-5 py-4">
                       <div className="flex items-start gap-4">
@@ -98,6 +129,14 @@ const Doctors = () => {
                       </div>
                     </td>
                     <td className="px-5 py-4 text-sm text-slate-600">{item.experience}</td>
+                    <td className="px-5 py-4 text-sm text-slate-600">
+                      {item.is_hod ? (
+                        <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">HOD</Badge>
+                      ) : (
+                        <span className="text-slate-400">-</span>
+                      )}
+                    </td>
+                    <td className="px-5 py-4 text-sm text-slate-600">{item.display_order ?? 0}</td>
                     <td className="px-5 py-4">
                       <div className="flex flex-wrap gap-2">
                         {(item.specialities || []).map((speciality) => (

@@ -9,7 +9,19 @@ import { hasPermission } from "../../lib/utils/permissions";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
 
-const EMPTY_FORM = { position: "", education: "", description: "", experience: "" };
+const EMPTY_FORM = {
+  position: "",
+  education: "",
+  description: "",
+  experience: "",
+  status: "open",
+  location: "",
+  department: "",
+  closing_date: "",
+  salary_range: "",
+};
+
+const VALID_STATUSES = ["draft", "open", "closed"];
 
 const CurrentOpeningFormPage = ({ mode }) => {
   const navigate = useNavigate();
@@ -45,6 +57,11 @@ const CurrentOpeningFormPage = ({ mode }) => {
           education: item.education || "",
           description: item.description || "",
           experience: item.experience || "",
+          status: item.status || "open",
+          location: item.location || "",
+          department: item.department || "",
+          closing_date: item.closing_date ? item.closing_date.slice(0, 10) : "",
+          salary_range: item.salary_range || "",
         });
       } catch (err) {
         showErrorToast(err.response?.data?.message || "Failed to load current opening");
@@ -68,6 +85,7 @@ const CurrentOpeningFormPage = ({ mode }) => {
     if (!form.education.trim()) nextErrors.education = "Education is required.";
     if (!form.description.trim()) nextErrors.description = "Description is required.";
     if (!form.experience.trim()) nextErrors.experience = "Experience is required.";
+    if (!VALID_STATUSES.includes(form.status)) nextErrors.status = "Status is required.";
     setFormErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -124,25 +142,99 @@ const CurrentOpeningFormPage = ({ mode }) => {
 
       <form onSubmit={handleSave} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         <div className="space-y-4">
+          {/* Position */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Position</label>
             <Input value={form.position} onChange={(event) => handleInputChange("position", event.target.value)} className={`rounded-xl ${formErrors.position ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.position}</FieldError>
           </div>
+
+          {/* Education */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Education</label>
             <Input value={form.education} onChange={(event) => handleInputChange("education", event.target.value)} className={`rounded-xl ${formErrors.education ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.education}</FieldError>
           </div>
+
+          {/* Description */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Description</label>
             <textarea value={form.description} onChange={(event) => handleInputChange("description", event.target.value)} rows={6} className={`min-h-[160px] w-full rounded-2xl border bg-white px-4 py-3 text-sm text-slate-700 outline-none ${formErrors.description ? "border-red-300 focus:ring-2 focus:ring-red-500" : "border-slate-200 focus:ring-2 focus:ring-primary/30"}`} />
             <FieldError>{formErrors.description}</FieldError>
           </div>
+
+          {/* Experience */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Experience</label>
             <Input value={form.experience} onChange={(event) => handleInputChange("experience", event.target.value)} className={`rounded-xl ${formErrors.experience ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.experience}</FieldError>
+          </div>
+
+          {/* Status */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">Status</label>
+            <select
+              value={form.status}
+              onChange={(e) => handleInputChange("status", e.target.value)}
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
+            >
+              <option value="open">Open</option>
+              <option value="draft">Draft (hidden from public)</option>
+              <option value="closed">Closed</option>
+            </select>
+            <FieldError>{formErrors.status}</FieldError>
+          </div>
+
+          {/* Location */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">
+              Location <span className="text-slate-400 font-normal">(optional)</span>
+            </label>
+            <Input
+              value={form.location}
+              onChange={(e) => handleInputChange("location", e.target.value)}
+              placeholder="e.g. Ahmedabad"
+              className="rounded-xl"
+            />
+          </div>
+
+          {/* Department */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">
+              Department <span className="text-slate-400 font-normal">(optional)</span>
+            </label>
+            <Input
+              value={form.department}
+              onChange={(e) => handleInputChange("department", e.target.value)}
+              placeholder="e.g. Nursing"
+              className="rounded-xl"
+            />
+          </div>
+
+          {/* Closing Date */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">
+              Closing Date <span className="text-slate-400 font-normal">(optional)</span>
+            </label>
+            <Input
+              type="date"
+              value={form.closing_date}
+              onChange={(e) => handleInputChange("closing_date", e.target.value)}
+              className="rounded-xl"
+            />
+          </div>
+
+          {/* Salary Range */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">
+              Salary Range <span className="text-slate-400 font-normal">(optional)</span>
+            </label>
+            <Input
+              value={form.salary_range}
+              onChange={(e) => handleInputChange("salary_range", e.target.value)}
+              placeholder="e.g. ₹4–6 LPA"
+              className="rounded-xl"
+            />
           </div>
         </div>
 

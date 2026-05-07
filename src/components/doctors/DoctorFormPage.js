@@ -23,6 +23,8 @@ const EMPTY_FORM = {
   experience: "",
   designation: "",
   description: "",
+  display_order: 0,
+  is_hod: false,
   speciality_ids: [],
 };
 
@@ -96,6 +98,8 @@ const DoctorFormPage = ({ mode }) => {
           experience: item.experience || "",
           designation: item.designation || "",
           description: item.description || "",
+          display_order: item.display_order ?? 0,
+          is_hod: Boolean(item.is_hod),
           speciality_ids: item.speciality_ids || [],
         });
         setImagePreviewUrl(item.image_url || "");
@@ -142,8 +146,10 @@ const DoctorFormPage = ({ mode }) => {
     if (!form.name.trim()) nextErrors.name = "Name is required.";
     if (!isEditMode && !form.image) nextErrors.image = "Image is required.";
     if (!form.experience.trim()) nextErrors.experience = "Experience is required.";
+    if (Number.isNaN(Number(form.experience)) || Number(form.experience) < 0) nextErrors.experience = "Experience must be 0 or more.";
     if (!form.designation.trim()) nextErrors.designation = "Designation is required.";
     if (!isMeaningfulHtml(form.description)) nextErrors.description = "Description is required.";
+    if (Number.isNaN(Number(form.display_order)) || Number(form.display_order) < 0) nextErrors.display_order = "Display order must be 0 or more.";
     if (form.speciality_ids.length === 0) nextErrors.speciality_ids = "At least one speciality is required.";
     setFormErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -156,9 +162,11 @@ const DoctorFormPage = ({ mode }) => {
     try {
       const payload = new FormData();
       payload.append("name", form.name.trim());
-      payload.append("experience", form.experience.trim());
+      payload.append("experience", String(Number(form.experience)));
       payload.append("designation", form.designation.trim());
       payload.append("description", form.description);
+      payload.append("display_order", String(Number(form.display_order) || 0));
+      payload.append("is_hod", String(Boolean(form.is_hod)));
       payload.append("speciality_ids", JSON.stringify(form.speciality_ids));
       if (form.image) payload.append("image", form.image);
 
@@ -216,13 +224,28 @@ const DoctorFormPage = ({ mode }) => {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">Experience</label>
-                <Input value={form.experience} onChange={(event) => handleInputChange("experience", event.target.value)} className={`rounded-xl ${formErrors.experience ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+                <Input type="number" min="0" max="80" value={form.experience} onChange={(event) => handleInputChange("experience", event.target.value)} className={`rounded-xl ${formErrors.experience ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
                 <FieldError>{formErrors.experience}</FieldError>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">Designation</label>
                 <Input value={form.designation} onChange={(event) => handleInputChange("designation", event.target.value)} className={`rounded-xl ${formErrors.designation ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
                 <FieldError>{formErrors.designation}</FieldError>
+              </div>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">Display Order</label>
+                <Input type="number" min="0" value={form.display_order} onChange={(event) => handleInputChange("display_order", event.target.value)} className={`rounded-xl ${formErrors.display_order ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+                <p className="text-xs text-slate-500">Lower numbers appear first within their speciality. HODs always appear before non-HODs.</p>
+                <FieldError>{formErrors.display_order}</FieldError>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">Head Of Department</label>
+                <label className="flex min-h-11 items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+                  <input type="checkbox" checked={form.is_hod} onChange={(event) => handleInputChange("is_hod", event.target.checked)} />
+                  Mark this doctor as HOD
+                </label>
               </div>
             </div>
             <div className="space-y-2">
