@@ -26,6 +26,8 @@ const EMPTY_FORM = {
   main_banners: [],
   sub_description: "",
   category: "",
+  show_on_home: true,
+  display_order: 0,
   description: "",
   brochure: null,
   services_intro: "",
@@ -148,6 +150,8 @@ const SpecialityFormPage = ({ mode }) => {
           main_banners: [],
           sub_description: item.sub_description || "",
           category: item.category || "",
+          show_on_home: item.show_on_home !== false && item.show_on_home !== 0,
+          display_order: item.display_order ?? 0,
           description: item.description || "",
           brochure: null,
           services_intro: item.services_intro || "",
@@ -271,6 +275,8 @@ const SpecialityFormPage = ({ mode }) => {
     payload.append("title", form.title.trim());
     payload.append("sub_description", form.sub_description.trim());
     payload.append("category", form.category);
+    payload.append("show_on_home", form.show_on_home);
+    payload.append("display_order", form.display_order);
     payload.append("description", form.description);
     payload.append("services_intro", form.services_intro.trim());
     payload.append("services_heading", form.services_heading.trim());
@@ -395,6 +401,36 @@ const SpecialityFormPage = ({ mode }) => {
                 </SelectContent>
               </Select>
               <FieldError>{formErrors.category}</FieldError>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-1 space-y-2">
+                <label className="text-sm font-semibold text-slate-700">Display Order</label>
+                <Input
+                  type="number"
+                  min={0}
+                  value={form.display_order}
+                  onChange={(event) => handleInputChange("display_order", parseInt(event.target.value, 10) || 0)}
+                  className="rounded-xl"
+                  placeholder="0"
+                />
+                <p className="text-xs text-slate-400">Lower numbers appear first in the homepage carousel.</p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">Show on Homepage</label>
+                <div className="flex h-10 items-center">
+                  <label className="flex cursor-pointer items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={form.show_on_home}
+                      onChange={(event) => handleInputChange("show_on_home", event.target.checked)}
+                      className="h-4 w-4 rounded accent-primary"
+                    />
+                    <span className="text-sm text-slate-700">{form.show_on_home ? "Visible" : "Hidden"}</span>
+                  </label>
+                </div>
+                <p className="text-xs text-slate-400">Show in homepage carousel.</p>
+              </div>
             </div>
 
             <div className="space-y-2">

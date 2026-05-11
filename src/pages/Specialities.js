@@ -78,6 +78,7 @@ const Specialities = () => {
                 <tr>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Speciality</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Category</th>
+                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Homepage</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Slug</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Main Banners</th>
                   <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Brochure</th>
@@ -105,6 +106,16 @@ const Specialities = () => {
                       </div>
                     </td>
                     <td className="px-5 py-4 text-sm capitalize text-slate-600">{item.category}</td>
+                    <td className="px-5 py-4">
+                      <div className="flex flex-col gap-1">
+                        {item.show_on_home ? (
+                          <span className="inline-flex w-fit items-center rounded-lg bg-green-50 px-2 py-1 text-xs font-semibold text-green-700">Shown</span>
+                        ) : (
+                          <span className="inline-flex w-fit items-center rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-500">Hidden</span>
+                        )}
+                        <span className="text-xs text-slate-400">Order: {item.display_order ?? 0}</span>
+                      </div>
+                    </td>
                     <td className="px-5 py-4 text-sm text-slate-600">{item.slug || "-"}</td>
                     <td className="px-5 py-4 text-sm text-slate-600">{item.main_banners?.length || 0} image(s)</td>
                     <td className="px-5 py-4 text-sm text-slate-600">
