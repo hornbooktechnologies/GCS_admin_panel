@@ -229,6 +229,13 @@ export const MenuItems = [
     allowedRoles: ["admin"],
   },
   {
+    title: "Government Schemes",
+    url: "/government-schemes",
+    icon: Shield,
+    moduleKey: "government-schemes",
+    allowedRoles: ["admin"],
+  },
+  {
     title: "Journals",
     url: "/journals",
     icon: BookOpenText,

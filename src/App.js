@@ -75,6 +75,9 @@ import StudentTestimonialEdit from "./pages/StudentTestimonialEdit";
 import Facilities from "./pages/Facilities";
 import FacilityCreate from "./pages/FacilityCreate";
 import FacilityEdit from "./pages/FacilityEdit";
+import GovernmentSchemes from "./pages/GovernmentSchemes";
+import GovernmentSchemeCreate from "./pages/GovernmentSchemeCreate";
+import GovernmentSchemeEdit from "./pages/GovernmentSchemeEdit";
 import Journals from "./pages/Journals";
 import JournalCreate from "./pages/JournalCreate";
 import JournalEdit from "./pages/JournalEdit";
@@ -123,6 +126,7 @@ const routePermissions = [
   { prefix: "/campus-life", moduleKey: "campus-life" },
   { prefix: "/student-testimonials", moduleKey: "student-testimonials" },
   { prefix: "/facilities", moduleKey: "facilities" },
+  { prefix: "/government-schemes", moduleKey: "government-schemes" },
   { prefix: "/journals", moduleKey: "journals" },
   { prefix: "/nursing-photo-gallery", moduleKey: "nursing-photo-gallery" },
   { prefix: "/specialities", moduleKey: "specialities" },
@@ -292,6 +296,9 @@ function AppContent() {
               <Route path="/facilities" element={<Facilities />} />
               <Route path="/facilities/new" element={<FacilityCreate />} />
               <Route path="/facilities/:id/edit" element={<FacilityEdit />} />
+              <Route path="/government-schemes" element={<GovernmentSchemes />} />
+              <Route path="/government-schemes/new" element={<GovernmentSchemeCreate />} />
+              <Route path="/government-schemes/:id/edit" element={<GovernmentSchemeEdit />} />
               <Route path="/journals" element={<Journals />} />
               <Route path="/journals/new" element={<JournalCreate />} />
               <Route path="/journals/:id/edit" element={<JournalEdit />} />
