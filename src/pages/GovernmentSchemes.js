@@ -6,6 +6,8 @@ import { hasPermission } from "../lib/utils/permissions";
 import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
 
 const formatNumber = (value) => {
   if (value === null || value === undefined || value === "") {
@@ -40,9 +42,6 @@ const GovernmentSchemes = () => {
   }, []);
 
   const handleDelete = async (item) => {
-    const confirmed = window.confirm(`Delete "${item.scheme_name}"? This cannot be undone.`);
-    if (!confirmed) return;
-
     try {
       await apiClient.delete(`/government-schemes/${item.id}`);
       showSuccessToast("Government scheme deleted successfully");
@@ -60,12 +59,12 @@ const GovernmentSchemes = () => {
           <p className="mt-1 text-sm font-medium text-slate-500">Manage scheme details, annual stats, documents, and speciality lists.</p>
         </div>
         <div className="flex gap-3">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={fetchItems}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={fetchItems}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
           {canCreate && (
-            <Button type="button" className="rounded-xl" onClick={() => navigate("/government-schemes/new")}>
+            <Button type="button" className="rounded-lg" onClick={() => navigate("/government-schemes/new")}>
               <Plus className="mr-2 h-4 w-4" />
               Add Scheme
             </Button>
@@ -73,7 +72,7 @@ const GovernmentSchemes = () => {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
+      <div className="overflow-hidden rounded-lg border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">Loading government schemes...</div>
         ) : items.length === 0 ? (
@@ -95,7 +94,7 @@ const GovernmentSchemes = () => {
                   <tr key={item.id}>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                           <Shield className="h-5 w-5" />
                         </span>
                         <div>
@@ -109,14 +108,16 @@ const GovernmentSchemes = () => {
                     <td className="px-6 py-4 text-sm font-semibold text-slate-800">{formatNumber(item.ipd_admissions)}</td>
                     <td className="px-6 py-4">
                       <div className="flex justify-end gap-2">
-                        <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/government-schemes/${item.id}/edit`)}>
+                        <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate(`/government-schemes/${item.id}/edit`)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Edit
                         </Button>
-                        <Button type="button" variant="outline" className="rounded-xl border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleDelete(item)}>
+                        <DeleteConfirmationButton onConfirm={() => handleDelete(item)}>
+<Button type="button" variant="outline" className="rounded-lg border-red-200 text-red-600 hover:bg-red-50">
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </Button>
+</DeleteConfirmationButton>
                       </div>
                     </td>
                   </tr>

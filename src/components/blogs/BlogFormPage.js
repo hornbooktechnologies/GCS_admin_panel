@@ -254,7 +254,7 @@ const BlogFormPage = ({ mode }) => {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-900">{pageTitle}</h1>
         <p className="mt-2 text-sm text-slate-500">
           Blog management is only available for admin users.
@@ -265,7 +265,7 @@ const BlogFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading blog editor...
@@ -281,7 +281,7 @@ const BlogFormPage = ({ mode }) => {
           <Button
             type="button"
             variant="ghost"
-            className="-ml-3 mb-2 rounded-xl px-3 text-slate-500"
+            className="-ml-3 mb-2 rounded-lg px-3 text-slate-500"
             onClick={() => navigate("/blogs")}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -300,7 +300,7 @@ const BlogFormPage = ({ mode }) => {
 
       <form
         onSubmit={handleSave}
-        className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
+        className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
       >
         <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="space-y-4">
@@ -310,7 +310,7 @@ const BlogFormPage = ({ mode }) => {
                 value={form.title}
                 onChange={(event) => handleInputChange("title", event.target.value)}
                 placeholder="GCS Hospital launches new specialty clinic"
-                className={`rounded-xl ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                className={`rounded-lg ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
               />
               <FieldError>{formErrors.title}</FieldError>
             </div>
@@ -324,7 +324,7 @@ const BlogFormPage = ({ mode }) => {
                   value={form.slug}
                   onChange={(event) => handleInputChange("slug", event.target.value)}
                   placeholder="optional-custom-slug"
-                  className="rounded-xl"
+                  className="rounded-lg"
                 />
                 <p className="text-xs text-slate-500">
                   Leave blank to auto-generate on create. Existing slugs stay stable unless you change this field.
@@ -341,7 +341,7 @@ const BlogFormPage = ({ mode }) => {
                     handleInputChange("category", event.target.value)
                   }
                   placeholder="e.g. Medical Research"
-                  className="rounded-xl"
+                  className="rounded-lg"
                 />
               </div>
             </div>
@@ -357,7 +357,7 @@ const BlogFormPage = ({ mode }) => {
                     handleInputChange("author_name", event.target.value)
                   }
                   placeholder="Dr. Ananya Sharma"
-                  className={`rounded-xl ${formErrors.author_name ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                  className={`rounded-lg ${formErrors.author_name ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                 />
                 <FieldError>{formErrors.author_name}</FieldError>
               </div>
@@ -372,7 +372,7 @@ const BlogFormPage = ({ mode }) => {
                     handleInputChange("author_designation", event.target.value)
                   }
                   placeholder="Senior Cardiologist"
-                  className={`rounded-xl ${formErrors.author_designation ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                  className={`rounded-lg ${formErrors.author_designation ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                 />
                 <FieldError>{formErrors.author_designation}</FieldError>
               </div>
@@ -386,7 +386,7 @@ const BlogFormPage = ({ mode }) => {
                   onChange={(event) =>
                     handleInputChange("blog_date", event.target.value)
                 }
-                className={`rounded-xl ${formErrors.blog_date ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                className={`rounded-lg ${formErrors.blog_date ? "border-red-300 focus-visible:ring-red-500" : ""}`}
               />
               <FieldError>{formErrors.blog_date}</FieldError>
             </div>
@@ -396,7 +396,7 @@ const BlogFormPage = ({ mode }) => {
               <select
                 value={form.status}
                 onChange={(event) => handleInputChange("status", event.target.value)}
-                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700"
               >
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>
@@ -408,7 +408,7 @@ const BlogFormPage = ({ mode }) => {
                 Description
               </label>
               <div
-                className={`overflow-hidden rounded-2xl border bg-white ${
+                className={`overflow-hidden rounded-lg border bg-white ${
                   formErrors.description ? "border-red-300" : "border-slate-200"
                 }`}
               >
@@ -452,7 +452,7 @@ const BlogFormPage = ({ mode }) => {
                     event.dataTransfer.files?.[0],
                   );
                 }}
-                className={`cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-all ${
+                className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${
                   formErrors.thumbnail_image
                     ? "border-red-300 bg-red-50/40"
                     : isDragOverThumbnailUpload
@@ -464,10 +464,10 @@ const BlogFormPage = ({ mode }) => {
                   <img
                     src={thumbnailPreviewUrl}
                     alt="Thumbnail preview"
-                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-2xl object-cover"
+                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
@@ -522,7 +522,7 @@ const BlogFormPage = ({ mode }) => {
                     event.dataTransfer.files?.[0],
                   );
                 }}
-                className={`cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-all ${
+                className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${
                   formErrors.detail_image
                     ? "border-red-300 bg-red-50/40"
                     : isDragOverDetailUpload
@@ -534,10 +534,10 @@ const BlogFormPage = ({ mode }) => {
                   <img
                     src={detailPreviewUrl}
                     alt="Detail preview"
-                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-2xl object-cover"
+                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
@@ -571,12 +571,12 @@ const BlogFormPage = ({ mode }) => {
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl"
+            className="rounded-lg"
             onClick={() => navigate("/blogs")}
           >
             Cancel
           </Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : (

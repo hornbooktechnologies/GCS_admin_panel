@@ -31,6 +31,8 @@ import { useAuthStore } from "../context/AuthContext";
 import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
 
 const EMPTY_FORM = {
   title: "",
@@ -242,14 +244,6 @@ const Banners = () => {
   };
 
   const handleDelete = async (banner) => {
-    const confirmed = window.confirm(
-      `Delete banner "${banner.title}"? This cannot be undone.`,
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
     try {
       await apiClient.delete(`/banners/${banner.id}`);
       showSuccessToast("Banner deleted successfully");
@@ -335,7 +329,7 @@ const Banners = () => {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-900">Banners</h1>
         <p className="mt-2 text-sm text-slate-500">
           Banner management is only available for admin users.
@@ -363,7 +357,7 @@ const Banners = () => {
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl"
+            className="rounded-lg"
             onClick={fetchBanners}
           >
             <RefreshCw className="mr-2 h-4 w-4" />
@@ -372,7 +366,7 @@ const Banners = () => {
           {canCreate && (
             <Button
               type="button"
-              className="rounded-xl"
+              className="rounded-lg"
               onClick={openCreateDialog}
             >
               <Plus className="mr-2 h-4 w-4" />
@@ -382,14 +376,14 @@ const Banners = () => {
         </div>
       </div>
 
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">
             Loading banners...
           </div>
         ) : banners.length === 0 ? (
           <div className="py-12 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg bg-slate-100 text-slate-400">
               <ImageIcon className="h-6 w-6" />
             </div>
             <h2 className="text-lg font-semibold text-slate-800">
@@ -409,7 +403,7 @@ const Banners = () => {
                 onDragOver={(event) => handleDragOverCard(event, banner.id)}
                 onDrop={(event) => handleDropCard(event, banner.id)}
                 onDragEnd={handleDragEnd}
-                className={`overflow-hidden rounded-3xl border bg-white shadow-sm transition-all duration-200 ${
+                className={`overflow-hidden rounded-lg border bg-white shadow-sm transition-all duration-200 ${
                   draggedBannerId === banner.id
                     ? "scale-[0.98] opacity-60 border-primary/40"
                     : dropTargetBannerId === banner.id
@@ -434,7 +428,7 @@ const Banners = () => {
                 <div className="space-y-4 p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex min-w-0 items-start gap-3">
-                      <div className="mt-0.5 rounded-xl border border-slate-200 bg-slate-50 p-2 text-slate-400">
+                      <div className="mt-0.5 rounded-lg border border-slate-200 bg-slate-50 p-2 text-slate-400">
                         <GripVertical className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
@@ -476,7 +470,7 @@ const Banners = () => {
                         href={banner.link_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50"
+                        className="inline-flex items-center rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50"
                       >
                         <ExternalLink className="mr-2 h-3.5 w-3.5" />
                         Open Link
@@ -486,21 +480,22 @@ const Banners = () => {
                     <Button
                       type="button"
                       variant="outline"
-                      className="rounded-xl"
+                      className="rounded-lg"
                       onClick={() => openEditDialog(banner)}
                     >
                       <Pencil className="mr-2 h-4 w-4" />
                       Edit
                     </Button>
-                    <Button
+                    <DeleteConfirmationButton onConfirm={() => handleDelete(banner)}>
+<Button
                       type="button"
                       variant="outline"
-                      className="rounded-xl border-red-200 text-red-600 hover:bg-red-50"
-                      onClick={() => handleDelete(banner)}
+                      className="rounded-lg border-red-200 text-red-600 hover:bg-red-50"
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
                       Delete
                     </Button>
+</DeleteConfirmationButton>
                   </div>
                 </div>
               </div>
@@ -510,7 +505,7 @@ const Banners = () => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-2xl rounded-3xl border border-white/60 bg-white p-0">
+        <DialogContent className="sm:max-w-2xl rounded-lg border border-white/60 bg-white p-0">
           <form onSubmit={handleSave}>
             <DialogHeader className="border-b border-slate-100 px-6 py-5">
               <DialogTitle>{dialogTitle}</DialogTitle>
@@ -531,7 +526,7 @@ const Banners = () => {
                       handleInputChange("title", event.target.value)
                     }
                     placeholder="Homepage hero banner"
-                    className={`rounded-xl ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                    className={`rounded-lg ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                   />
                   <FieldError>{formErrors.title}</FieldError>
                 </div>
@@ -546,7 +541,7 @@ const Banners = () => {
                       handleInputChange("link_url", event.target.value)
                     }
                     placeholder="https://example.com/page"
-                    className={`rounded-xl ${formErrors.link_url ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                    className={`rounded-lg ${formErrors.link_url ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                   />
                   <FieldError>{formErrors.link_url}</FieldError>
                 </div>
@@ -559,7 +554,7 @@ const Banners = () => {
                     value={form.status}
                     onValueChange={(value) => handleInputChange("status", value)}
                   >
-                    <SelectTrigger className="rounded-xl">
+                    <SelectTrigger className="rounded-lg">
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -593,7 +588,7 @@ const Banners = () => {
                       setIsDragOverUpload(false);
                       handleImageSelect(event.dataTransfer.files?.[0]);
                     }}
-                    className={`cursor-pointer rounded-3xl border border-dashed p-6 text-center transition-all ${
+                    className={`cursor-pointer rounded-lg border border-dashed p-6 text-center transition-all ${
                       formErrors.image
                         ? "border-red-300 bg-red-50/40"
                         : isDragOverUpload
@@ -601,7 +596,7 @@ const Banners = () => {
                         : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"
                     }`}
                   >
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
                       <Upload className="h-6 w-6" />
                     </div>
                     <p className="mt-4 text-sm font-semibold text-slate-700">
@@ -634,7 +629,7 @@ const Banners = () => {
                 <label className="text-sm font-semibold text-slate-700">
                   Preview
                 </label>
-                <div className="overflow-hidden rounded-3xl border border-dashed border-slate-200 bg-slate-50">
+                <div className="overflow-hidden rounded-lg border border-dashed border-slate-200 bg-slate-50">
                   {previewUrl ? (
                     <img
                       src={previewUrl}
@@ -654,12 +649,12 @@ const Banners = () => {
               <Button
                 type="button"
                 variant="outline"
-                className="rounded-xl"
+                className="rounded-lg"
                 onClick={closeDialog}
               >
                 Cancel
               </Button>
-              <Button type="submit" className="rounded-xl" disabled={isSaving}>
+              <Button type="submit" className="rounded-lg" disabled={isSaving}>
                 {isSaving ? "Saving..." : editingBanner ? "Update Banner" : "Create Banner"}
               </Button>
             </DialogFooter>

@@ -175,13 +175,13 @@ const GovernmentSchemeFormPage = ({ mode }) => {
   };
 
   const renderListEditor = (field) => (
-    <div className="space-y-3 rounded-3xl border border-slate-200 bg-slate-50/70 p-4">
+    <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50/70 p-4">
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-semibold text-slate-800">{listLabels[field]}</h2>
           <p className="text-xs text-slate-500">Add one item per row.</p>
         </div>
-        <Button type="button" variant="outline" className="rounded-xl" onClick={() => handleAddListItem(field)}>
+        <Button type="button" variant="outline" className="rounded-lg" onClick={() => handleAddListItem(field)}>
           <Plus className="mr-2 h-4 w-4" />
           Add More
         </Button>
@@ -190,8 +190,8 @@ const GovernmentSchemeFormPage = ({ mode }) => {
       <div className="space-y-3">
         {form[field].map((value, index) => (
           <div key={`${field}-${index}`} className="flex items-start gap-3">
-            <Input value={value} onChange={(event) => handleListChange(field, index, event.target.value)} placeholder={`${listLabels[field]} ${index + 1}`} className="rounded-xl" />
-            <Button type="button" variant="outline" className="rounded-xl border-red-200 px-3 text-red-600 hover:bg-red-50" onClick={() => handleRemoveListItem(field, index)}>
+            <Input value={value} onChange={(event) => handleListChange(field, index, event.target.value)} placeholder={`${listLabels[field]} ${index + 1}`} className="rounded-lg" />
+            <Button type="button" variant="outline" className="rounded-lg border-red-200 px-3 text-red-600 hover:bg-red-50" onClick={() => handleRemoveListItem(field, index)}>
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
@@ -203,7 +203,7 @@ const GovernmentSchemeFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading government scheme editor...
@@ -215,38 +215,38 @@ const GovernmentSchemeFormPage = ({ mode }) => {
   return (
     <div className="max-w-[1600px] space-y-6">
       <div>
-        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-xl px-3 text-slate-500" onClick={() => navigate("/government-schemes")}>
+        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/government-schemes")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Government Schemes
         </Button>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">{pageTitle}</h1>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-6 rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <form onSubmit={handleSave} className="space-y-6 rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         <div className="grid gap-5 lg:grid-cols-2">
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Scheme Name</label>
-            <Input value={form.scheme_name} onChange={(event) => handleInputChange("scheme_name", event.target.value)} className={`rounded-xl ${formErrors.scheme_name ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <Input value={form.scheme_name} onChange={(event) => handleInputChange("scheme_name", event.target.value)} className={`rounded-lg ${formErrors.scheme_name ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.scheme_name}</FieldError>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Badge Text</label>
-            <Input value={form.badge_text} onChange={(event) => handleInputChange("badge_text", event.target.value)} className="rounded-xl" />
+            <Input value={form.badge_text} onChange={(event) => handleInputChange("badge_text", event.target.value)} className="rounded-lg" />
           </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Cash-less Cover</label>
-            <Input value={form.cash_less_cover} onChange={(event) => handleInputChange("cash_less_cover", event.target.value)} className="rounded-xl" />
+            <Input value={form.cash_less_cover} onChange={(event) => handleInputChange("cash_less_cover", event.target.value)} className="rounded-lg" />
           </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Display Order</label>
-            <Input type="number" min="0" value={form.display_order} onChange={(event) => handleInputChange("display_order", event.target.value)} className={`rounded-xl ${formErrors.display_order ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <Input type="number" min="0" value={form.display_order} onChange={(event) => handleInputChange("display_order", event.target.value)} className={`rounded-lg ${formErrors.display_order ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.display_order}</FieldError>
           </div>
         </div>
 
         <div className="space-y-2">
           <label className="text-sm font-semibold text-slate-700">Description</label>
-          <div className="overflow-hidden rounded-2xl bg-white">
+          <div className="overflow-hidden rounded-lg bg-white">
             <ReactQuill theme="snow" value={form.description} onChange={(value) => handleInputChange("description", value)} modules={quillModules} placeholder="Write scheme description here..." />
           </div>
         </div>
@@ -257,7 +257,7 @@ const GovernmentSchemeFormPage = ({ mode }) => {
               <label className="text-sm font-semibold text-slate-700">
                 {field.split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ")}
               </label>
-              <Input type="number" min="0" value={form[field]} onChange={(event) => handleInputChange(field, event.target.value)} className={`rounded-xl ${formErrors[field] ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input type="number" min="0" value={form[field]} onChange={(event) => handleInputChange(field, event.target.value)} className={`rounded-lg ${formErrors[field] ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors[field]}</FieldError>
             </div>
           ))}
@@ -270,10 +270,10 @@ const GovernmentSchemeFormPage = ({ mode }) => {
         </div>
 
         <div className="flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/government-schemes")}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/government-schemes")}>
             Cancel
           </Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {isSaving ? "Saving..." : isEditMode ? "Update Scheme" : "Create Scheme"}
           </Button>

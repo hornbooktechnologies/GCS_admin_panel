@@ -201,7 +201,7 @@ const SympotmFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading symptom editor...
@@ -216,7 +216,7 @@ const SympotmFormPage = ({ mode }) => {
         <Button
           type="button"
           variant="ghost"
-          className="-ml-3 mb-2 rounded-xl px-3 text-slate-500"
+          className="-ml-3 mb-2 rounded-lg px-3 text-slate-500"
           onClick={() => navigate("/symptoms")}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -227,7 +227,7 @@ const SympotmFormPage = ({ mode }) => {
 
       <form
         onSubmit={handleSave}
-        className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
+        className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
       >
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-4">
@@ -236,7 +236,7 @@ const SympotmFormPage = ({ mode }) => {
               <Input
                 value={form.name}
                 onChange={(event) => handleInputChange("name", event.target.value)}
-                className={`rounded-xl ${formErrors.name ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                className={`rounded-lg ${formErrors.name ? "border-red-300 focus-visible:ring-red-500" : ""}`}
               />
               <FieldError>{formErrors.name}</FieldError>
             </div>
@@ -246,7 +246,7 @@ const SympotmFormPage = ({ mode }) => {
               <Textarea
                 value={form.subtitle}
                 onChange={(event) => handleInputChange("subtitle", event.target.value)}
-                className={`min-h-[110px] rounded-xl ${formErrors.subtitle ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                className={`min-h-[110px] rounded-lg ${formErrors.subtitle ? "border-red-300 focus-visible:ring-red-500" : ""}`}
               />
               <FieldError>{formErrors.subtitle}</FieldError>
             </div>
@@ -264,16 +264,16 @@ const SympotmFormPage = ({ mode }) => {
                   imageInputRef.current?.click();
                 }
               }}
-              className={`cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}
+              className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}
             >
               {imagePreviewUrl ? (
                 <img
                   src={imagePreviewUrl}
                   alt="Preview"
-                  className="mx-auto mb-4 aspect-[16/10] w-full rounded-2xl object-cover"
+                  className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
                 />
               ) : (
-                <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm">
+                <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                   <ImageIcon className="h-8 w-8" />
                 </div>
               )}
@@ -290,13 +290,13 @@ const SympotmFormPage = ({ mode }) => {
           </div>
         </div>
 
-        <div className="mt-8 space-y-4 rounded-3xl border border-slate-200 bg-slate-50/70 p-5">
+        <div className="mt-8 space-y-4 rounded-lg border border-slate-200 bg-slate-50/70 p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-lg font-semibold text-slate-900">Potential Causes</h2>
               <p className="text-sm text-slate-500">Add one or more cause blocks with a title and description.</p>
             </div>
-            <Button type="button" variant="outline" className="rounded-xl" onClick={handleAddCause}>
+            <Button type="button" variant="outline" className="rounded-lg" onClick={handleAddCause}>
               <Plus className="mr-2 h-4 w-4" />
               Add Cause
             </Button>
@@ -308,13 +308,13 @@ const SympotmFormPage = ({ mode }) => {
               const causeError = formErrors.potential_causes?.[index] || {};
 
               return (
-                <div key={`cause-${index + 1}`} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div key={`cause-${index + 1}`} className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <h3 className="text-sm font-semibold text-slate-700">Cause {index + 1}</h3>
                     <Button
                       type="button"
                       variant="outline"
-                      className="rounded-xl border-red-200 text-red-600 hover:bg-red-50"
+                      className="rounded-lg border-red-200 text-red-600 hover:bg-red-50"
                       onClick={() => handleRemoveCause(index)}
                       disabled={form.potential_causes.length === 1}
                     >
@@ -329,7 +329,7 @@ const SympotmFormPage = ({ mode }) => {
                       <Input
                         value={cause.title}
                         onChange={(event) => handleCauseChange(index, "title", event.target.value)}
-                        className={`rounded-xl ${causeError.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                        className={`rounded-lg ${causeError.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                       />
                       <FieldError>{causeError.title}</FieldError>
                     </div>
@@ -339,7 +339,7 @@ const SympotmFormPage = ({ mode }) => {
                       <Textarea
                         value={cause.description}
                         onChange={(event) => handleCauseChange(index, "description", event.target.value)}
-                        className={`min-h-[120px] rounded-xl ${causeError.description ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                        className={`min-h-[120px] rounded-lg ${causeError.description ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                       />
                       <FieldError>{causeError.description}</FieldError>
                     </div>
@@ -351,10 +351,10 @@ const SympotmFormPage = ({ mode }) => {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/symptoms")}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/symptoms")}>
             Cancel
           </Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {isSaving ? "Saving..." : isEditMode ? "Update Symptom" : "Create Symptom"}
           </Button>

@@ -126,7 +126,7 @@ const ResultFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading result editor...
@@ -138,24 +138,24 @@ const ResultFormPage = ({ mode }) => {
   return (
     <div className="max-w-[1600px] space-y-6">
       <div>
-        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-xl px-3 text-slate-500" onClick={() => navigate("/results")}>
+        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/results")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Results
         </Button>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">{pageTitle}</h1>
       </div>
 
-      <form onSubmit={handleSave} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <form onSubmit={handleSave} className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Title</label>
-              <Input value={form.title} onChange={(event) => handleInputChange("title", event.target.value)} className={`rounded-xl ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input value={form.title} onChange={(event) => handleInputChange("title", event.target.value)} className={`rounded-lg ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.title}</FieldError>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Year</label>
-              <Input type="number" min="1900" max="2155" value={form.year} onChange={(event) => handleInputChange("year", event.target.value)} className={`rounded-xl ${formErrors.year ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input type="number" min="1900" max="2155" value={form.year} onChange={(event) => handleInputChange("year", event.target.value)} className={`rounded-lg ${formErrors.year ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.year}</FieldError>
             </div>
           </div>
@@ -163,8 +163,8 @@ const ResultFormPage = ({ mode }) => {
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">PDF Upload</label>
-              <div role="button" tabIndex={0} onClick={() => pdfInputRef.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); pdfInputRef.current?.click(); } }} className={`cursor-pointer rounded-3xl border border-dashed p-6 text-center transition-all ${formErrors.pdf ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}>
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
+              <div role="button" tabIndex={0} onClick={() => pdfInputRef.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); pdfInputRef.current?.click(); } }} className={`cursor-pointer rounded-lg border border-dashed p-6 text-center transition-all ${formErrors.pdf ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}>
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
                   <Upload className="h-6 w-6" />
                 </div>
                 <p className="mt-4 text-sm font-semibold text-slate-700">Upload PDF</p>
@@ -174,7 +174,7 @@ const ResultFormPage = ({ mode }) => {
               <FieldError>{formErrors.pdf}</FieldError>
             </div>
 
-            <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center text-slate-500">
+            <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 p-6 text-center text-slate-500">
               {existingPdfUrl ? (
                 <a href={existingPdfUrl} target="_blank" rel="noreferrer" className="inline-flex items-center text-sm font-semibold text-primary">
                   <FileText className="mr-2 h-4 w-4" />
@@ -188,8 +188,8 @@ const ResultFormPage = ({ mode }) => {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/results")}>Cancel</Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/results")}>Cancel</Button>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {isSaving ? "Saving..." : isEditMode ? "Update Result" : "Create Result"}
           </Button>

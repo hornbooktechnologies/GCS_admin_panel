@@ -32,18 +32,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../ui/alert-dialog";
 import { Checkbox } from "../ui/checkbox";
+import { DeleteConfirmationButton } from "../common/ConfirmationDialog";
 
 const ActivityLogTable = () => {
   const [logs, setLogs] = useState([]);
@@ -313,36 +303,20 @@ const ActivityLogTable = () => {
               <X className='w-4 h-4' />
             </Button>
             {selectedIds.length > 0 && (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    size='sm'
-                    className='h-9 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-md border-0 transition-all duration-300'
-                  >
-                    <Trash2 className='w-4 h-4 mr-2' />
-                    Delete ({selectedIds.length})
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      the selected activity logs.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={handleBulkDelete}
-                      className='bg-red-600 hover:bg-red-700'
-                      disabled={isDeleting}
-                    >
-                      {isDeleting ? 'Deleting...' : 'Delete'}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <DeleteConfirmationButton
+                title="Delete selected logs?"
+                description="This action cannot be undone. The selected activity logs will be permanently deleted."
+                onConfirm={handleBulkDelete}
+                isLoading={isDeleting}
+              >
+                <Button
+                  size='sm'
+                  className='h-9 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-md border-0 transition-all duration-300'
+                >
+                  <Trash2 className='w-4 h-4 mr-2' />
+                  Delete ({selectedIds.length})
+                </Button>
+              </DeleteConfirmationButton>
             )}
           </div>
         </CardHeader>
@@ -418,35 +392,19 @@ const ActivityLogTable = () => {
                           {log.ip_address}
                         </TableCell>
                         <TableCell className='text-right sticky right-0 bg-white z-10 shadow-[-2px_0px_5px_rgba(0,0,0,0.05)]'>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                variant='ghost'
-                                size='sm'
-                                className='text-red-500 hover:text-red-700 hover:bg-red-50'
-                              >
-                                <Trash2 className='w-4 h-4' />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Log?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Are you sure you want to delete this activity
-                                  log? This cannot be undone.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => handleDelete(log.id)}
-                                  className='bg-red-600 hover:bg-red-700'
-                                >
-                                  Delete
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
+                          <DeleteConfirmationButton
+                            title="Delete log?"
+                            description="Are you sure you want to delete this activity log? This cannot be undone."
+                            onConfirm={() => handleDelete(log.id)}
+                          >
+                            <Button
+                              variant='ghost'
+                              size='sm'
+                              className='text-red-500 hover:text-red-700 hover:bg-red-50'
+                            >
+                              <Trash2 className='w-4 h-4' />
+                            </Button>
+                          </DeleteConfirmationButton>
                         </TableCell>
                       </TableRow>
                     ))}

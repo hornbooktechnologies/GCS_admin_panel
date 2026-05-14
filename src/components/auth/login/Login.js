@@ -91,7 +91,7 @@ const Login = () => {
         </div>
 
         {/* Main Card */}
-        <Card className="w-full border border-white/60 bg-white/80 backdrop-blur-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-500 rounded-3xl overflow-hidden">
+        <Card className="w-full border border-white/60 bg-white/80 backdrop-blur-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-500 rounded-lg overflow-hidden">
           <CardHeader className="p-8 pb-2 text-center space-y-2">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary-hover to-primary bg-clip-text text-transparent tracking-tight">
               Sign In
@@ -117,7 +117,7 @@ const Login = () => {
                       <Input
                         placeholder="Enter your email"
                         type="email"
-                        className="block h-12 w-full pl-11 pr-4 bg-slate-50/50 border-slate-200 focus:bg-white text-base text-slate-800 rounded-xl transition-all duration-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 hover:border-blue-300"
+                        className="block h-12 w-full pl-11 pr-4 bg-slate-50/50 border-slate-200 focus:bg-white text-base text-slate-800 rounded-lg transition-all duration-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 hover:border-blue-300"
                         {...register("email")}
                       />
                     </div>
@@ -141,7 +141,7 @@ const Login = () => {
                       <Input
                         placeholder="Enter your password"
                         type={showPassword ? "text" : "password"}
-                        className="block h-12 w-full pl-11 pr-12 bg-slate-50/50 border-slate-200 focus:bg-white text-base text-slate-800 rounded-xl transition-all duration-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 hover:border-blue-300"
+                        className="block h-12 w-full pl-11 pr-12 bg-slate-50/50 border-slate-200 focus:bg-white text-base text-slate-800 rounded-lg transition-all duration-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 hover:border-blue-300"
                         {...register("password")}
                       />
                       <button
@@ -170,7 +170,7 @@ const Login = () => {
                     <Button
                       type="submit"
                       className={cn(
-                        "w-full h-12 rounded-xl text-white font-bold tracking-wide shadow-lg shadow-blue-500/25 transition-all duration-300 active:scale-[0.98]",
+                        "w-full h-12 rounded-lg text-white font-bold tracking-wide shadow-lg shadow-blue-500/25 transition-all duration-300 active:scale-[0.98]",
                         "bg-primary hover:bg-primary-hover hover:shadow-blue-500/40",
                         {
                           "opacity-80 cursor-not-allowed": isSubmitting,

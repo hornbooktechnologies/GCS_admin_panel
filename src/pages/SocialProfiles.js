@@ -129,7 +129,7 @@ const SocialProfiles = () => {
         <Button
           type="button"
           variant="outline"
-          className="rounded-xl"
+          className="rounded-lg"
           onClick={fetchProfiles}
         >
           <RefreshCw className="mr-2 h-4 w-4" />
@@ -137,7 +137,7 @@ const SocialProfiles = () => {
         </Button>
       </div>
 
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">
             Loading social profiles...
@@ -156,16 +156,16 @@ const SocialProfiles = () => {
                       handleChange(field.key, event.target.value)
                     }
                     placeholder={`https://${field.key}.com/...`}
-                    className={`rounded-xl ${errors[field.key] ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                    className={`rounded-lg ${errors[field.key] ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                   />
                   <FieldError>{errors[field.key]}</FieldError>
                 </div>
               ))}
             </div>
 
-            <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-6">
+            <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 p-6">
               <div className="flex items-center gap-3">
-                <div className="rounded-2xl bg-white p-3 text-primary shadow-sm">
+                <div className="rounded-lg bg-white p-3 text-primary shadow-sm">
                   <Globe className="h-5 w-5" />
                 </div>
                 <div>
@@ -180,7 +180,7 @@ const SocialProfiles = () => {
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit" className="rounded-xl" disabled={isSaving}>
+              <Button type="submit" className="rounded-lg" disabled={isSaving}>
                 {isSaving ? "Saving..." : "Save Social Profiles"}
               </Button>
             </div>

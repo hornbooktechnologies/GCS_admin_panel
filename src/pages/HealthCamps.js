@@ -6,6 +6,8 @@ import { hasPermission } from "../lib/utils/permissions";
 import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
 
 const HealthCamps = () => {
   const navigate = useNavigate();
@@ -32,8 +34,6 @@ const HealthCamps = () => {
   }, []);
 
   const handleDelete = async (item) => {
-    const confirmed = window.confirm(`Delete health camp for year "${item.year}"? This cannot be undone.`);
-    if (!confirmed) return;
     try {
       await apiClient.delete(`/health-camps/${item.id}`);
       showSuccessToast("Health camp deleted successfully");
@@ -51,13 +51,13 @@ const HealthCamps = () => {
           <p className="mt-1 text-sm font-medium text-slate-500">Manage yearly health camp statistics.</p>
         </div>
         <div className="flex gap-3">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={fetchItems}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={fetchItems}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
           {canCreate && (
 
-            <Button type="button" className="rounded-xl" onClick={() => navigate("/health-camps/new")}>
+            <Button type="button" className="rounded-lg" onClick={() => navigate("/health-camps/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Add Health Camp
           </Button>
@@ -66,7 +66,7 @@ const HealthCamps = () => {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
+      <div className="overflow-hidden rounded-lg border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">Loading health camps...</div>
         ) : items.length === 0 ? (
@@ -90,14 +90,16 @@ const HealthCamps = () => {
                     <td className="px-5 py-4 text-sm text-slate-700">{item.no_of_patients}</td>
                     <td className="px-5 py-4">
                       <div className="flex justify-end gap-2">
-                        <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/health-camps/${item.id}/edit`)}>
+                        <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate(`/health-camps/${item.id}/edit`)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Edit
                         </Button>
-                        <Button type="button" variant="outline" className="rounded-xl border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleDelete(item)}>
+                        <DeleteConfirmationButton onConfirm={() => handleDelete(item)}>
+<Button type="button" variant="outline" className="rounded-lg border-red-200 text-red-600 hover:bg-red-50">
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </Button>
+</DeleteConfirmationButton>
                       </div>
                     </td>
                   </tr>

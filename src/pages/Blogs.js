@@ -15,6 +15,8 @@ import { useAuthStore } from "../context/AuthContext";
 import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
 
 const Blogs = () => {
   const navigate = useNavigate();
@@ -48,14 +50,6 @@ const Blogs = () => {
   }, [isAdmin]);
 
   const handleDelete = async (blog) => {
-    const confirmed = window.confirm(
-      `Delete blog "${blog.title}"? This cannot be undone.`,
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
     try {
       await apiClient.delete(`/blogs/${blog.id}`);
       showSuccessToast("Blog deleted successfully");
@@ -119,7 +113,7 @@ const Blogs = () => {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-900">Blogs</h1>
         <p className="mt-2 text-sm text-slate-500">
           Blog management is only available for admin users.
@@ -147,7 +141,7 @@ const Blogs = () => {
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl"
+            className="rounded-lg"
             onClick={fetchBlogs}
           >
             <RefreshCw className="mr-2 h-4 w-4" />
@@ -157,7 +151,7 @@ const Blogs = () => {
 
             <Button
             type="button"
-            className="rounded-xl"
+            className="rounded-lg"
             onClick={() => navigate("/blogs/new")}
           >
             <Plus className="mr-2 h-4 w-4" />
@@ -168,14 +162,14 @@ const Blogs = () => {
         </div>
       </div>
 
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">
             Loading blogs...
           </div>
         ) : blogs.length === 0 ? (
           <div className="py-12 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg bg-slate-100 text-slate-400">
               <ImageIcon className="h-6 w-6" />
             </div>
             <h2 className="text-lg font-semibold text-slate-800">
@@ -203,7 +197,7 @@ const Blogs = () => {
                   setDraggedBlogId(null);
                   setDropTargetBlogId(null);
                 }}
-                className={`overflow-hidden rounded-3xl border bg-white shadow-sm transition-all duration-200 ${
+                className={`overflow-hidden rounded-lg border bg-white shadow-sm transition-all duration-200 ${
                   draggedBlogId === blog.id
                     ? "scale-[0.98] border-primary/40 opacity-60"
                     : dropTargetBlogId === blog.id
@@ -229,7 +223,7 @@ const Blogs = () => {
                   <div className="space-y-4 p-5">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex min-w-0 items-start gap-3">
-                        <div className="mt-0.5 rounded-xl border border-slate-200 bg-slate-50 p-2 text-slate-400">
+                        <div className="mt-0.5 rounded-lg border border-slate-200 bg-slate-50 p-2 text-slate-400">
                           <GripVertical className="h-4 w-4" />
                         </div>
                         <div className="min-w-0">
@@ -283,21 +277,22 @@ const Blogs = () => {
                       <Button
                         type="button"
                         variant="outline"
-                        className="rounded-xl"
+                        className="rounded-lg"
                         onClick={() => navigate(`/blogs/${blog.id}/edit`)}
                       >
                         <Pencil className="mr-2 h-4 w-4" />
                         Edit
                       </Button>
-                      <Button
+                      <DeleteConfirmationButton onConfirm={() => handleDelete(blog)}>
+<Button
                         type="button"
                         variant="outline"
-                        className="rounded-xl border-red-200 text-red-600 hover:bg-red-50"
-                        onClick={() => handleDelete(blog)}
+                        className="rounded-lg border-red-200 text-red-600 hover:bg-red-50"
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
                         Delete
                       </Button>
+</DeleteConfirmationButton>
                     </div>
                   </div>
                 </div>

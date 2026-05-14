@@ -6,6 +6,8 @@ import { useAuthStore } from "../context/AuthContext";
 import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
 
 const News = () => {
   const navigate = useNavigate();
@@ -39,8 +41,6 @@ const News = () => {
   }, [isAdmin]);
 
   const handleDelete = async (item) => {
-    const confirmed = window.confirm(`Delete "${item.title || item.name}"? This cannot be undone.`);
-    if (!confirmed) return;
     try {
       await apiClient.delete(`/news/${item.id}`);
       showSuccessToast("News item deleted successfully");
@@ -101,7 +101,7 @@ const News = () => {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-900">News</h1>
         <p className="mt-2 text-sm text-slate-500">News management is only available for admin users.</p>
       </div>
@@ -116,13 +116,13 @@ const News = () => {
           <p className="mt-1 text-sm font-medium text-slate-500">Manage news items and drag cards to reorder them.</p>
         </div>
         <div className="flex gap-3">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={fetchNews}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={fetchNews}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
           {canCreate && (
 
-            <Button type="button" className="rounded-xl" onClick={() => navigate("/news/new")}>
+            <Button type="button" className="rounded-lg" onClick={() => navigate("/news/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Add News
           </Button>
@@ -131,7 +131,7 @@ const News = () => {
         </div>
       </div>
 
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">Loading news...</div>
         ) : newsItems.length === 0 ? (
@@ -154,7 +154,7 @@ const News = () => {
                   setDraggedId(null);
                   setDropTargetId(null);
                 }}
-                className={`overflow-hidden rounded-3xl border bg-white shadow-sm transition-all duration-200 ${
+                className={`overflow-hidden rounded-lg border bg-white shadow-sm transition-all duration-200 ${
                   draggedId === item.id
                     ? "scale-[0.98] border-primary/40 opacity-60"
                     : dropTargetId === item.id
@@ -180,7 +180,7 @@ const News = () => {
                   <div className="space-y-4 p-5">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex min-w-0 items-start gap-3">
-                        <div className="mt-0.5 rounded-xl border border-slate-200 bg-slate-50 p-2 text-slate-400">
+                        <div className="mt-0.5 rounded-lg border border-slate-200 bg-slate-50 p-2 text-slate-400">
                           <GripVertical className="h-4 w-4" />
                         </div>
                         <div className="min-w-0">
@@ -195,14 +195,16 @@ const News = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                      <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/news/${item.id}/edit`)}>
+                      <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate(`/news/${item.id}/edit`)}>
                         <Pencil className="mr-2 h-4 w-4" />
                         Edit
                       </Button>
-                      <Button type="button" variant="outline" className="rounded-xl border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleDelete(item)}>
+                      <DeleteConfirmationButton onConfirm={() => handleDelete(item)}>
+<Button type="button" variant="outline" className="rounded-lg border-red-200 text-red-600 hover:bg-red-50">
                         <Trash2 className="mr-2 h-4 w-4" />
                         Delete
                       </Button>
+</DeleteConfirmationButton>
                     </div>
                   </div>
                 </div>

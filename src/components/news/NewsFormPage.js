@@ -220,7 +220,7 @@ const NewsFormPage = ({ mode }) => {
             inputRef.current?.click();
           }
         }}
-        className={`cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-all ${
+        className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${
           formErrors[field]
             ? "border-red-300 bg-red-50/40"
             : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"
@@ -230,10 +230,10 @@ const NewsFormPage = ({ mode }) => {
           <img
             src={previewUrl}
             alt={`${label} preview`}
-            className="mx-auto mb-4 aspect-[16/10] w-full rounded-2xl object-cover"
+            className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
           />
         ) : (
-          <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm">
+          <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
             <ImageIcon className="h-8 w-8" />
           </div>
         )}
@@ -258,7 +258,7 @@ const NewsFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading news editor...
@@ -273,7 +273,7 @@ const NewsFormPage = ({ mode }) => {
         <Button
           type="button"
           variant="ghost"
-          className="-ml-3 mb-2 rounded-xl px-3 text-slate-500"
+          className="-ml-3 mb-2 rounded-lg px-3 text-slate-500"
           onClick={() => navigate("/news")}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -286,7 +286,7 @@ const NewsFormPage = ({ mode }) => {
 
       <form
         onSubmit={handleSave}
-        className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
+        className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
       >
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-4">
@@ -295,7 +295,7 @@ const NewsFormPage = ({ mode }) => {
               <Input
                 value={form.title}
                 onChange={(event) => handleInputChange("title", event.target.value)}
-                className={`rounded-xl ${
+                className={`rounded-lg ${
                   formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""
                 }`}
               />
@@ -313,7 +313,7 @@ const NewsFormPage = ({ mode }) => {
                   onChange={(event) =>
                     handleInputChange("published_date", event.target.value)
                   }
-                  className={`rounded-xl ${
+                  className={`rounded-lg ${
                     formErrors.published_date
                       ? "border-red-300 focus-visible:ring-red-500"
                       : ""
@@ -328,7 +328,7 @@ const NewsFormPage = ({ mode }) => {
                   value={form.status}
                   onValueChange={(value) => handleInputChange("status", value)}
                 >
-                  <SelectTrigger className="rounded-xl">
+                  <SelectTrigger className="rounded-lg">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -339,7 +339,7 @@ const NewsFormPage = ({ mode }) => {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+            <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3">
               <input
                 id="featured"
                 type="checkbox"
@@ -360,7 +360,7 @@ const NewsFormPage = ({ mode }) => {
                 value={form.content}
                 onChange={(event) => handleInputChange("content", event.target.value)}
                 rows={12}
-                className={`rounded-2xl ${
+                className={`rounded-lg ${
                   formErrors.content ? "border-red-300 focus-visible:ring-red-500" : ""
                 }`}
                 placeholder="Write the full news content here..."
@@ -392,12 +392,12 @@ const NewsFormPage = ({ mode }) => {
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl"
+            className="rounded-lg"
             onClick={() => navigate("/news")}
           >
             Cancel
           </Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : (

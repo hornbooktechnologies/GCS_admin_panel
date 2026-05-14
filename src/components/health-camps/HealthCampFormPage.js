@@ -107,7 +107,7 @@ const HealthCampFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading health camp editor...
@@ -119,37 +119,37 @@ const HealthCampFormPage = ({ mode }) => {
   return (
     <div className="max-w-[1600px] space-y-6">
       <div>
-        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-xl px-3 text-slate-500" onClick={() => navigate("/health-camps")}>
+        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/health-camps")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Health Camps
         </Button>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">{pageTitle}</h1>
       </div>
 
-      <form onSubmit={handleSave} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <form onSubmit={handleSave} className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         <div className="grid gap-6 md:grid-cols-3">
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Year</label>
-            <Input type="number" value={form.year} onChange={(event) => handleInputChange("year", event.target.value)} className={`rounded-xl ${formErrors.year ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <Input type="number" value={form.year} onChange={(event) => handleInputChange("year", event.target.value)} className={`rounded-lg ${formErrors.year ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.year}</FieldError>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Camps</label>
-            <Input type="number" value={form.camps} onChange={(event) => handleInputChange("camps", event.target.value)} className={`rounded-xl ${formErrors.camps ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <Input type="number" value={form.camps} onChange={(event) => handleInputChange("camps", event.target.value)} className={`rounded-lg ${formErrors.camps ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.camps}</FieldError>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">No. of Patient</label>
-            <Input type="number" value={form.no_of_patients} onChange={(event) => handleInputChange("no_of_patients", event.target.value)} className={`rounded-xl ${formErrors.no_of_patients ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <Input type="number" value={form.no_of_patients} onChange={(event) => handleInputChange("no_of_patients", event.target.value)} className={`rounded-lg ${formErrors.no_of_patients ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.no_of_patients}</FieldError>
           </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/health-camps")}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/health-camps")}>
             Cancel
           </Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {isSaving ? "Saving..." : isEditMode ? "Update Health Camp" : "Create Health Camp"}
           </Button>

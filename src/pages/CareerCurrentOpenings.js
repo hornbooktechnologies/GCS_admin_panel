@@ -6,6 +6,8 @@ import { hasPermission } from "../lib/utils/permissions";
 import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
 
 const CareerCurrentOpenings = () => {
   const navigate = useNavigate();
@@ -35,8 +37,6 @@ const CareerCurrentOpenings = () => {
   }, []);
 
   const handleDelete = async (item) => {
-    const confirmed = window.confirm(`Delete opening "${item.position}"? This cannot be undone.`);
-    if (!confirmed) return;
     try {
       await apiClient.delete(`/career/current-openings/${item.id}`);
       showSuccessToast("Current opening deleted successfully");
@@ -60,17 +60,17 @@ const CareerCurrentOpenings = () => {
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && fetchOpenings(search)}
             placeholder="Search positions..."
-            className="rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30 w-64"
+            className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30 w-64"
           />
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => fetchOpenings(search)}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => fetchOpenings(search)}>
             Search
           </Button>
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => fetchOpenings()}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => fetchOpenings()}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
           {canCreate && (
-            <Button type="button" className="rounded-xl" onClick={() => navigate("/career/current-openings/new")}>
+            <Button type="button" className="rounded-lg" onClick={() => navigate("/career/current-openings/new")}>
               <Plus className="mr-2 h-4 w-4" />
               Add Opening
             </Button>
@@ -78,7 +78,7 @@ const CareerCurrentOpenings = () => {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
+      <div className="overflow-hidden rounded-lg border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">Loading current openings...</div>
         ) : openings.length === 0 ? (
@@ -118,14 +118,16 @@ const CareerCurrentOpenings = () => {
                     <td className="px-5 py-4 text-sm text-slate-600"><div className="line-clamp-2">{item.description}</div></td>
                     <td className="px-5 py-4">
                       <div className="flex justify-end gap-2">
-                        <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/career/current-openings/${item.id}/edit`)}>
+                        <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate(`/career/current-openings/${item.id}/edit`)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Edit
                         </Button>
-                        <Button type="button" variant="outline" className="rounded-xl border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleDelete(item)}>
+                        <DeleteConfirmationButton onConfirm={() => handleDelete(item)}>
+<Button type="button" variant="outline" className="rounded-lg border-red-200 text-red-600 hover:bg-red-50">
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </Button>
+</DeleteConfirmationButton>
                       </div>
                     </td>
                   </tr>

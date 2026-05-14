@@ -16,17 +16,8 @@ import { useAuthStore } from "../../context/AuthContext";
 import { hasPermission } from "../../lib/utils/permissions";
 import CreateOrEditUserForm from "./CreateOrEditUserForm";
 import useToast from "../../hooks/useToast";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "../ui/alert-dialog";
 import ViewUserDialog from "./ViewUserDialog";
+import { ConfirmationDialog } from "../common/ConfirmationDialog";
 
 const UsersList = () => {
   const { user } = useAuthStore();
@@ -320,30 +311,14 @@ const UsersList = () => {
         user={userToView}
       />
 
-      <AlertDialog
+      <ConfirmationDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-      >
-        <AlertDialogContent className="w-[90%] sm:max-w-lg rounded-xl">
-          <AlertDialogHeader className="!text-left mb-4">
-            <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this user?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter className="!flex-row !justify-end gap-3">
-            <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)} className="!mt-0">
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={executeDelete}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        title="Delete user?"
+        description="Are you sure you want to delete this user? This action cannot be undone."
+        confirmLabel="Continue"
+        onConfirm={executeDelete}
+      />
     </>
   );
 };

@@ -240,7 +240,7 @@ const EventFormPage = ({ mode }) => {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-900">{pageTitle}</h1>
         <p className="mt-2 text-sm text-slate-500">
           Event management is only available for admin users.
@@ -251,7 +251,7 @@ const EventFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading event editor...
@@ -272,7 +272,7 @@ const EventFormPage = ({ mode }) => {
           <Button
             type="button"
             variant="ghost"
-            className="-ml-3 mb-2 rounded-xl px-3 text-slate-500"
+            className="-ml-3 mb-2 rounded-lg px-3 text-slate-500"
             onClick={() => navigate("/events")}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -291,7 +291,7 @@ const EventFormPage = ({ mode }) => {
 
       <form
         onSubmit={handleSave}
-        className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
+        className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
       >
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-4">
@@ -301,7 +301,7 @@ const EventFormPage = ({ mode }) => {
                 value={form.title}
                 onChange={(event) => handleInputChange("title", event.target.value)}
                 placeholder="Annual health awareness camp"
-                className={`rounded-xl ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                className={`rounded-lg ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
               />
               <FieldError>{formErrors.title}</FieldError>
             </div>
@@ -315,7 +315,7 @@ const EventFormPage = ({ mode }) => {
                 }
                 rows={8}
                 placeholder="Write event details here..."
-                className={`min-h-[180px] w-full rounded-2xl border bg-white px-4 py-3 text-sm text-slate-700 outline-none ${
+                className={`min-h-[180px] w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-700 outline-none ${
                   formErrors.description
                     ? "border-red-300 focus:ring-2 focus:ring-red-500"
                     : "border-slate-200 focus:ring-2 focus:ring-primary/30"
@@ -335,7 +335,7 @@ const EventFormPage = ({ mode }) => {
                     onChange={(event) =>
                       handleInputChange("event_date", event.target.value)
                     }
-                    className={`rounded-xl pl-10 ${formErrors.event_date ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                    className={`rounded-lg pl-10 ${formErrors.event_date ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                   />
                 </div>
                 <FieldError>{formErrors.event_date}</FieldError>
@@ -349,7 +349,7 @@ const EventFormPage = ({ mode }) => {
                     value={form.place}
                     onChange={(event) => handleInputChange("place", event.target.value)}
                     placeholder="GCS Hospital Auditorium"
-                    className={`rounded-xl pl-10 ${formErrors.place ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                    className={`rounded-lg pl-10 ${formErrors.place ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                   />
                 </div>
                 <FieldError>{formErrors.place}</FieldError>
@@ -380,7 +380,7 @@ const EventFormPage = ({ mode }) => {
                   setIsDragOverThumbnailUpload(false);
                   handleThumbnailSelect(event.dataTransfer.files?.[0]);
                 }}
-                className={`cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-all ${
+                className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${
                   formErrors.thumbnail_image
                     ? "border-red-300 bg-red-50/40"
                     : isDragOverThumbnailUpload
@@ -392,10 +392,10 @@ const EventFormPage = ({ mode }) => {
                   <img
                     src={thumbnailPreviewUrl}
                     alt="Thumbnail preview"
-                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-2xl object-cover"
+                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
@@ -444,7 +444,7 @@ const EventFormPage = ({ mode }) => {
                   setIsDragOverGalleryUpload(false);
                   handleGallerySelect(event.dataTransfer.files);
                 }}
-                className={`cursor-pointer rounded-3xl border border-dashed p-6 text-center transition-all ${
+                className={`cursor-pointer rounded-lg border border-dashed p-6 text-center transition-all ${
                   formErrors.gallery_images
                     ? "border-red-300 bg-red-50/40"
                     : isDragOverGalleryUpload
@@ -452,7 +452,7 @@ const EventFormPage = ({ mode }) => {
                       : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"
                 }`}
               >
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
                   <Upload className="h-6 w-6" />
                 </div>
                 <p className="mt-4 text-sm font-semibold text-slate-700">
@@ -487,7 +487,7 @@ const EventFormPage = ({ mode }) => {
                   {displayGalleryImages.map((item, index) => (
                     <div
                       key={`${item.image_url}-${index}`}
-                      className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50"
+                      className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
                     >
                       <img
                         src={item.image_url}
@@ -498,7 +498,7 @@ const EventFormPage = ({ mode }) => {
                   ))}
                 </div>
               ) : (
-                <div className="flex min-h-48 items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50 text-slate-400">
+                <div className="flex min-h-48 items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50 text-slate-400">
                   <ImageIcon className="h-8 w-8" />
                 </div>
               )}
@@ -510,12 +510,12 @@ const EventFormPage = ({ mode }) => {
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl"
+            className="rounded-lg"
             onClick={() => navigate("/events")}
           >
             Cancel
           </Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : (

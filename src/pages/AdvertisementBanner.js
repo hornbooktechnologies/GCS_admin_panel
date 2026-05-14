@@ -185,7 +185,7 @@ const AdvertisementBanner = () => {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-900">
           Advertisement Banner
         </h1>
@@ -211,7 +211,7 @@ const AdvertisementBanner = () => {
         <Button
           type="button"
           variant="outline"
-          className="rounded-xl"
+          className="rounded-lg"
           onClick={fetchBanner}
         >
           <RefreshCw className="mr-2 h-4 w-4" />
@@ -221,7 +221,7 @@ const AdvertisementBanner = () => {
 
       <form
         onSubmit={handleSave}
-        className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
+        className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
       >
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">
@@ -241,7 +241,7 @@ const AdvertisementBanner = () => {
                       handleInputChange("title", event.target.value)
                     }
                     placeholder="Hospital health camp promotion"
-                    className={`rounded-xl ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                    className={`rounded-lg ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                   />
                   <FieldError>{formErrors.title}</FieldError>
                 </div>
@@ -256,7 +256,7 @@ const AdvertisementBanner = () => {
                       handleInputChange("link_url", event.target.value)
                     }
                     placeholder="https://example.com/campaign"
-                    className={`rounded-xl ${formErrors.link_url ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                    className={`rounded-lg ${formErrors.link_url ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                   />
                   <FieldError>{formErrors.link_url}</FieldError>
                 </div>
@@ -285,14 +285,14 @@ const AdvertisementBanner = () => {
                       setIsDragOverUpload(false);
                       handleImageSelect(event.dataTransfer.files?.[0]);
                     }}
-                    className={`cursor-pointer rounded-3xl border border-dashed p-6 text-center transition-all ${formErrors.image
+                    className={`cursor-pointer rounded-lg border border-dashed p-6 text-center transition-all ${formErrors.image
                       ? "border-red-300 bg-red-50/40"
                       : isDragOverUpload
                         ? "border-primary bg-primary/5"
                         : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"
                       }`}
                   >
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
                       <Upload className="h-6 w-6" />
                     </div>
                     <p className="mt-4 text-sm font-semibold text-slate-700">
@@ -325,7 +325,7 @@ const AdvertisementBanner = () => {
                 <label className="text-sm font-semibold text-slate-700">
                   Preview
                 </label>
-                <div className="overflow-hidden rounded-3xl border border-dashed border-slate-200 bg-slate-50">
+                <div className="overflow-hidden rounded-lg border border-dashed border-slate-200 bg-slate-50">
                   {previewUrl ? (
                     <img
                       src={previewUrl}
@@ -342,7 +342,7 @@ const AdvertisementBanner = () => {
             </div>
 
             <div className="mt-6 flex justify-end border-t border-slate-100 pt-5">
-              <Button type="submit" className="rounded-xl" disabled={isSaving}>
+              <Button type="submit" className="rounded-lg" disabled={isSaving}>
                 <Save className="mr-2 h-4 w-4" />
                 {isSaving ? "Saving..." : "Save Advertisement Banner"}
               </Button>

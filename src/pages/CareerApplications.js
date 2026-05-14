@@ -58,19 +58,19 @@ const CareerApplications = () => {
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && fetchApplications(search)}
             placeholder="Search name, email, position..."
-            className="rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30 w-72"
+            className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30 w-72"
           />
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => fetchApplications(search)}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => fetchApplications(search)}>
             Search
           </Button>
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => fetchApplications()}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => fetchApplications()}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
+      <div className="overflow-hidden rounded-lg border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">Loading applications...</div>
         ) : applications.length === 0 ? (
@@ -104,7 +104,7 @@ const CareerApplications = () => {
                         value={item.status || "pending"}
                         disabled={updatingStatus === item.id}
                         onChange={(e) => handleStatusChange(item.id, e.target.value)}
-                        className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs text-slate-700 outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50"
+                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-700 outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50"
                       >
                         <option value="pending">Pending</option>
                         <option value="reviewing">Reviewing</option>
@@ -115,7 +115,7 @@ const CareerApplications = () => {
                     </td>
                     <td className="px-5 py-4 text-sm text-slate-600"><div className="line-clamp-3">{item.message || "-"}</div></td>
                     <td className="px-5 py-4 text-sm text-slate-600">
-                      <a href={item.resume_url} target="_blank" rel="noreferrer" className="inline-flex items-center rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">
+                      <a href={item.resume_url} target="_blank" rel="noreferrer" className="inline-flex items-center rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">
                         <FileText className="mr-2 h-3.5 w-3.5" />
                         Open Resume
                         <ExternalLink className="ml-2 h-3.5 w-3.5" />

@@ -6,6 +6,8 @@ import { hasPermission } from "../lib/utils/permissions";
 import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
 
 const Sympotms = () => {
   const navigate = useNavigate();
@@ -32,9 +34,6 @@ const Sympotms = () => {
   }, []);
 
   const handleDelete = async (item) => {
-    const confirmed = window.confirm(`Delete "${item.name}"? This cannot be undone.`);
-    if (!confirmed) return;
-
     try {
       await apiClient.delete(`/symptoms/${item.id}`);
       showSuccessToast("Symptom deleted successfully");
@@ -52,13 +51,13 @@ const Sympotms = () => {
           <p className="mt-1 text-sm font-medium text-slate-500">Manage symptom cards, subtitles, images, and repeatable potential causes.</p>
         </div>
         <div className="flex gap-3">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={fetchItems}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={fetchItems}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
           {canCreate && (
 
-            <Button type="button" className="rounded-xl" onClick={() => navigate("/symptoms/new")}>
+            <Button type="button" className="rounded-lg" onClick={() => navigate("/symptoms/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Add Symptom
           </Button>
@@ -67,7 +66,7 @@ const Sympotms = () => {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
+      <div className="overflow-hidden rounded-lg border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">Loading symptoms...</div>
         ) : items.length === 0 ? (
@@ -88,7 +87,7 @@ const Sympotms = () => {
                   <tr key={item.id}>
                     <td className="px-5 py-4">
                       <div className="flex items-start gap-4">
-                        <div className="h-16 w-24 overflow-hidden rounded-2xl bg-slate-100">
+                        <div className="h-16 w-24 overflow-hidden rounded-lg bg-slate-100">
                           {item.image_url ? (
                             <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
                           ) : (
@@ -106,14 +105,16 @@ const Sympotms = () => {
                     <td className="px-5 py-4 text-sm text-slate-600">{item.potential_causes?.length || 0} item(s)</td>
                     <td className="px-5 py-4">
                       <div className="flex justify-end gap-2">
-                        <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/symptoms/${item.id}/edit`)}>
+                        <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate(`/symptoms/${item.id}/edit`)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Edit
                         </Button>
-                        <Button type="button" variant="outline" className="rounded-xl border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleDelete(item)}>
+                        <DeleteConfirmationButton onConfirm={() => handleDelete(item)}>
+<Button type="button" variant="outline" className="rounded-lg border-red-200 text-red-600 hover:bg-red-50">
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </Button>
+</DeleteConfirmationButton>
                       </div>
                     </td>
                   </tr>

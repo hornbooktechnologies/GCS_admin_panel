@@ -46,13 +46,13 @@ const Career = () => {
         {cards.map((card) => {
           const Icon = card.icon;
           return (
-            <div key={card.title} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">
+            <div key={card.title} className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
                 <Icon className="h-6 w-6" />
               </div>
               <h2 className="text-lg font-bold text-slate-800">{card.title}</h2>
               <p className="mt-2 text-sm text-slate-500">{card.description}</p>
-              <Button type="button" className="mt-5 rounded-xl" onClick={() => navigate(card.path)}>
+              <Button type="button" className="mt-5 rounded-lg" onClick={() => navigate(card.path)}>
                 Open
               </Button>
             </div>

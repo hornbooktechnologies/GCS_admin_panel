@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/node_modules/quill/dist/quill.snow.css";
-import { ArrowLeft, ChevronDown, Image as ImageIcon, LoaderCircle, Save } from "lucide-react";
+import { ArrowLeft, ChevronDown, Image as ImageIcon, LoaderCircle, Save, Trash2 } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
@@ -42,6 +42,8 @@ const quillModules = {
 const isMeaningfulHtml = (html) =>
   html && html.replace(/<(.|\n)*?>/g, "").replace(/&nbsp;/g, " ").trim().length > 0;
 
+const asString = (value) => (value === undefined || value === null ? "" : String(value));
+
 const DoctorFormPage = ({ mode }) => {
   const navigate = useNavigate();
   const { doctorId } = useParams();
@@ -52,9 +54,12 @@ const DoctorFormPage = ({ mode }) => {
   const [isPageLoading, setIsPageLoading] = useState(mode === "edit");
   const [isSaving, setIsSaving] = useState(false);
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+  const [existingImageUrl, setExistingImageUrl] = useState("");
+  const [removeImage, setRemoveImage] = useState(false);
   const imageInputRef = useRef(null);
   const isEditMode = mode === "edit";
   const pageTitle = useMemo(() => (isEditMode ? "Edit Doctor" : "Create Doctor"), [isEditMode]);
+  const imageUrlForPreview = imagePreviewUrl && (form.image || !removeImage) ? imagePreviewUrl : "";
 
   useEffect(() => {
     if (!form.image) return undefined;
@@ -95,14 +100,16 @@ const DoctorFormPage = ({ mode }) => {
         setForm({
           name: item.name || "",
           image: null,
-          experience: item.experience || "",
+          experience: asString(item.experience),
           designation: item.designation || "",
           description: item.description || "",
-          display_order: item.display_order ?? 0,
+          display_order: asString(item.display_order ?? 0),
           is_hod: Boolean(item.is_hod),
           speciality_ids: item.speciality_ids || [],
         });
         setImagePreviewUrl(item.image_url || "");
+        setExistingImageUrl(item.image_url || "");
+        setRemoveImage(false);
       } catch (err) {
         showErrorToast(err.response?.data?.message || "Failed to load doctor");
         navigate("/doctors");
@@ -125,7 +132,28 @@ const DoctorFormPage = ({ mode }) => {
       setFormErrors((current) => ({ ...current, image: "Only image files are allowed." }));
       return;
     }
+    setRemoveImage(false);
     handleInputChange("image", file);
+  };
+
+  const handleRemoveImage = () => {
+    if (form.image) {
+      handleInputChange("image", null);
+      if (imageInputRef.current) {
+        imageInputRef.current.value = "";
+      }
+      setImagePreviewUrl(isEditMode && !removeImage ? existingImageUrl : "");
+      return;
+    }
+
+    if (isEditMode) {
+      setRemoveImage(true);
+    }
+    setImagePreviewUrl("");
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
+    setFormErrors((current) => ({ ...current, image: "" }));
   };
 
   const toggleSpeciality = (specialityId) => {
@@ -143,13 +171,16 @@ const DoctorFormPage = ({ mode }) => {
 
   const validateForm = () => {
     const nextErrors = {};
+    const experienceValue = asString(form.experience).trim();
+    const displayOrderValue = asString(form.display_order).trim();
+
     if (!form.name.trim()) nextErrors.name = "Name is required.";
     if (!isEditMode && !form.image) nextErrors.image = "Image is required.";
-    if (!form.experience.trim()) nextErrors.experience = "Experience is required.";
-    if (Number.isNaN(Number(form.experience)) || Number(form.experience) < 0) nextErrors.experience = "Experience must be 0 or more.";
+    if (!experienceValue) nextErrors.experience = "Experience is required.";
+    if (Number.isNaN(Number(experienceValue)) || Number(experienceValue) < 0) nextErrors.experience = "Experience must be 0 or more.";
     if (!form.designation.trim()) nextErrors.designation = "Designation is required.";
     if (!isMeaningfulHtml(form.description)) nextErrors.description = "Description is required.";
-    if (Number.isNaN(Number(form.display_order)) || Number(form.display_order) < 0) nextErrors.display_order = "Display order must be 0 or more.";
+    if (Number.isNaN(Number(displayOrderValue)) || Number(displayOrderValue) < 0) nextErrors.display_order = "Display order must be 0 or more.";
     if (form.speciality_ids.length === 0) nextErrors.speciality_ids = "At least one speciality is required.";
     setFormErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -162,13 +193,14 @@ const DoctorFormPage = ({ mode }) => {
     try {
       const payload = new FormData();
       payload.append("name", form.name.trim());
-      payload.append("experience", String(Number(form.experience)));
+      payload.append("experience", String(Number(asString(form.experience).trim())));
       payload.append("designation", form.designation.trim());
       payload.append("description", form.description);
-      payload.append("display_order", String(Number(form.display_order) || 0));
+      payload.append("display_order", String(Number(asString(form.display_order).trim()) || 0));
       payload.append("is_hod", String(Boolean(form.is_hod)));
       payload.append("speciality_ids", JSON.stringify(form.speciality_ids));
       if (form.image) payload.append("image", form.image);
+      if (isEditMode && removeImage && !form.image) payload.append("remove_image", "true");
 
       if (isEditMode) {
         await apiClient.put(`/doctors/${doctorId}`, payload, {
@@ -194,7 +226,7 @@ const DoctorFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading doctor editor...
@@ -206,43 +238,43 @@ const DoctorFormPage = ({ mode }) => {
   return (
     <div className="max-w-[1600px] space-y-6">
       <div>
-        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-xl px-3 text-slate-500" onClick={() => navigate("/doctors")}>
+        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/doctors")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Doctors
         </Button>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">{pageTitle}</h1>
       </div>
 
-      <form onSubmit={handleSave} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <form onSubmit={handleSave} className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Name</label>
-              <Input value={form.name} onChange={(event) => handleInputChange("name", event.target.value)} className={`rounded-xl ${formErrors.name ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input value={form.name} onChange={(event) => handleInputChange("name", event.target.value)} className={`rounded-lg ${formErrors.name ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.name}</FieldError>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">Experience</label>
-                <Input type="number" min="0" max="80" value={form.experience} onChange={(event) => handleInputChange("experience", event.target.value)} className={`rounded-xl ${formErrors.experience ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+                <Input type="number" min="0" max="80" value={form.experience} onChange={(event) => handleInputChange("experience", event.target.value)} className={`rounded-lg ${formErrors.experience ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
                 <FieldError>{formErrors.experience}</FieldError>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">Designation</label>
-                <Input value={form.designation} onChange={(event) => handleInputChange("designation", event.target.value)} className={`rounded-xl ${formErrors.designation ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+                <Input value={form.designation} onChange={(event) => handleInputChange("designation", event.target.value)} className={`rounded-lg ${formErrors.designation ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
                 <FieldError>{formErrors.designation}</FieldError>
               </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">Display Order</label>
-                <Input type="number" min="0" value={form.display_order} onChange={(event) => handleInputChange("display_order", event.target.value)} className={`rounded-xl ${formErrors.display_order ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+                <Input type="number" min="0" value={form.display_order} onChange={(event) => handleInputChange("display_order", event.target.value)} className={`rounded-lg ${formErrors.display_order ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
                 <p className="text-xs text-slate-500">Lower numbers appear first within their speciality. HODs always appear before non-HODs.</p>
                 <FieldError>{formErrors.display_order}</FieldError>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">Head Of Department</label>
-                <label className="flex min-h-11 items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+                <label className="flex min-h-11 items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
                   <input type="checkbox" checked={form.is_hod} onChange={(event) => handleInputChange("is_hod", event.target.checked)} />
                   Mark this doctor as HOD
                 </label>
@@ -252,7 +284,7 @@ const DoctorFormPage = ({ mode }) => {
               <label className="text-sm font-semibold text-slate-700">Specialities</label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button type="button" variant="outline" className={`w-full justify-between rounded-xl ${formErrors.speciality_ids ? "border-red-300 text-red-600" : ""}`}>
+                  <Button type="button" variant="outline" className={`w-full justify-between rounded-lg ${formErrors.speciality_ids ? "border-red-300 text-red-600" : ""}`}>
                     <span className="truncate">
                       {selectedSpecialities.length > 0
                         ? `${selectedSpecialities.length} selected`
@@ -291,7 +323,7 @@ const DoctorFormPage = ({ mode }) => {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Description</label>
-              <div className={`overflow-hidden rounded-2xl border bg-white ${formErrors.description ? "border-red-300" : "border-slate-200"}`}>
+              <div className={`overflow-hidden rounded-lg border bg-white ${formErrors.description ? "border-red-300" : "border-slate-200"}`}>
                 <ReactQuill theme="snow" value={form.description} onChange={(value) => handleInputChange("description", value)} modules={quillModules} placeholder="Write description here..." />
               </div>
               <FieldError>{formErrors.description}</FieldError>
@@ -301,16 +333,37 @@ const DoctorFormPage = ({ mode }) => {
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Image</label>
-              <div role="button" tabIndex={0} onClick={() => imageInputRef.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); imageInputRef.current?.click(); } }} className={`cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}>
-                {imagePreviewUrl ? (
-                  <img src={imagePreviewUrl} alt="Preview" className="mx-auto mb-4 aspect-[16/10] w-full rounded-2xl object-cover" />
+              <div role="button" tabIndex={0} onClick={() => imageInputRef.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); imageInputRef.current?.click(); } }} className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}>
+                {imageUrlForPreview ? (
+                  <img
+                    src={imageUrlForPreview}
+                    alt="Preview"
+                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
+                    onError={() => setImagePreviewUrl("")}
+                  />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
                 <p className="text-sm font-semibold text-slate-700">Upload image</p>
               </div>
+              {(imagePreviewUrl || form.image) ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full rounded-lg border-red-200 text-red-600 hover:bg-red-50"
+                  onClick={handleRemoveImage}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {form.image ? "Remove selected image" : "Remove current image"}
+                </Button>
+              ) : null}
+              {isEditMode && removeImage ? (
+                <p className="text-xs font-medium text-slate-500">
+                  The saved doctor image will be replaced with the default picture.
+                </p>
+              ) : null}
               <Input ref={imageInputRef} type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" className="hidden" onChange={(event) => handleImageSelect(event.target.files?.[0])} />
               <FieldError>{formErrors.image}</FieldError>
             </div>
@@ -318,8 +371,8 @@ const DoctorFormPage = ({ mode }) => {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/doctors")}>Cancel</Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/doctors")}>Cancel</Button>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {isSaving ? "Saving..." : isEditMode ? "Update Doctor" : "Create Doctor"}
           </Button>

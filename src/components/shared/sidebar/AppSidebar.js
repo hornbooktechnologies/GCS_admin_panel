@@ -67,8 +67,8 @@ const AppSidebar = () => {
           // Mobile: Fixed overlay | Desktop: Relative in-flow
           "fixed top-4 left-4 h-[calc(100dvh-2rem)] md:relative md:h-full md:top-0 md:left-0",
           isOpen
-            ? "translate-x-0 w-[240px] md:w-[260px] rounded-3xl"
-            : "-translate-x-[calc(100%+20px)] md:translate-x-0 md:w-20 rounded-3xl",
+            ? "translate-x-0 w-[240px] md:w-[260px] rounded-lg"
+            : "-translate-x-[calc(100%+20px)] md:translate-x-0 md:w-20 rounded-lg",
         )}
       >
         {/* Logo Header synced with Navbar height */}
@@ -131,7 +131,7 @@ const AppSidebar = () => {
                             className={cn(
                               "flex items-center transition-all duration-300 group relative",
                               isOpen
-                                ? "justify-start px-5 py-3.5 gap-3 rounded-2xl w-full"
+                                ? "justify-start px-5 py-3.5 gap-3 rounded-lg w-full"
                                 : "justify-center w-12 h-12 mx-auto rounded-full",
                               isActive
                                 ? "bg-primary text-white shadow-xl shadow-primary/30"
@@ -175,7 +175,7 @@ const AppSidebar = () => {
                             className={cn(
                               "flex items-center transition-all duration-300 group relative",
                               isOpen
-                                ? "justify-start px-5 py-3.5 gap-3 rounded-2xl w-full"
+                                ? "justify-start px-5 py-3.5 gap-3 rounded-lg w-full"
                                 : "justify-center w-12 h-12 mx-auto rounded-full",
                               isActive
                                 ? "bg-primary text-white shadow-xl shadow-primary/30"
@@ -225,7 +225,7 @@ const AppSidebar = () => {
                               to={child.url}
                               onClick={handleNavClick}
                               className={cn(
-                                "flex items-center rounded-xl px-4 py-2.5 text-sm transition-all duration-200",
+                                "flex items-center rounded-lg px-4 py-2.5 text-sm transition-all duration-200",
                                 childIsActive
                                   ? "bg-primary/10 text-primary font-semibold"
                                   : "text-slate-500 hover:bg-white hover:text-primary",
@@ -253,7 +253,7 @@ const AppSidebar = () => {
                   className={cn(
                     "flex items-center transition-all duration-300 group relative",
                     isOpen
-                      ? "justify-start px-5 py-3 gap-3 rounded-2xl w-full"
+                      ? "justify-start px-5 py-3 gap-3 rounded-lg w-full"
                       : "justify-center w-12 h-12 mx-auto rounded-full",
                     "text-primary hover:text-red-600 hover:bg-red-50 hover:shadow-sm",
                   )}

@@ -140,7 +140,7 @@ export default function UserTable({
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align='end'
-              className='w-fit min-w-auto p-2 space-y-1 bg-white border border-slate-200 shadow-lg rounded-xl'
+              className='w-fit min-w-auto p-2 space-y-1 bg-white border border-slate-200 shadow-lg rounded-lg'
             >
               <DropdownMenuItem
                 className='cursor-pointer flex items-center gap-2 p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors focus:bg-slate-100'

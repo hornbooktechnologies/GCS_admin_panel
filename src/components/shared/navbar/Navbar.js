@@ -18,7 +18,7 @@ const Navbar = () => {
 
     return (
         <>
-            <div className='flex justify-between items-center h-[72px] px-4 z-20 mt-4 mr-4 ml-4 md:mt-0 md:mr-0 md:ml-0 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-xl'>
+            <div className='flex justify-between items-center h-[72px] px-4 z-20 mt-4 mr-4 ml-4 md:mt-0 md:mr-0 md:ml-0 rounded-lg bg-white/80 backdrop-blur-xl border border-white/60 shadow-xl'>
                 <div className="flex items-center gap-3">
                     {/* Toggle Button */}
                     <button

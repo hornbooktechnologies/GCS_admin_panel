@@ -95,7 +95,7 @@ const ViewUserDialog = ({ isOpen, setIsOpen, user }) => {
                 <div className="px-6">
                     {/* Profile Section */}
                     <div className="relative mb-6">
-                        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+                        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
                             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                                 {/* Profile Avatar Placeholder */}
                                 <div className="relative">
@@ -125,7 +125,7 @@ const ViewUserDialog = ({ isOpen, setIsOpen, user }) => {
                     </div>
 
                     {/* Information Grid */}
-                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-3">
+                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden mb-3">
                         <div className="bg-gradient-to-r from-blue-50 to-blue-100 px-5 py-3 border-b border-blue-200">
                             <h3 className="text-sm font-bold text-blue-900 uppercase tracking-wide flex items-center gap-2">
                                 <Activity className="w-4 h-4" />

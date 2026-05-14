@@ -196,7 +196,7 @@ const TeamFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading team member editor...
@@ -208,40 +208,40 @@ const TeamFormPage = ({ mode }) => {
   return (
     <div className="max-w-[1600px] space-y-6">
       <div>
-        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-xl px-3 text-slate-500" onClick={() => navigate("/team")}>
+        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/team")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Team
         </Button>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">{pageTitle}</h1>
       </div>
 
-      <form onSubmit={handleSave} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <form onSubmit={handleSave} className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Name</label>
-              <Input value={form.name} onChange={(event) => handleInputChange("name", event.target.value)} className={`rounded-xl ${formErrors.name ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input value={form.name} onChange={(event) => handleInputChange("name", event.target.value)} className={`rounded-lg ${formErrors.name ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.name}</FieldError>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Sub Title</label>
-              <Input value={form.subtitle} onChange={(event) => handleInputChange("subtitle", event.target.value)} className={`rounded-xl ${formErrors.subtitle ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input value={form.subtitle} onChange={(event) => handleInputChange("subtitle", event.target.value)} className={`rounded-lg ${formErrors.subtitle ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.subtitle}</FieldError>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">Role Tag</label>
-                <Input value={form.role_tag} onChange={(event) => handleInputChange("role_tag", event.target.value)} className="rounded-xl" placeholder="Chairman" />
+                <Input value={form.role_tag} onChange={(event) => handleInputChange("role_tag", event.target.value)} className="rounded-lg" placeholder="Chairman" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">Featured Title</label>
-                <Input value={form.featured_title} onChange={(event) => handleInputChange("featured_title", event.target.value)} className="rounded-xl" placeholder="Executive Chairman & Trustee" />
+                <Input value={form.featured_title} onChange={(event) => handleInputChange("featured_title", event.target.value)} className="rounded-lg" placeholder="Executive Chairman & Trustee" />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Team Category</label>
               <Select value={form.category_id} onValueChange={(value) => handleInputChange("category_id", value)}>
-                <SelectTrigger className="rounded-xl">
+                <SelectTrigger className="rounded-lg">
                   <SelectValue placeholder="Select team category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -256,71 +256,71 @@ const TeamFormPage = ({ mode }) => {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Short Description</label>
-              <textarea value={form.short_description} onChange={(event) => handleInputChange("short_description", event.target.value)} rows={4} className="min-h-[110px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30" placeholder="Short excerpt for card/listing view..." />
+              <textarea value={form.short_description} onChange={(event) => handleInputChange("short_description", event.target.value)} rows={4} className="min-h-[110px] w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30" placeholder="Short excerpt for card/listing view..." />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Professional Profile</label>
-              <div className={`overflow-hidden rounded-2xl border bg-white ${formErrors.description ? "border-red-300" : "border-slate-200"}`}>
+              <div className={`overflow-hidden rounded-lg border bg-white ${formErrors.description ? "border-red-300" : "border-slate-200"}`}>
                 <ReactQuill theme="snow" value={form.description} onChange={(value) => handleInputChange("description", value)} modules={quillModules} placeholder="Write description here..." />
               </div>
               <FieldError>{formErrors.description}</FieldError>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Featured Description</label>
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
                 <ReactQuill theme="snow" value={form.featured_description} onChange={(value) => handleInputChange("featured_description", value)} modules={quillModules} placeholder="Write featured section content here..." />
               </div>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+            <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-4">
               <div className="grid gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">Visionary Leadership Title</label>
-                  <Input value={form.visionary_leadership_title} onChange={(event) => handleInputChange("visionary_leadership_title", event.target.value)} className="rounded-xl" />
+                  <Input value={form.visionary_leadership_title} onChange={(event) => handleInputChange("visionary_leadership_title", event.target.value)} className="rounded-lg" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">Visionary Leadership Description</label>
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
                     <ReactQuill theme="snow" value={form.visionary_leadership_description} onChange={(value) => handleInputChange("visionary_leadership_description", value)} modules={quillModules} placeholder="Write visionary leadership content here..." />
                   </div>
                 </div>
               </div>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+            <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-4">
               <div className="grid gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">Proven Expertise Title</label>
-                  <Input value={form.proven_expertise_title} onChange={(event) => handleInputChange("proven_expertise_title", event.target.value)} className="rounded-xl" />
+                  <Input value={form.proven_expertise_title} onChange={(event) => handleInputChange("proven_expertise_title", event.target.value)} className="rounded-lg" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">Proven Expertise Description</label>
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
                     <ReactQuill theme="snow" value={form.proven_expertise_description} onChange={(value) => handleInputChange("proven_expertise_description", value)} modules={quillModules} placeholder="Write proven expertise content here..." />
                   </div>
                 </div>
               </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+              <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-4">
                 <div className="grid gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-700">Verification Label</label>
-                    <Input value={form.verification_label} onChange={(event) => handleInputChange("verification_label", event.target.value)} className="rounded-xl" />
+                    <Input value={form.verification_label} onChange={(event) => handleInputChange("verification_label", event.target.value)} className="rounded-lg" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-700">Verification Value</label>
-                    <Input value={form.verification_value} onChange={(event) => handleInputChange("verification_value", event.target.value)} className="rounded-xl" />
+                    <Input value={form.verification_value} onChange={(event) => handleInputChange("verification_value", event.target.value)} className="rounded-lg" />
                   </div>
                 </div>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+              <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-4">
                 <div className="grid gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-700">Affiliation Label</label>
-                    <Input value={form.affiliation_label} onChange={(event) => handleInputChange("affiliation_label", event.target.value)} className="rounded-xl" />
+                    <Input value={form.affiliation_label} onChange={(event) => handleInputChange("affiliation_label", event.target.value)} className="rounded-lg" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-700">Affiliation Value</label>
-                    <Input value={form.affiliation_value} onChange={(event) => handleInputChange("affiliation_value", event.target.value)} className="rounded-xl" />
+                    <Input value={form.affiliation_value} onChange={(event) => handleInputChange("affiliation_value", event.target.value)} className="rounded-lg" />
                   </div>
                 </div>
               </div>
@@ -330,11 +330,11 @@ const TeamFormPage = ({ mode }) => {
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Image</label>
-              <div role="button" tabIndex={0} onClick={() => imageInputRef.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); imageInputRef.current?.click(); } }} className={`cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}>
+              <div role="button" tabIndex={0} onClick={() => imageInputRef.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); imageInputRef.current?.click(); } }} className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}>
                 {imagePreviewUrl ? (
-                  <img src={imagePreviewUrl} alt="Preview" className="mx-auto mb-4 aspect-[16/10] w-full rounded-2xl object-cover" />
+                  <img src={imagePreviewUrl} alt="Preview" className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover" />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
@@ -347,8 +347,8 @@ const TeamFormPage = ({ mode }) => {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/team")}>Cancel</Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/team")}>Cancel</Button>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {isSaving ? "Saving..." : isEditMode ? "Update Team Member" : "Create Team Member"}
           </Button>

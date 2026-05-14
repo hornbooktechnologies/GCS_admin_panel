@@ -158,7 +158,7 @@ const PermissionGate = ({ children }) => {
   }
 
   return (
-    <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+    <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
       <h1 className="text-2xl font-bold text-slate-900">Access denied</h1>
       <p className="mt-2 text-sm text-slate-500">
         You do not have permission to access this module.

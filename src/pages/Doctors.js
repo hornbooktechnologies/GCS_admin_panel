@@ -1,13 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Image as ImageIcon, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { Filter, Image as ImageIcon, Pencil, Plus, RefreshCw, Trash2, X } from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { hasPermission } from "../lib/utils/permissions";
 import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
+
+const DEFAULT_DOCTOR_IMAGE_URL = "/assets/icons/default-pic.jpg";
 
 const Doctors = () => {
   const navigate = useNavigate();
@@ -15,15 +20,37 @@ const Doctors = () => {
   const { showErrorToast, showSuccessToast } = useToast();
   const canCreate = hasPermission(user, "doctors", "create");
   const [doctors, setDoctors] = useState([]);
+  const [specialities, setSpecialities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedSpecialityId, setSelectedSpecialityId] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedHod, setSelectedHod] = useState("all");
+
+  const hasActiveFilters = selectedSpecialityId !== "all" || selectedCategory !== "all" || selectedHod !== "all";
+
+  const fetchSpecialities = async () => {
+    try {
+      const response = await apiClient.get("/specialities");
+      setSpecialities(response.data?.data?.specialities || []);
+    } catch (err) {
+      console.error("Failed to load specialities for filter", err);
+    }
+  };
+
   const fetchDoctors = async (searchValue = debouncedSearch) => {
     setIsLoading(true);
     try {
-      const query = searchValue ? `?search=${encodeURIComponent(searchValue)}&limit=100` : "?limit=100";
-      const response = await apiClient.get(`/doctors${query}`);
+      const params = new URLSearchParams();
+      if (searchValue) params.append("search", searchValue);
+      if (selectedSpecialityId !== "all") params.append("speciality_id", selectedSpecialityId);
+      if (selectedCategory !== "all") params.append("category", selectedCategory);
+      params.append("limit", "100");
+
+      const response = await apiClient.get(`/doctors?${params.toString()}`);
       setDoctors(response.data?.data?.rows || []);
     } catch (err) {
       showErrorToast(err.response?.data?.message || "Failed to load doctors");
@@ -33,17 +60,27 @@ const Doctors = () => {
   };
 
   useEffect(() => {
+    fetchSpecialities();
+  }, []);
+
+  useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search.trim()), 300);
     return () => clearTimeout(timer);
   }, [search]);
 
   useEffect(() => {
     fetchDoctors(debouncedSearch);
-  }, [debouncedSearch]);
+  }, [debouncedSearch, selectedSpecialityId, selectedCategory]);
+
+  const filteredDoctors = useMemo(() => {
+    if (selectedHod === "all") return doctors;
+    const isHodFilter = selectedHod === "true";
+    return doctors.filter((doc) => Boolean(doc.is_hod) === isHodFilter);
+  }, [doctors, selectedHod]);
 
   const sortedDoctors = useMemo(
     () =>
-      [...doctors].sort((a, b) => {
+      [...filteredDoctors].sort((a, b) => {
         if (Boolean(a.is_hod) !== Boolean(b.is_hod)) {
           return Number(Boolean(b.is_hod)) - Number(Boolean(a.is_hod));
         }
@@ -52,12 +89,17 @@ const Doctors = () => {
         }
         return (a.name || "").localeCompare(b.name || "");
       }),
-    [doctors],
+    [filteredDoctors],
   );
 
+  const handleClearFilters = () => {
+    setSelectedSpecialityId("all");
+    setSelectedCategory("all");
+    setSelectedHod("all");
+    setSearch("");
+  };
+
   const handleDelete = async (item) => {
-    const confirmed = window.confirm(`Delete "${item.name}"? This cannot be undone.`);
-    if (!confirmed) return;
     try {
       await apiClient.delete(`/doctors/${item.id}`);
       showSuccessToast("Doctor deleted successfully");
@@ -79,24 +121,97 @@ const Doctors = () => {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search by name or designation"
-            className="min-w-64 rounded-xl"
+            className="min-w-64 rounded-lg"
           />
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => fetchDoctors(search.trim())}>
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              className={`rounded-lg transition-all ${showFilters || hasActiveFilters ? "bg-slate-100 border-slate-300" : ""}`}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <Filter className={`mr-2 h-4 w-4 ${hasActiveFilters ? "text-primary fill-primary/10" : ""}`} />
+              Filter
+              {hasActiveFilters && (
+                <span className="ml-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-white">
+                  !
+                </span>
+              )}
+            </Button>
+            <Button type="button" variant="outline" className="rounded-lg" onClick={() => fetchDoctors(search.trim())}>
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Refresh
+            </Button>
+          </div>
           {canCreate && (
-
-            <Button type="button" className="rounded-xl" onClick={() => navigate("/doctors/new")}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Doctor
-          </Button>
-
+            <Button type="button" className="rounded-lg" onClick={() => navigate("/doctors/new")}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Doctor
+            </Button>
           )}
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
+      {showFilters && (
+        <div className="grid gap-4 rounded-lg border border-white/60 bg-white/80 p-5 shadow-sm backdrop-blur-xl md:grid-cols-4 lg:grid-cols-5">
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Speciality</label>
+            <Select value={selectedSpecialityId} onValueChange={setSelectedSpecialityId}>
+              <SelectTrigger className="rounded-lg bg-white/50">
+                <SelectValue placeholder="All Specialities" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Specialities</SelectItem>
+                {specialities.map((s) => (
+                  <SelectItem key={s.id} value={s.id}>
+                    {s.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Category</label>
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger className="rounded-lg bg-white/50">
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="general">General</SelectItem>
+                <SelectItem value="super">Super</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">HOD Status</label>
+            <Select value={selectedHod} onValueChange={setSelectedHod}>
+              <SelectTrigger className="rounded-lg bg-white/50">
+                <SelectValue placeholder="All Doctors" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Doctors</SelectItem>
+                <SelectItem value="true">HOD Only</SelectItem>
+                <SelectItem value="false">Non-HOD Only</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-end">
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-10 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+              onClick={handleClearFilters}
+              disabled={!hasActiveFilters && !search}
+            >
+              <X className="mr-2 h-4 w-4" />
+              Clear Filters
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <div className="overflow-hidden rounded-lg border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">Loading doctors...</div>
         ) : doctors.length === 0 ? (
@@ -119,8 +234,18 @@ const Doctors = () => {
                   <tr key={item.id}>
                     <td className="px-5 py-4">
                       <div className="flex items-start gap-4">
-                        <div className="h-16 w-16 overflow-hidden rounded-2xl bg-slate-100">
-                          {item.image_url ? <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-slate-400"><ImageIcon className="h-5 w-5" /></div>}
+                        <div className="h-16 w-16 overflow-hidden rounded-lg bg-slate-100">
+                          <img
+                            src={item.image_url || DEFAULT_DOCTOR_IMAGE_URL}
+                            alt={item.name || "Doctor image"}
+                            className="h-full w-full object-cover"
+                            onError={(event) => {
+                              const target = event.currentTarget;
+                              if (target.src !== DEFAULT_DOCTOR_IMAGE_URL) {
+                                target.src = DEFAULT_DOCTOR_IMAGE_URL;
+                              }
+                            }}
+                          />
                         </div>
                         <div>
                           <div className="text-sm font-semibold text-slate-800">{item.name}</div>
@@ -148,14 +273,16 @@ const Doctors = () => {
                     </td>
                     <td className="px-5 py-4">
                       <div className="flex justify-end gap-2">
-                        <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/doctors/${item.id}/edit`)}>
+                        <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate(`/doctors/${item.id}/edit`)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Edit
                         </Button>
-                        <Button type="button" variant="outline" className="rounded-xl border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleDelete(item)}>
+                        <DeleteConfirmationButton onConfirm={() => handleDelete(item)}>
+<Button type="button" variant="outline" className="rounded-lg border-red-200 text-red-600 hover:bg-red-50">
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </Button>
+</DeleteConfirmationButton>
                       </div>
                     </td>
                   </tr>

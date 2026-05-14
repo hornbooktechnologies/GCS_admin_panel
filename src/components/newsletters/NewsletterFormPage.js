@@ -31,6 +31,7 @@ const ALLOWED_IMAGE_TYPES = [
   "image/webp",
 ];
 const ALLOWED_PDF_TYPES = ["application/pdf"];
+const NEWSLETTER_UPLOAD_TIMEOUT_MS = 180000;
 
 const NewsletterFormPage = ({ mode }) => {
   const navigate = useNavigate();
@@ -208,18 +209,25 @@ const NewsletterFormPage = ({ mode }) => {
       if (isEditMode) {
         await apiClient.put(`/newsletters/${newsletterId}`, payload, {
           headers: { "Content-Type": "multipart/form-data" },
+          timeout: NEWSLETTER_UPLOAD_TIMEOUT_MS,
         });
         showSuccessToast("Newsletter updated successfully");
       } else {
         await apiClient.post("/newsletters", payload, {
           headers: { "Content-Type": "multipart/form-data" },
+          timeout: NEWSLETTER_UPLOAD_TIMEOUT_MS,
         });
         showSuccessToast("Newsletter created successfully");
       }
 
       navigate("/newsletters");
     } catch (err) {
-      showErrorToast(err.response?.data?.message || "Unable to save newsletter");
+      showErrorToast(
+        err.response?.data?.message ||
+          (err.code === "ECONNABORTED"
+            ? "Newsletter upload timed out. Please try again with a smaller file or a faster connection."
+            : err.message || "Unable to save newsletter"),
+      );
     } finally {
       setIsSaving(false);
     }
@@ -227,7 +235,7 @@ const NewsletterFormPage = ({ mode }) => {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-900">{pageTitle}</h1>
         <p className="mt-2 text-sm text-slate-500">
           Newsletter management is only available for admin users.
@@ -238,7 +246,7 @@ const NewsletterFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading newsletter editor...
@@ -262,7 +270,7 @@ const NewsletterFormPage = ({ mode }) => {
           <Button
             type="button"
             variant="ghost"
-            className="-ml-3 mb-2 rounded-xl px-3 text-slate-500"
+            className="-ml-3 mb-2 rounded-lg px-3 text-slate-500"
             onClick={() => navigate("/newsletters")}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -279,7 +287,7 @@ const NewsletterFormPage = ({ mode }) => {
 
       <form
         onSubmit={handleSave}
-        className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
+        className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl"
       >
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-4">
@@ -289,7 +297,7 @@ const NewsletterFormPage = ({ mode }) => {
                 value={form.title}
                 onChange={(event) => handleInputChange("title", event.target.value)}
                 placeholder="Jan to June 2025"
-                className={`rounded-xl ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                className={`rounded-lg ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`}
               />
               <FieldError>{formErrors.title}</FieldError>
             </div>
@@ -300,7 +308,7 @@ const NewsletterFormPage = ({ mode }) => {
                 value={form.year}
                 onChange={(event) => handleInputChange("year", event.target.value)}
                 placeholder="2026"
-                className={`rounded-xl ${formErrors.year ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                className={`rounded-lg ${formErrors.year ? "border-red-300 focus-visible:ring-red-500" : ""}`}
               />
               <FieldError>{formErrors.year}</FieldError>
             </div>
@@ -317,7 +325,7 @@ const NewsletterFormPage = ({ mode }) => {
                     photoInputRef.current?.click();
                   }
                 }}
-                className={`cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-all ${
+                className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${
                   formErrors.photo
                     ? "border-red-300 bg-red-50/40"
                     : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"
@@ -327,16 +335,16 @@ const NewsletterFormPage = ({ mode }) => {
                   <img
                     src={photoPreviewUrl}
                     alt="Newsletter photo preview"
-                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-2xl object-cover"
+                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
                 <p className="text-sm font-semibold text-slate-700">Upload photo</p>
                 <p className="mt-1 text-xs text-slate-500">
-                  JPG, PNG, GIF, or WEBP up to 10MB
+                  JPG, PNG, GIF, or WEBP up to 100MB
                 </p>
               </div>
               <Input
@@ -365,20 +373,20 @@ const NewsletterFormPage = ({ mode }) => {
                     attachmentInputRef.current?.click();
                   }
                 }}
-                className={`cursor-pointer rounded-3xl border border-dashed p-6 text-center transition-all ${
+                className={`cursor-pointer rounded-lg border border-dashed p-6 text-center transition-all ${
                   formErrors.attachment
                     ? "border-red-300 bg-red-50/40"
                     : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"
                 }`}
               >
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
                   <Upload className="h-6 w-6" />
                 </div>
                 <p className="mt-4 text-sm font-semibold text-slate-700">
                   Upload image or PDF
                 </p>
                 <p className="mt-1 text-xs text-slate-500">
-                  Supported: PDF, JPG, PNG, GIF, WEBP up to 10MB
+                  Supported: PDF, JPG, PNG, GIF, WEBP up to 100MB
                 </p>
                 <p className="mt-3 text-xs font-semibold text-primary">
                   {attachmentLabel}
@@ -400,7 +408,7 @@ const NewsletterFormPage = ({ mode }) => {
               <label className="text-sm font-semibold text-slate-700">
                 Current Attachment
               </label>
-              <div className="flex min-h-48 items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-6">
+              <div className="flex min-h-48 items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50 p-6">
                 {form.attachment ? (
                   ALLOWED_PDF_TYPES.includes(form.attachment.type) ? (
                     <div className="text-center text-slate-500">
@@ -411,7 +419,7 @@ const NewsletterFormPage = ({ mode }) => {
                     <img
                       src={attachmentPreviewUrl}
                       alt="Attachment preview"
-                      className="max-h-56 rounded-2xl object-contain"
+                      className="max-h-56 rounded-lg object-contain"
                     />
                   )
                 ) : existingAttachment?.url ? (
@@ -429,7 +437,7 @@ const NewsletterFormPage = ({ mode }) => {
                     <img
                       src={existingAttachment.url}
                       alt="Current attachment"
-                      className="max-h-56 rounded-2xl object-contain"
+                      className="max-h-56 rounded-lg object-contain"
                     />
                   )
                 ) : (
@@ -446,12 +454,12 @@ const NewsletterFormPage = ({ mode }) => {
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl"
+            className="rounded-lg"
             onClick={() => navigate("/newsletters")}
           >
             Cancel
           </Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : (

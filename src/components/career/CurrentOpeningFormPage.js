@@ -112,7 +112,7 @@ const CurrentOpeningFormPage = ({ mode }) => {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-900">{pageTitle}</h1>
         <p className="mt-2 text-sm text-slate-500">This section is only available for admin users.</p>
       </div>
@@ -121,7 +121,7 @@ const CurrentOpeningFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading current opening editor...
@@ -133,40 +133,40 @@ const CurrentOpeningFormPage = ({ mode }) => {
   return (
     <div className="max-w-[1600px] space-y-6">
       <div>
-        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-xl px-3 text-slate-500" onClick={() => navigate("/career/current-openings")}>
+        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/career/current-openings")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Current Openings
         </Button>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">{pageTitle}</h1>
       </div>
 
-      <form onSubmit={handleSave} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <form onSubmit={handleSave} className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         <div className="space-y-4">
           {/* Position */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Position</label>
-            <Input value={form.position} onChange={(event) => handleInputChange("position", event.target.value)} className={`rounded-xl ${formErrors.position ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <Input value={form.position} onChange={(event) => handleInputChange("position", event.target.value)} className={`rounded-lg ${formErrors.position ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.position}</FieldError>
           </div>
 
           {/* Education */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Education</label>
-            <Input value={form.education} onChange={(event) => handleInputChange("education", event.target.value)} className={`rounded-xl ${formErrors.education ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <Input value={form.education} onChange={(event) => handleInputChange("education", event.target.value)} className={`rounded-lg ${formErrors.education ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.education}</FieldError>
           </div>
 
           {/* Description */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Description</label>
-            <textarea value={form.description} onChange={(event) => handleInputChange("description", event.target.value)} rows={6} className={`min-h-[160px] w-full rounded-2xl border bg-white px-4 py-3 text-sm text-slate-700 outline-none ${formErrors.description ? "border-red-300 focus:ring-2 focus:ring-red-500" : "border-slate-200 focus:ring-2 focus:ring-primary/30"}`} />
+            <textarea value={form.description} onChange={(event) => handleInputChange("description", event.target.value)} rows={6} className={`min-h-[160px] w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-700 outline-none ${formErrors.description ? "border-red-300 focus:ring-2 focus:ring-red-500" : "border-slate-200 focus:ring-2 focus:ring-primary/30"}`} />
             <FieldError>{formErrors.description}</FieldError>
           </div>
 
           {/* Experience */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Experience</label>
-            <Input value={form.experience} onChange={(event) => handleInputChange("experience", event.target.value)} className={`rounded-xl ${formErrors.experience ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <Input value={form.experience} onChange={(event) => handleInputChange("experience", event.target.value)} className={`rounded-lg ${formErrors.experience ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.experience}</FieldError>
           </div>
 
@@ -176,7 +176,7 @@ const CurrentOpeningFormPage = ({ mode }) => {
             <select
               value={form.status}
               onChange={(e) => handleInputChange("status", e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
+              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
             >
               <option value="open">Open</option>
               <option value="draft">Draft (hidden from public)</option>
@@ -194,7 +194,7 @@ const CurrentOpeningFormPage = ({ mode }) => {
               value={form.location}
               onChange={(e) => handleInputChange("location", e.target.value)}
               placeholder="e.g. Ahmedabad"
-              className="rounded-xl"
+              className="rounded-lg"
             />
           </div>
 
@@ -207,7 +207,7 @@ const CurrentOpeningFormPage = ({ mode }) => {
               value={form.department}
               onChange={(e) => handleInputChange("department", e.target.value)}
               placeholder="e.g. Nursing"
-              className="rounded-xl"
+              className="rounded-lg"
             />
           </div>
 
@@ -220,7 +220,7 @@ const CurrentOpeningFormPage = ({ mode }) => {
               type="date"
               value={form.closing_date}
               onChange={(e) => handleInputChange("closing_date", e.target.value)}
-              className="rounded-xl"
+              className="rounded-lg"
             />
           </div>
 
@@ -233,14 +233,14 @@ const CurrentOpeningFormPage = ({ mode }) => {
               value={form.salary_range}
               onChange={(e) => handleInputChange("salary_range", e.target.value)}
               placeholder="e.g. ₹4–6 LPA"
-              className="rounded-xl"
+              className="rounded-lg"
             />
           </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/career/current-openings")}>Cancel</Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/career/current-openings")}>Cancel</Button>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {isSaving ? "Saving..." : isEditMode ? "Update Current Opening" : "Create Current Opening"}
           </Button>

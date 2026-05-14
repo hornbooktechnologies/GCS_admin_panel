@@ -21,6 +21,8 @@ import {
 import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import { requestHandler } from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
 import {
   hasPermission,
   PermissionActions,
@@ -168,9 +170,6 @@ const RolesPermissions = () => {
   };
 
   const handleDelete = async (role) => {
-    const confirmed = window.confirm(`Delete role "${role.name}"?`);
-    if (!confirmed) return;
-
     const response = await requestHandler(`/roles/${role.id}`, {
       method: "DELETE",
     });
@@ -194,14 +193,14 @@ const RolesPermissions = () => {
           </p>
         </div>
         {canCreate && (
-          <Button onClick={openCreate} className="rounded-xl">
+          <Button onClick={openCreate} className="rounded-lg">
             <Plus className="mr-2 h-4 w-4" />
             Add Role
           </Button>
         )}
       </div>
 
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-5 shadow-sm backdrop-blur-xl">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-5 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="flex items-center gap-2 p-6 text-sm font-medium text-slate-500">
             <LoaderCircle className="h-4 w-4 animate-spin" />
@@ -228,7 +227,7 @@ const RolesPermissions = () => {
                     <tr key={role.id} className="border-b border-slate-50">
                       <td className="px-4 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="rounded-2xl bg-primary/10 p-2 text-primary">
+                          <div className="rounded-lg bg-primary/10 p-2 text-primary">
                             <Shield className="h-4 w-4" />
                           </div>
                           <div>
@@ -263,15 +262,16 @@ const RolesPermissions = () => {
                             </Button>
                           )}
                           {canDelete && (
-                            <Button
+                            <DeleteConfirmationButton onConfirm={() => handleDelete(role)}>
+<Button
                               type="button"
                               variant="outline"
                               size="sm"
                               disabled={Boolean(role.is_system)}
-                              onClick={() => handleDelete(role)}
                             >
                               <Trash2 className="h-4 w-4 text-red-500" />
                             </Button>
+</DeleteConfirmationButton>
                           )}
                         </div>
                       </td>
@@ -343,7 +343,7 @@ const RolesPermissions = () => {
               </div>
             </div>
 
-            <div className="max-h-[52vh] overflow-auto rounded-2xl border border-slate-100">
+            <div className="max-h-[52vh] overflow-auto rounded-lg border border-slate-100">
               <table className="w-full min-w-[720px] text-sm">
                 <thead className="sticky top-0 bg-white">
                   <tr className="border-b border-slate-100 text-left text-xs uppercase tracking-wide text-slate-500">

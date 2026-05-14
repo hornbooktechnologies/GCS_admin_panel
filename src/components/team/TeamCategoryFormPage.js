@@ -97,7 +97,7 @@ const TeamCategoryFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading team category editor...
@@ -109,24 +109,24 @@ const TeamCategoryFormPage = ({ mode }) => {
   return (
     <div className="max-w-[1600px] space-y-6">
       <div>
-        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-xl px-3 text-slate-500" onClick={() => navigate("/master/team-categories")}>
+        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/master/team-categories")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Team Categories
         </Button>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">{pageTitle}</h1>
       </div>
 
-      <form onSubmit={handleSave} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <form onSubmit={handleSave} className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Title</label>
-            <Input value={form.title} onChange={(event) => handleInputChange("title", event.target.value)} className={`rounded-xl ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+            <Input value={form.title} onChange={(event) => handleInputChange("title", event.target.value)} className={`rounded-lg ${formErrors.title ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
             <FieldError>{formErrors.title}</FieldError>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Layout Type</label>
             <Select value={form.layout_type} onValueChange={(value) => handleInputChange("layout_type", value)}>
-              <SelectTrigger className="rounded-xl">
+              <SelectTrigger className="rounded-lg">
                 <SelectValue placeholder="Select layout type" />
               </SelectTrigger>
               <SelectContent>
@@ -140,17 +140,17 @@ const TeamCategoryFormPage = ({ mode }) => {
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Eyebrow</label>
-            <Input value={form.eyebrow} onChange={(event) => handleInputChange("eyebrow", event.target.value)} className="rounded-xl" />
+            <Input value={form.eyebrow} onChange={(event) => handleInputChange("eyebrow", event.target.value)} className="rounded-lg" />
           </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Heading</label>
-            <Input value={form.heading} onChange={(event) => handleInputChange("heading", event.target.value)} className="rounded-xl" />
+            <Input value={form.heading} onChange={(event) => handleInputChange("heading", event.target.value)} className="rounded-lg" />
           </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/master/team-categories")}>Cancel</Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/master/team-categories")}>Cancel</Button>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {isSaving ? "Saving..." : isEditMode ? "Update Team Category" : "Create Team Category"}
           </Button>

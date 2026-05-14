@@ -274,13 +274,13 @@ const JournalFormPage = ({ mode }) => {
   };
 
   const renderSection = (section) => (
-    <div key={section} className="rounded-3xl border border-slate-200 bg-slate-50/70 p-4">
+    <div key={section} className="rounded-lg border border-slate-200 bg-slate-50/70 p-4">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-semibold text-slate-800">{SECTION_LABELS[section]}</h2>
           <p className="text-xs text-slate-500">Add title, author, and PDF entries.</p>
         </div>
-        <Button type="button" variant="outline" className="rounded-xl" onClick={() => handleAddSectionItem(section)}>
+        <Button type="button" variant="outline" className="rounded-lg" onClick={() => handleAddSectionItem(section)}>
           <Plus className="mr-2 h-4 w-4" />
           Add More
         </Button>
@@ -290,18 +290,18 @@ const JournalFormPage = ({ mode }) => {
         {form.sections[section].map((item, index) => {
           const inputKey = `${section}-${index}`;
           return (
-            <div key={inputKey} className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div key={inputKey} className="rounded-lg border border-slate-200 bg-white p-4">
               <div className="grid gap-4 lg:grid-cols-[1fr_1fr_auto]">
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">Title</label>
-                  <Input value={item.title} onChange={(event) => handleSectionItemChange(section, index, "title", event.target.value)} className="rounded-xl" />
+                  <Input value={item.title} onChange={(event) => handleSectionItemChange(section, index, "title", event.target.value)} className="rounded-lg" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">Author</label>
-                  <Input value={item.author} onChange={(event) => handleSectionItemChange(section, index, "author", event.target.value)} className="rounded-xl" />
+                  <Input value={item.author} onChange={(event) => handleSectionItemChange(section, index, "author", event.target.value)} className="rounded-lg" />
                 </div>
                 <div className="flex items-end justify-end">
-                  <Button type="button" variant="outline" className="rounded-xl border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleRemoveSectionItem(section, index)}>
+                  <Button type="button" variant="outline" className="rounded-lg border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleRemoveSectionItem(section, index)}>
                     <Trash2 className="mr-2 h-4 w-4" />
                     Remove
                   </Button>
@@ -310,8 +310,8 @@ const JournalFormPage = ({ mode }) => {
 
               <div className="mt-4 space-y-2">
                 <label className="text-sm font-semibold text-slate-700">PDF Upload</label>
-                <div role="button" tabIndex={0} onClick={() => fileInputRefs.current[inputKey]?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); fileInputRefs.current[inputKey]?.click(); } }} className="cursor-pointer rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-center transition-all hover:border-primary/40 hover:bg-white">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
+                <div role="button" tabIndex={0} onClick={() => fileInputRefs.current[inputKey]?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); fileInputRefs.current[inputKey]?.click(); } }} className="cursor-pointer rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-center transition-all hover:border-primary/40 hover:bg-white">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
                     <Upload className="h-5 w-5" />
                   </div>
                   <p className="mt-3 text-sm font-semibold text-slate-700">Upload PDF</p>
@@ -349,7 +349,7 @@ const JournalFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading journal editor...
@@ -361,7 +361,7 @@ const JournalFormPage = ({ mode }) => {
   return (
     <div className="max-w-[1600px] space-y-6">
       <div>
-        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-xl px-3 text-slate-500" onClick={() => navigate("/journals")}>
+        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/journals")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Journals
         </Button>
@@ -369,21 +369,21 @@ const JournalFormPage = ({ mode }) => {
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
-        <div className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+        <div className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Volume</label>
-              <Input value={form.volume} onChange={(event) => handleInputChange("volume", event.target.value)} className={`rounded-xl ${formErrors.volume ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input value={form.volume} onChange={(event) => handleInputChange("volume", event.target.value)} className={`rounded-lg ${formErrors.volume ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.volume}</FieldError>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Number</label>
-              <Input value={form.number} onChange={(event) => handleInputChange("number", event.target.value)} className={`rounded-xl ${formErrors.number ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input value={form.number} onChange={(event) => handleInputChange("number", event.target.value)} className={`rounded-lg ${formErrors.number ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.number}</FieldError>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Duration</label>
-              <Input value={form.duration} onChange={(event) => handleInputChange("duration", event.target.value)} className={`rounded-xl ${formErrors.duration ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input value={form.duration} onChange={(event) => handleInputChange("duration", event.target.value)} className={`rounded-lg ${formErrors.duration ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.duration}</FieldError>
             </div>
           </div>
@@ -391,12 +391,12 @@ const JournalFormPage = ({ mode }) => {
 
         {Object.keys(form.sections).map(renderSection)}
 
-        <div className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+        <div className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/journals")}>
+            <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/journals")}>
               Cancel
             </Button>
-            <Button type="submit" className="rounded-xl" disabled={isSaving}>
+            <Button type="submit" className="rounded-lg" disabled={isSaving}>
               {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
               {isSaving ? "Saving..." : isEditMode ? "Update Journal" : "Create Journal"}
             </Button>

@@ -6,6 +6,8 @@ import { hasPermission } from "../lib/utils/permissions";
 import { useAuthStore } from "../context/AuthContext";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
+import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+
 
 const Team = () => {
   const navigate = useNavigate();
@@ -32,8 +34,6 @@ const Team = () => {
   }, []);
 
   const handleDelete = async (item) => {
-    const confirmed = window.confirm(`Delete "${item.name}"? This cannot be undone.`);
-    if (!confirmed) return;
     try {
       await apiClient.delete(`/team/${item.id}`);
       showSuccessToast("Team member deleted successfully");
@@ -51,13 +51,13 @@ const Team = () => {
           <p className="mt-1 text-sm font-medium text-slate-500">Manage team member profiles and assign them to team categories.</p>
         </div>
         <div className="flex gap-3">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={fetchMembers}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={fetchMembers}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
           </Button>
           {canCreate && (
 
-            <Button type="button" className="rounded-xl" onClick={() => navigate("/team/new")}>
+            <Button type="button" className="rounded-lg" onClick={() => navigate("/team/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Add Team Member
           </Button>
@@ -66,7 +66,7 @@ const Team = () => {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
+      <div className="overflow-hidden rounded-lg border border-white/60 bg-white/80 shadow-sm backdrop-blur-xl">
         {isLoading ? (
           <div className="py-12 text-center text-sm font-medium text-slate-500">Loading team members...</div>
         ) : members.length === 0 ? (
@@ -87,7 +87,7 @@ const Team = () => {
                   <tr key={item.id}>
                     <td className="px-5 py-4">
                       <div className="flex items-start gap-4">
-                        <div className="h-16 w-16 overflow-hidden rounded-2xl bg-slate-100">
+                        <div className="h-16 w-16 overflow-hidden rounded-lg bg-slate-100">
                           {item.image_url ? <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-slate-400"><ImageIcon className="h-5 w-5" /></div>}
                         </div>
                         <div>
@@ -119,14 +119,16 @@ const Team = () => {
                     <td className="px-5 py-4 text-sm text-slate-600">{item.subtitle}</td>
                     <td className="px-5 py-4">
                       <div className="flex justify-end gap-2">
-                        <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/team/${item.id}/edit`)}>
+                        <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate(`/team/${item.id}/edit`)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Edit
                         </Button>
-                        <Button type="button" variant="outline" className="rounded-xl border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleDelete(item)}>
+                        <DeleteConfirmationButton onConfirm={() => handleDelete(item)}>
+<Button type="button" variant="outline" className="rounded-lg border-red-200 text-red-600 hover:bg-red-50">
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </Button>
+</DeleteConfirmationButton>
                       </div>
                     </td>
                   </tr>

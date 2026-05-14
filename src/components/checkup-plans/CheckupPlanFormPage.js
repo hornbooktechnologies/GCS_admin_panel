@@ -172,7 +172,7 @@ const CheckupPlanFormPage = ({ mode }) => {
 
   if (isPageLoading) {
     return (
-      <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-sm">
+      <div className="rounded-lg border border-white/60 bg-white/80 p-8 shadow-sm">
         <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
           <LoaderCircle className="h-4 w-4 animate-spin" />
           Loading checkup plan editor...
@@ -184,35 +184,35 @@ const CheckupPlanFormPage = ({ mode }) => {
   return (
     <div className="max-w-[1600px] space-y-6">
       <div>
-        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-xl px-3 text-slate-500" onClick={() => navigate("/checkup-plans")}>
+        <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/checkup-plans")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Checkup Plans
         </Button>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">{pageTitle}</h1>
       </div>
 
-      <form onSubmit={handleSave} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+      <form onSubmit={handleSave} className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-5">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Name</label>
-              <Input value={form.name} onChange={(event) => handleInputChange("name", event.target.value)} className={`rounded-xl ${formErrors.name ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input value={form.name} onChange={(event) => handleInputChange("name", event.target.value)} className={`rounded-lg ${formErrors.name ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.name}</FieldError>
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Price</label>
-              <Input type="number" min="0" step="0.01" value={form.price} onChange={(event) => handleInputChange("price", event.target.value)} className={`rounded-xl ${formErrors.price ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
+              <Input type="number" min="0" step="0.01" value={form.price} onChange={(event) => handleInputChange("price", event.target.value)} className={`rounded-lg ${formErrors.price ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.price}</FieldError>
             </div>
 
-            <div className="space-y-3 rounded-3xl border border-slate-200 bg-slate-50/70 p-4">
+            <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50/70 p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <h2 className="text-sm font-semibold text-slate-800">Test Names</h2>
                   <p className="text-xs text-slate-500">Add one or more test names for this plan.</p>
                 </div>
-                <Button type="button" variant="outline" className="rounded-xl" onClick={handleAddTestName}>
+                <Button type="button" variant="outline" className="rounded-lg" onClick={handleAddTestName}>
                   <Plus className="mr-2 h-4 w-4" />
                   Add More
                 </Button>
@@ -225,9 +225,9 @@ const CheckupPlanFormPage = ({ mode }) => {
                       value={testName}
                       onChange={(event) => handleTestNameChange(index, event.target.value)}
                       placeholder={`Test name ${index + 1}`}
-                      className={`rounded-xl ${formErrors.test_names ? "border-red-300 focus-visible:ring-red-500" : ""}`}
+                      className={`rounded-lg ${formErrors.test_names ? "border-red-300 focus-visible:ring-red-500" : ""}`}
                     />
-                    <Button type="button" variant="outline" className="rounded-xl border-red-200 px-3 text-red-600 hover:bg-red-50" onClick={() => handleRemoveTestName(index)}>
+                    <Button type="button" variant="outline" className="rounded-lg border-red-200 px-3 text-red-600 hover:bg-red-50" onClick={() => handleRemoveTestName(index)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -249,12 +249,12 @@ const CheckupPlanFormPage = ({ mode }) => {
                   imageInputRef.current?.click();
                 }
               }}
-              className={`cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}
+              className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}
             >
               {imagePreviewUrl ? (
-                <img src={imagePreviewUrl} alt="Preview" className="mx-auto mb-4 aspect-[16/10] w-full rounded-2xl object-cover" />
+                <img src={imagePreviewUrl} alt="Preview" className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover" />
               ) : (
-                <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm">
+                <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                   <ImageIcon className="h-8 w-8" />
                 </div>
               )}
@@ -272,10 +272,10 @@ const CheckupPlanFormPage = ({ mode }) => {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/checkup-plans")}>
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => navigate("/checkup-plans")}>
             Cancel
           </Button>
-          <Button type="submit" className="rounded-xl" disabled={isSaving}>
+          <Button type="submit" className="rounded-lg" disabled={isSaving}>
             {isSaving ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             {isSaving ? "Saving..." : isEditMode ? "Update Checkup Plan" : "Create Checkup Plan"}
           </Button>

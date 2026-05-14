@@ -329,14 +329,14 @@ const Dashboard = () => {
         <div
           key={index}
           className={cn(
-            "col-span-1 bg-white/80 backdrop-blur-xl rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-white/60",
+            "col-span-1 bg-white/80 backdrop-blur-xl rounded-lg p-6 flex flex-col justify-between relative overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-white/60",
             stat.path ? "cursor-pointer" : "cursor-default",
           )}
           onClick={() => stat.path && navigate(stat.path)}
         >
           <div className="absolute right-0 top-0 w-32 h-32 bg-orange-500/10 rounded-bl-full -mr-8 -mt-8"></div>
           <div className="flex justify-between items-start z-10">
-            <div className="bg-orange-50 p-3 rounded-2xl text-orange-600">
+            <div className="bg-orange-50 p-3 rounded-lg text-orange-600">
               <Icon className="w-6 h-6" />
             </div>
             <span className="flex w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
@@ -359,7 +359,7 @@ const Dashboard = () => {
       <div
         key={index}
         className={cn(
-          "col-span-1 bg-white/80 backdrop-blur-xl rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-white/60",
+          "col-span-1 bg-white/80 backdrop-blur-xl rounded-lg p-6 flex flex-col justify-between shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-white/60",
           stat.path ? "cursor-pointer" : "cursor-default",
         )}
         onClick={() => stat.path && navigate(stat.path)}
@@ -367,7 +367,7 @@ const Dashboard = () => {
         <div className="flex justify-between items-start mb-4">
           <p className="text-sm font-semibold text-slate-500">{stat.title}</p>
           <div
-            className={`${stat.bgClass || "bg-blue-50"} p-2 rounded-xl ${stat.textClass || "text-primary"}`}
+            className={`${stat.bgClass || "bg-blue-50"} p-2 rounded-lg ${stat.textClass || "text-primary"}`}
           >
             <Icon className="w-5 h-5" />
           </div>
@@ -386,22 +386,22 @@ const Dashboard = () => {
     <div className="max-w-[1600px]">
       {/* Header Skeleton */}
       <div className="flex justify-end mb-6">
-        <Skeleton className="h-11 w-48 rounded-xl" />
+        <Skeleton className="h-11 w-48 rounded-lg" />
       </div>
 
       <div className={gridClass}>
         {/* Welcome Hero Skeleton */}
-        <div className={`${welcomeColSpan} bg-white/50 rounded-3xl p-8 h-[200px] border border-white/60`}>
+        <div className={`${welcomeColSpan} bg-white/50 rounded-lg p-8 h-[200px] border border-white/60`}>
           <Skeleton className="h-8 w-1/3 mb-4 rounded-lg" />
           <Skeleton className="h-6 w-1/2 rounded-lg" />
         </div>
 
         {/* Stat Card Skeletons (Top 2) */}
         {[1, 2].map((i) => (
-          <div key={i} className="col-span-1 bg-white/50 rounded-3xl p-6 h-[160px] border border-white/60">
+          <div key={i} className="col-span-1 bg-white/50 rounded-lg p-6 h-[160px] border border-white/60">
             <div className="flex justify-between items-start mb-6">
               <Skeleton className="h-4 w-24 rounded" />
-              <Skeleton className="h-10 w-10 rounded-xl" />
+              <Skeleton className="h-10 w-10 rounded-lg" />
             </div>
             <Skeleton className="h-8 w-16 mb-2 rounded-lg" />
             <Skeleton className="h-3 w-32 rounded" />
@@ -410,10 +410,10 @@ const Dashboard = () => {
 
         {/* Stat Card Skeletons (Remaining 4) */}
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="col-span-1 bg-white/50 rounded-3xl p-6 h-[160px] border border-white/60">
+          <div key={i} className="col-span-1 bg-white/50 rounded-lg p-6 h-[160px] border border-white/60">
             <div className="flex justify-between items-start mb-6">
               <Skeleton className="h-4 w-24 rounded" />
-              <Skeleton className="h-10 w-10 rounded-xl" />
+              <Skeleton className="h-10 w-10 rounded-lg" />
             </div>
             <Skeleton className="h-8 w-16 mb-2 rounded-lg" />
             <Skeleton className="h-3 w-32 rounded" />
@@ -422,13 +422,13 @@ const Dashboard = () => {
 
         {/* Large Cards Skeletons (4 cards) */}
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className={`${onLeaveTodayColSpan} bg-white/50 rounded-3xl p-6 h-[220px] border border-white/60`}>
+          <div key={i} className={`${onLeaveTodayColSpan} bg-white/50 rounded-lg p-6 h-[220px] border border-white/60`}>
             <div className="flex items-center gap-2 mb-6">
               <Skeleton className="h-6 w-6 rounded-lg" />
               <Skeleton className="h-6 w-40 rounded-lg" />
             </div>
             <div className="flex gap-4 items-center mb-4">
-              <Skeleton className="h-16 w-16 rounded-xl" />
+              <Skeleton className="h-16 w-16 rounded-lg" />
               <div className="flex-1 space-y-2">
                 <Skeleton className="h-5 w-1/2 rounded" />
                 <Skeleton className="h-4 w-1/3 rounded" />
@@ -450,13 +450,13 @@ const Dashboard = () => {
       <div className="flex justify-end mb-6">
         <div className="w-full md:w-48">
           <Select value={selectedYear} onValueChange={setSelectedYear}>
-            <SelectTrigger className="w-full h-11 bg-white border border-slate-200 hover:border-primary/50 hover:shadow-md focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl">
+            <SelectTrigger className="w-full h-11 bg-white border border-slate-200 hover:border-primary/50 hover:shadow-md focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-lg">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" />
                 <SelectValue placeholder="Select Year" />
               </div>
             </SelectTrigger>
-            <SelectContent className="rounded-xl border border-slate-100 shadow-xl p-1 bg-white">
+            <SelectContent className="rounded-lg border border-slate-100 shadow-xl p-1 bg-white">
               {years.map((year) => (
                 <SelectItem
                   key={year}
@@ -475,7 +475,7 @@ const Dashboard = () => {
       <div className={gridClass}>
         {/* Welcome Hero Card - Spans 2 columns now (was 3) */}
         <div
-          className={`${welcomeColSpan} bg-white/80 backdrop-blur-xl rounded-3xl p-8 relative overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 border border-white/60`}
+          className={`${welcomeColSpan} bg-white/80 backdrop-blur-xl rounded-lg p-8 relative overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 border border-white/60`}
         >
           <div className="absolute -right-20 -top-20 w-96 h-96 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-full blur-3xl"></div>
           <div className="relative z-10 flex flex-col justify-center h-full gap-2">
@@ -506,7 +506,7 @@ const Dashboard = () => {
         {/* Upcoming Holiday Card - Spans 2 columns */}
         {upcomingHolidaysList.length > 0 && (
           <div
-            className={`${upcomingHolidayColSpan} bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/60 flex flex-col`}
+            className={`${upcomingHolidayColSpan} bg-white/80 backdrop-blur-xl rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/60 flex flex-col`}
           >
             <div className='flex items-center gap-2 mb-4'>
               <Palmtree className='w-5 h-5 text-primary' />
@@ -514,8 +514,8 @@ const Dashboard = () => {
                 Upcoming Holiday
               </h3>
             </div>
-            <div className='flex items-center gap-5 bg-white/60 p-4 rounded-2xl border border-slate-100 flex-1'>
-              <div className='flex flex-col items-center justify-center bg-white shadow-sm rounded-xl w-16 h-16 shrink-0 border border-slate-100'>
+            <div className='flex items-center gap-5 bg-white/60 p-4 rounded-lg border border-slate-100 flex-1'>
+              <div className='flex flex-col items-center justify-center bg-white shadow-sm rounded-lg w-16 h-16 shrink-0 border border-slate-100'>
                 <span className='text-[10px] font-bold text-primary uppercase tracking-wide'>
                   {new Date(upcomingHolidaysList[0].date).toLocaleDateString(
                     'en-US',
@@ -546,7 +546,7 @@ const Dashboard = () => {
         {/* On Leave Today Card - Spans 2 columns */}
         {employeesOnLeaveToday.length > 0 && (
           <div
-            className={`${onLeaveTodayColSpan} bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/60 flex flex-col`}
+            className={`${onLeaveTodayColSpan} bg-white/80 backdrop-blur-xl rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/60 flex flex-col`}
           >
             <div className='flex items-center justify-between mb-4'>
               <div className='flex items-center gap-2'>
@@ -563,7 +563,7 @@ const Dashboard = () => {
               {employeesOnLeaveToday.map((emp) => (
                 <div
                   key={emp.id}
-                  className='flex items-center gap-4 p-3 rounded-2xl bg-white/60 border border-slate-100 hover:bg-white transition-colors cursor-pointer'
+                  className='flex items-center gap-4 p-3 rounded-lg bg-white/60 border border-slate-100 hover:bg-white transition-colors cursor-pointer'
                 >
                   {emp.user_image ? (
                     <div
@@ -598,14 +598,14 @@ const Dashboard = () => {
         {/* Today's Birthday Card - Festive Theme */}
         {todaysBirthdays.length > 0 && (
           <div
-            className={`${onLeaveTodayColSpan} bg-gradient-to-br from-rose-50 to-pink-100 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-pink-100 flex flex-col relative overflow-hidden`}
+            className={`${onLeaveTodayColSpan} bg-gradient-to-br from-rose-50 to-pink-100 backdrop-blur-xl rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-pink-100 flex flex-col relative overflow-hidden`}
           >
             {/* Decorative Background Element */}
             <PartyPopper className='absolute -right-6 -top-6 w-32 h-32 text-pink-200/50 rotate-12' />
 
             <div className='flex items-center justify-between mb-4 relative z-10'>
               <div className='flex items-center gap-2'>
-                <div className='p-2 bg-white/80 rounded-xl shadow-sm text-rose-500'>
+                <div className='p-2 bg-white/80 rounded-lg shadow-sm text-rose-500'>
                   <Cake className='w-5 h-5' />
                 </div>
                 <h3 className='font-bold text-slate-800 text-lg'>
@@ -622,7 +622,7 @@ const Dashboard = () => {
               {todaysBirthdays.map((user) => (
                 <div
                   key={user.id}
-                  className='flex items-center gap-4 p-3 rounded-2xl bg-white/60 border border-white/50 hover:bg-white transition-colors cursor-pointer shadow-sm group'
+                  className='flex items-center gap-4 p-3 rounded-lg bg-white/60 border border-white/50 hover:bg-white transition-colors cursor-pointer shadow-sm group'
                 >
                   {user.user_image ? (
                     <div
@@ -652,7 +652,7 @@ const Dashboard = () => {
         {/* Current Upcoming Leave Card - Spans 2 columns */}
         {employeesOnLeaveWeek.length > 0 && (
           <div
-            className={`${onLeaveTodayColSpan} bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/60 flex flex-col`}
+            className={`${onLeaveTodayColSpan} bg-white/80 backdrop-blur-xl rounded-lg p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/60 flex flex-col`}
           >
             <div className='flex items-center justify-between mb-4'>
               <div className='flex items-center gap-2'>
@@ -670,7 +670,7 @@ const Dashboard = () => {
               {employeesOnLeaveWeek.map((leave, index) => (
                 <div
                   key={leave.id || index}
-                  className='flex items-center gap-4 p-3 rounded-2xl bg-white/60 border border-slate-100 hover:bg-white transition-colors cursor-pointer group'
+                  className='flex items-center gap-4 p-3 rounded-lg bg-white/60 border border-slate-100 hover:bg-white transition-colors cursor-pointer group'
                 >
                   {leave.user_image ? (
                     <div
