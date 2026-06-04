@@ -48,6 +48,10 @@ import TeamCategoryEdit from "./pages/TeamCategoryEdit";
 import Team from "./pages/Team";
 import TeamCreate from "./pages/TeamCreate";
 import TeamEdit from "./pages/TeamEdit";
+import Committees from "./pages/Committees";
+import CommitteeCreate from "./pages/CommitteeCreate";
+import CommitteeEdit from "./pages/CommitteeEdit";
+import CommitteeMembers from "./pages/CommitteeMembers";
 import Awards from "./pages/Awards";
 import AwardCreate from "./pages/AwardCreate";
 import AwardEdit from "./pages/AwardEdit";
@@ -117,6 +121,7 @@ const routePermissions = [
   { prefix: "/downloads", moduleKey: "downloads" },
   { prefix: "/master/team-categories", moduleKey: "team-categories" },
   { prefix: "/team", moduleKey: "team" },
+  { prefix: "/committees", moduleKey: "committees" },
   { prefix: "/awards", moduleKey: "awards" },
   { prefix: "/news", moduleKey: "news" },
   { prefix: "/health-camps", moduleKey: "health-camps" },
@@ -269,6 +274,10 @@ function AppContent() {
               <Route path="/team" element={<Team />} />
               <Route path="/team/new" element={<TeamCreate />} />
               <Route path="/team/:id/edit" element={<TeamEdit />} />
+              <Route path="/committees" element={<Committees />} />
+              <Route path="/committees/new" element={<CommitteeCreate />} />
+              <Route path="/committees/:id/edit" element={<CommitteeEdit />} />
+              <Route path="/committees/:id/members" element={<CommitteeMembers />} />
               <Route path="/awards" element={<Awards />} />
               <Route path="/awards/new" element={<AwardCreate />} />
               <Route path="/awards/:awardId/edit" element={<AwardEdit />} />

@@ -166,6 +166,13 @@ export const MenuItems = [
     allowedRoles: ["admin"],
   },
   {
+    title: "Committees",
+    url: "/committees",
+    icon: ClipboardList,
+    moduleKey: "committees",
+    allowedRoles: ["admin"],
+  },
+  {
     title: "Awards",
     url: "/awards",
     icon: Trophy,
