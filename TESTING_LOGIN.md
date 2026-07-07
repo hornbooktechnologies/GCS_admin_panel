@@ -32,13 +32,13 @@ Enter your test credentials. For example:
 
 **Admin User:**
 ```
-Email: admin@example.com
+Email: admin@gcshospital.com
 Password: admin123
 ```
 
 **HR User:**
 ```
-Email: hr@example.com
+Email: hr@gcshospital.com
 Password: hr123
 ```
 
