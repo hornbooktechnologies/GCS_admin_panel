@@ -31,6 +31,9 @@ const ALLOWED_IMAGE_TYPES = [
   "image/webp",
 ];
 const ALLOWED_PDF_TYPES = ["application/pdf"];
+const NEWSLETTER_UPLOAD_LIMIT_MB = 100;
+const NEWSLETTER_UPLOAD_LIMIT_BYTES =
+  NEWSLETTER_UPLOAD_LIMIT_MB * 1024 * 1024;
 const NEWSLETTER_UPLOAD_TIMEOUT_MS = 180000;
 
 const NewsletterFormPage = ({ mode }) => {
@@ -143,6 +146,14 @@ const NewsletterFormPage = ({ mode }) => {
       return;
     }
 
+    if (file.size > NEWSLETTER_UPLOAD_LIMIT_BYTES) {
+      setFormErrors((current) => ({
+        ...current,
+        photo: `Photo must be ${NEWSLETTER_UPLOAD_LIMIT_MB}MB or smaller.`,
+      }));
+      return;
+    }
+
     handleInputChange("photo", file);
   };
 
@@ -162,7 +173,63 @@ const NewsletterFormPage = ({ mode }) => {
       return;
     }
 
+    if (file.size > NEWSLETTER_UPLOAD_LIMIT_BYTES) {
+      setFormErrors((current) => ({
+        ...current,
+        attachment: `Attachment must be ${NEWSLETTER_UPLOAD_LIMIT_MB}MB or smaller.`,
+      }));
+      return;
+    }
+
     handleInputChange("attachment", file);
+  };
+
+  const uploadFileDirectlyToS3 = async (file, fieldName) => {
+    const policyResponse = await apiClient.post(
+      "/newsletters/upload-policy",
+      {
+        field_name: fieldName,
+        file_name: file.name,
+        content_type: file.type,
+        file_size: file.size,
+      },
+      { timeout: NEWSLETTER_UPLOAD_TIMEOUT_MS },
+    );
+    const policy = policyResponse.data?.data;
+
+    if (!policy?.upload_url || !policy?.upload_fields || !policy?.key) {
+      throw new Error("Unable to authorize the newsletter file upload.");
+    }
+
+    const s3Payload = new FormData();
+    Object.entries(policy.upload_fields).forEach(([key, value]) => {
+      s3Payload.append(key, value);
+    });
+    s3Payload.append("file", file);
+
+    let uploadResponse;
+
+    try {
+      uploadResponse = await fetch(policy.upload_url, {
+        method: "POST",
+        body: s3Payload,
+      });
+    } catch (error) {
+      throw new Error(
+        "Direct upload to S3 failed. Please verify the S3 bucket CORS settings and your network connection.",
+      );
+    }
+
+    if (!uploadResponse.ok) {
+      throw new Error(
+        `S3 rejected the ${fieldName} upload (${uploadResponse.status}).`,
+      );
+    }
+
+    return {
+      key: policy.key,
+      contentType: file.type,
+    };
   };
 
   const validateForm = () => {
@@ -194,27 +261,37 @@ const NewsletterFormPage = ({ mode }) => {
 
     setIsSaving(true);
     try {
-      const payload = new FormData();
-      payload.append("title", form.title.trim());
-      payload.append("year", form.year.trim());
+      const [photoUpload, attachmentUpload] = await Promise.all([
+        form.photo
+          ? uploadFileDirectlyToS3(form.photo, "photo")
+          : Promise.resolve(null),
+        form.attachment
+          ? uploadFileDirectlyToS3(form.attachment, "attachment")
+          : Promise.resolve(null),
+      ]);
 
-      if (form.photo) {
-        payload.append("photo", form.photo);
+      const payload = {
+        title: form.title.trim(),
+        year: form.year.trim(),
+      };
+
+      if (photoUpload) {
+        payload.photo_key = photoUpload.key;
+        payload.photo_content_type = photoUpload.contentType;
       }
 
-      if (form.attachment) {
-        payload.append("attachment", form.attachment);
+      if (attachmentUpload) {
+        payload.attachment_key = attachmentUpload.key;
+        payload.attachment_content_type = attachmentUpload.contentType;
       }
 
       if (isEditMode) {
         await apiClient.put(`/newsletters/${newsletterId}`, payload, {
-          headers: { "Content-Type": "multipart/form-data" },
           timeout: NEWSLETTER_UPLOAD_TIMEOUT_MS,
         });
         showSuccessToast("Newsletter updated successfully");
       } else {
         await apiClient.post("/newsletters", payload, {
-          headers: { "Content-Type": "multipart/form-data" },
           timeout: NEWSLETTER_UPLOAD_TIMEOUT_MS,
         });
         showSuccessToast("Newsletter created successfully");
@@ -344,7 +421,7 @@ const NewsletterFormPage = ({ mode }) => {
                 )}
                 <p className="text-sm font-semibold text-slate-700">Upload photo</p>
                 <p className="mt-1 text-xs text-slate-500">
-                  JPG, PNG, GIF, or WEBP up to 100MB
+                  JPG, PNG, GIF, or WEBP up to {NEWSLETTER_UPLOAD_LIMIT_MB}MB
                 </p>
               </div>
               <Input
@@ -386,7 +463,8 @@ const NewsletterFormPage = ({ mode }) => {
                   Upload image or PDF
                 </p>
                 <p className="mt-1 text-xs text-slate-500">
-                  Supported: PDF, JPG, PNG, GIF, WEBP up to 100MB
+                  Supported: PDF, JPG, PNG, GIF, WEBP up to{" "}
+                  {NEWSLETTER_UPLOAD_LIMIT_MB}MB
                 </p>
                 <p className="mt-3 text-xs font-semibold text-primary">
                   {attachmentLabel}
