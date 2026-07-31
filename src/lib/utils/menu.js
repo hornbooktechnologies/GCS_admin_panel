@@ -55,6 +55,21 @@ export const MenuItems = [
     allowedRoles: ["admin", "hr", "manager"],
   },
   {
+    title: "Master",
+    url: "/master",
+    icon: FolderTree,
+    moduleKey: "team-categories",
+    allowedRoles: ["admin"],
+    children: [
+      {
+        title: "Team Categories",
+        url: "/master/team-categories",
+        moduleKey: "team-categories",
+        allowedRoles: ["admin"],
+      },
+    ],
+  },
+  {
     title: "Banners",
     url: "/banners",
     icon: Image,
@@ -139,21 +154,6 @@ export const MenuItems = [
         title: "Internship Positions",
         url: "/career/internship-positions",
         moduleKey: "career",
-        allowedRoles: ["admin"],
-      },
-    ],
-  },
-  {
-    title: "Master",
-    url: "/master",
-    icon: FolderTree,
-    moduleKey: "team-categories",
-    allowedRoles: ["admin"],
-    children: [
-      {
-        title: "Team Categories",
-        url: "/master/team-categories",
-        moduleKey: "team-categories",
         allowedRoles: ["admin"],
       },
     ],
