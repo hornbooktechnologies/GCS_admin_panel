@@ -8,6 +8,7 @@ import {
   Upload,
 } from "lucide-react";
 import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+import ImageUploadGuidance from "../components/common/ImageUploadGuidance";
 import { Button } from "../components/ui/button";
 import { FieldError } from "../components/ui/field";
 import { Input } from "../components/ui/input";
@@ -284,20 +285,25 @@ function BannerEditor({
               onChange={(event) => handleImageSelect(event.target.files?.[0])}
             />
             <FieldError>{formErrors.image}</FieldError>
+            <ImageUploadGuidance
+              requirementKey="advertisementBanner"
+              file={form.image}
+              src={previewUrl}
+            />
           </div>
         </div>
 
         <div className="min-w-0 space-y-2">
           <label className="text-sm font-semibold text-slate-700">Preview</label>
-          <div className="flex min-h-52 items-center justify-center overflow-hidden rounded-lg border border-dashed border-slate-200 bg-slate-50 p-2">
+          <div className="flex aspect-[4/5] items-center justify-center overflow-hidden rounded-lg border border-dashed border-slate-200 bg-slate-50 p-2">
             {previewUrl ? (
               <img
                 src={previewUrl}
                 alt={`Advertisement banner ${slot} preview`}
-                className="max-h-80 w-full rounded-md object-contain"
+                className="h-full w-full rounded-md object-contain"
               />
             ) : (
-              <div className="flex aspect-video w-full items-center justify-center text-slate-400">
+              <div className="flex h-full w-full items-center justify-center text-slate-400">
                 <ImageIcon className="h-8 w-8" />
               </div>
             )}

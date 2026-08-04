@@ -1,8 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+jest.mock('./components/app/AppRoutes', () => () => (
+  <div>Admin application routes</div>
+));
+
+test('renders the admin application shell', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText('Admin application routes')).toBeInTheDocument();
 });

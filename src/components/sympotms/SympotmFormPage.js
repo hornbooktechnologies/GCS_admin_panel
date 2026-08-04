@@ -4,6 +4,7 @@ import { ArrowLeft, Image as ImageIcon, LoaderCircle, Plus, Save, Trash2 } from 
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import { Textarea } from "../ui/textarea";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
@@ -270,10 +271,10 @@ const SympotmFormPage = ({ mode }) => {
                 <img
                   src={imagePreviewUrl}
                   alt="Preview"
-                  className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
+                  className="mx-auto mb-4 aspect-square w-full rounded-lg object-cover"
                 />
               ) : (
-                <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
+                <div className="mx-auto mb-4 flex aspect-square w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                   <ImageIcon className="h-8 w-8" />
                 </div>
               )}
@@ -287,6 +288,7 @@ const SympotmFormPage = ({ mode }) => {
               onChange={(event) => handleImageSelect(event.target.files?.[0])}
             />
             <FieldError>{formErrors.image}</FieldError>
+            <ImageUploadGuidance requirementKey="symptom" file={form.image} src={imagePreviewUrl} />
           </div>
         </div>
 

@@ -32,6 +32,7 @@ import { hasPermission } from "../lib/utils/permissions";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 import { DeleteConfirmationButton } from "../components/common/ConfirmationDialog";
+import ImageUploadGuidance from "../components/common/ImageUploadGuidance";
 
 
 const EMPTY_FORM = {
@@ -622,6 +623,7 @@ const Banners = () => {
                     Supports JPG, PNG, GIF, and WEBP up to 5MB.
                   </p>
                   <FieldError>{formErrors.image}</FieldError>
+                  <ImageUploadGuidance requirementKey="homeBanner" file={form.image} src={previewUrl} />
                 </div>
               </div>
 
@@ -634,10 +636,10 @@ const Banners = () => {
                     <img
                       src={previewUrl}
                       alt="Banner preview"
-                      className="aspect-[16/9] w-full object-cover"
+                      className="aspect-[24/7] w-full object-cover"
                     />
                   ) : (
-                    <div className="flex aspect-[16/9] items-center justify-center text-slate-400">
+                    <div className="flex aspect-[24/7] items-center justify-center text-slate-400">
                       <ImageIcon className="h-8 w-8" />
                     </div>
                   )}

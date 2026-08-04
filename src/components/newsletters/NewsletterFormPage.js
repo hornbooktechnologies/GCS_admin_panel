@@ -11,6 +11,7 @@ import {
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import { useAuthStore } from "../../context/AuthContext";
 import { hasPermission } from "../../lib/utils/permissions";
 import useToast from "../../hooks/useToast";
@@ -412,10 +413,10 @@ const NewsletterFormPage = ({ mode }) => {
                   <img
                     src={photoPreviewUrl}
                     alt="Newsletter photo preview"
-                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
+                    className="mx-auto mb-4 aspect-[3/4] w-full rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[3/4] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
@@ -432,6 +433,7 @@ const NewsletterFormPage = ({ mode }) => {
                 onChange={(event) => handlePhotoSelect(event.target.files?.[0])}
               />
               <FieldError>{formErrors.photo}</FieldError>
+              <ImageUploadGuidance requirementKey="newsletterCover" file={form.photo} src={photoPreviewUrl} />
             </div>
           </div>
 
@@ -480,6 +482,11 @@ const NewsletterFormPage = ({ mode }) => {
                 }
               />
               <FieldError>{formErrors.attachment}</FieldError>
+              <ImageUploadGuidance
+                requirementKey="newsletterAttachment"
+                file={form.attachment && !ALLOWED_PDF_TYPES.includes(form.attachment.type) ? form.attachment : null}
+                src={!form.attachment && existingAttachment?.type !== "pdf" ? existingAttachment?.url : ""}
+              />
             </div>
 
             <div className="space-y-2">

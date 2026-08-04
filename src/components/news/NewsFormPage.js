@@ -9,6 +9,7 @@ import {
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import { Textarea } from "../ui/textarea";
 import {
   Select,
@@ -207,6 +208,8 @@ const NewsFormPage = ({ mode }) => {
     previewUrl,
     inputRef,
     helperText,
+    requirementKey,
+    previewAspectClass = "aspect-[16/10]",
   }) => (
     <div className="space-y-2">
       <label className="text-sm font-semibold text-slate-700">{label}</label>
@@ -230,10 +233,10 @@ const NewsFormPage = ({ mode }) => {
           <img
             src={previewUrl}
             alt={`${label} preview`}
-            className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
+            className={`mx-auto mb-4 w-full rounded-lg object-cover ${previewAspectClass}`}
           />
         ) : (
-          <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
+          <div className={`mx-auto mb-4 flex w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm ${previewAspectClass}`}>
             <ImageIcon className="h-8 w-8" />
           </div>
         )}
@@ -253,6 +256,11 @@ const NewsFormPage = ({ mode }) => {
         onChange={(event) => handleImageSelect(field, event.target.files?.[0])}
       />
       <FieldError>{formErrors[field]}</FieldError>
+      <ImageUploadGuidance
+        requirementKey={requirementKey}
+        file={form[field]}
+        src={previewUrl}
+      />
     </div>
   );
 
@@ -376,6 +384,7 @@ const NewsFormPage = ({ mode }) => {
               previewUrl: thumbnailPreviewUrl,
               inputRef: thumbnailInputRef,
               helperText: "Used on the listing card. JPG, PNG, GIF, or WEBP.",
+              requirementKey: "newsThumbnail",
             })}
 
             {renderImageUpload({
@@ -384,6 +393,8 @@ const NewsFormPage = ({ mode }) => {
               previewUrl: detailPreviewUrl,
               inputRef: detailInputRef,
               helperText: "Used on the news detail page. JPG, PNG, GIF, or WEBP.",
+              requirementKey: "newsDetail",
+              previewAspectClass: "aspect-[2/1]",
             })}
           </div>
         </div>

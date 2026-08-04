@@ -4,6 +4,7 @@ import { ArrowLeft, Image as ImageIcon, LoaderCircle, Plus, Save, Trash2 } from 
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
 
@@ -268,6 +269,7 @@ const CheckupPlanFormPage = ({ mode }) => {
               onChange={(event) => handleImageSelect(event.target.files?.[0])}
             />
             <FieldError>{formErrors.image}</FieldError>
+            <ImageUploadGuidance requirementKey="healthCheckup" file={form.image} src={imagePreviewUrl} />
           </div>
         </div>
 

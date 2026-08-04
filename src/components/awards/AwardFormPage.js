@@ -4,6 +4,7 @@ import { ArrowLeft, Image as ImageIcon, LoaderCircle, Save } from "lucide-react"
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
 
@@ -151,9 +152,9 @@ const AwardFormPage = ({ mode }) => {
             <label className="text-sm font-semibold text-slate-700">Image</label>
             <div role="button" tabIndex={0} onClick={() => imageInputRef.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); imageInputRef.current?.click(); } }} className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}>
               {imagePreviewUrl ? (
-                <img src={imagePreviewUrl} alt="Preview" className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover" />
+                <img src={imagePreviewUrl} alt="Preview" className="mx-auto mb-4 aspect-[4/3] w-full rounded-lg object-cover" />
               ) : (
-                <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
+                <div className="mx-auto mb-4 flex aspect-[4/3] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                   <ImageIcon className="h-8 w-8" />
                 </div>
               )}
@@ -161,6 +162,7 @@ const AwardFormPage = ({ mode }) => {
             </div>
             <Input ref={imageInputRef} type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" className="hidden" onChange={(event) => handleImageSelect(event.target.files?.[0])} />
             <FieldError>{formErrors.image}</FieldError>
+            <ImageUploadGuidance requirementKey="awardImage" file={form.image} src={imagePreviewUrl} />
           </div>
         </div>
 

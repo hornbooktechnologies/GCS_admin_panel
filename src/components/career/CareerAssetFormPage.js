@@ -4,6 +4,7 @@ import { ArrowLeft, FileText, Image as ImageIcon, LoaderCircle, Save, Upload } f
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import { useAuthStore } from "../../context/AuthContext";
 import { hasPermission } from "../../lib/utils/permissions";
 import useToast from "../../hooks/useToast";
@@ -169,11 +170,12 @@ const CareerAssetFormPage = ({ config, mode }) => {
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Image Upload</label>
               <div role="button" tabIndex={0} onClick={() => imageInputRef.current?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); imageInputRef.current?.click(); } }} className={`cursor-pointer rounded-lg border border-dashed p-5 text-center transition-all ${formErrors.image ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"}`}>
-                {imagePreviewUrl ? <img src={imagePreviewUrl} alt="Preview" className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover" /> : <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm"><ImageIcon className="h-8 w-8" /></div>}
+                {imagePreviewUrl ? <img src={imagePreviewUrl} alt="Preview" className="mx-auto mb-4 aspect-video w-full rounded-lg object-cover" /> : <div className="mx-auto mb-4 flex aspect-video w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm"><ImageIcon className="h-8 w-8" /></div>}
                 <p className="text-sm font-semibold text-slate-700">Upload image</p>
               </div>
               <Input ref={imageInputRef} type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" className="hidden" onChange={(event) => handleImageSelect(event.target.files?.[0])} />
               <FieldError>{formErrors.image}</FieldError>
+              <ImageUploadGuidance requirementKey="careerAsset" file={form.image} src={imagePreviewUrl} />
             </div>
           </div>
 

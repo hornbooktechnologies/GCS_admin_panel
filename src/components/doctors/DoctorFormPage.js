@@ -14,6 +14,7 @@ import {
 } from "../ui/dropdown-menu";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import { selectTriggerStyles } from "../ui/select";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
@@ -327,11 +328,11 @@ const DoctorFormPage = ({ mode }) => {
                   <img
                     src={imageUrlForPreview}
                     alt="Preview"
-                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
+                    className="mx-auto mb-4 aspect-square w-full rounded-lg object-cover"
                     onError={() => setImagePreviewUrl("")}
                   />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-square w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
@@ -355,6 +356,7 @@ const DoctorFormPage = ({ mode }) => {
               ) : null}
               <Input ref={imageInputRef} type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" className="hidden" onChange={(event) => handleImageSelect(event.target.files?.[0])} />
               <FieldError>{formErrors.image}</FieldError>
+              <ImageUploadGuidance requirementKey="doctorPhoto" file={form.image} src={imageUrlForPreview} />
             </div>
           </div>
         </div>

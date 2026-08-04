@@ -6,6 +6,7 @@ import { ArrowLeft, Image as ImageIcon, LoaderCircle, Save } from "lucide-react"
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useAuthStore } from "../../context/AuthContext";
 import { hasPermission } from "../../lib/utils/permissions";
@@ -495,6 +496,11 @@ const BlogFormPage = ({ mode }) => {
                 }
               />
               <FieldError>{formErrors.thumbnail_image}</FieldError>
+              <ImageUploadGuidance
+                requirementKey="blogThumbnail"
+                file={form.thumbnail_image}
+                src={thumbnailPreviewUrl}
+              />
             </div>
 
             <div className="space-y-2">
@@ -536,10 +542,10 @@ const BlogFormPage = ({ mode }) => {
                   <img
                     src={detailPreviewUrl}
                     alt="Detail preview"
-                    className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover"
+                    className="mx-auto mb-4 aspect-[2/1] w-full rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[2/1] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
@@ -565,6 +571,11 @@ const BlogFormPage = ({ mode }) => {
                 }
               />
               <FieldError>{formErrors.detail_image}</FieldError>
+              <ImageUploadGuidance
+                requirementKey="blogDetail"
+                file={form.detail_image}
+                src={detailPreviewUrl}
+              />
             </div>
           </div>
         </div>

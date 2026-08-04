@@ -16,6 +16,7 @@ import {
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
@@ -547,9 +548,9 @@ const SpecialityFormPage = ({ mode }) => {
                 }`}
               >
                 {topBannerPreviewUrl ? (
-                  <img src={topBannerPreviewUrl} alt="Top banner preview" className="mx-auto mb-4 aspect-[16/8] w-full rounded-lg object-cover" />
+                  <img src={topBannerPreviewUrl} alt="Top banner preview" className="mx-auto mb-4 aspect-[16/5] w-full rounded-lg object-cover" />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/8] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[16/5] w-full items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <ImageIcon className="h-8 w-8" />
                   </div>
                 )}
@@ -563,6 +564,11 @@ const SpecialityFormPage = ({ mode }) => {
                 onChange={(event) => handleTopBannerSelect(event.target.files?.[0])}
               />
               <FieldError>{formErrors.top_banner}</FieldError>
+              <ImageUploadGuidance
+                requirementKey="specialityTopBanner"
+                file={form.top_banner}
+                src={topBannerPreviewUrl}
+              />
             </div>
           </div>
 
@@ -614,6 +620,11 @@ const SpecialityFormPage = ({ mode }) => {
                 onChange={(event) => handleMainBannerSelect(event.target.files)}
               />
               <FieldError>{formErrors.main_banners}</FieldError>
+              <ImageUploadGuidance
+                requirementKey="specialityMain"
+                files={form.main_banners}
+                sources={existingMainBanners}
+              />
             </div>
 
             <div className="space-y-2">
@@ -660,9 +671,9 @@ const SpecialityFormPage = ({ mode }) => {
                 }`}
               >
                 {brochurePreviewUrl && brochureType === "image" ? (
-                  <img src={brochurePreviewUrl} alt="Brochure preview" className="mx-auto mb-4 aspect-[16/10] w-full rounded-lg object-cover" />
+                  <img src={brochurePreviewUrl} alt="Brochure preview" className="mx-auto mb-4 aspect-[210/297] w-full rounded-lg object-contain" />
                 ) : (
-                  <div className="mx-auto mb-4 flex aspect-[16/10] w-full flex-col items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
+                  <div className="mx-auto mb-4 flex aspect-[210/297] w-full flex-col items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm">
                     <FileText className="h-8 w-8" />
                     {brochureType === "pdf" ? <span className="mt-2 text-xs font-semibold">PDF selected</span> : null}
                   </div>
@@ -678,6 +689,11 @@ const SpecialityFormPage = ({ mode }) => {
                 onChange={(event) => handleBrochureSelect(event.target.files?.[0])}
               />
               <FieldError>{formErrors.brochure}</FieldError>
+              <ImageUploadGuidance
+                requirementKey="specialityBrochure"
+                file={brochureType === "image" ? form.brochure : null}
+                src={brochureType === "image" ? brochurePreviewUrl : ""}
+              />
               {brochureDisplayName ? (
                 <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
                   <div className="flex items-center gap-3">

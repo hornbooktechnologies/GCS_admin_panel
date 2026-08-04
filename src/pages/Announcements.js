@@ -62,6 +62,7 @@ const Announcements = () => {
   const [draggedId, setDraggedId] = useState(null);
   const [dropTargetId, setDropTargetId] = useState(null);
   const [isDragOverAttachmentUpload, setIsDragOverAttachmentUpload] = useState(false);
+  const [selectedAttachmentUrl, setSelectedAttachmentUrl] = useState("");
   const attachmentInputRef = useRef(null);
 
   const dialogTitle = useMemo(
@@ -69,6 +70,24 @@ const Announcements = () => {
       editingAnnouncement ? "Edit Announcement" : "Create Announcement",
     [editingAnnouncement],
   );
+
+  const existingAttachmentUrl =
+    editingAnnouncement?.pdf_url || editingAnnouncement?.image_url || "";
+  const existingAttachmentIsPdf = !!editingAnnouncement?.pdf_url;
+  const selectedAttachmentIsImage =
+    form.attachment && ALLOWED_IMAGE_TYPES.includes(form.attachment.type);
+
+  useEffect(() => {
+    if (!form.attachment || typeof URL.createObjectURL !== "function") {
+      setSelectedAttachmentUrl("");
+      return undefined;
+    }
+
+    const objectUrl = URL.createObjectURL(form.attachment);
+    setSelectedAttachmentUrl(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [form.attachment]);
 
   const fetchAnnouncements = async () => {
     setIsLoading(true);
@@ -157,6 +176,13 @@ const Announcements = () => {
     }
 
     handleInputChange("attachment", file);
+  };
+
+  const clearSelectedAttachment = () => {
+    handleInputChange("attachment", null);
+    if (attachmentInputRef.current) {
+      attachmentInputRef.current.value = "";
+    }
   };
 
   const validateForm = () => {
@@ -486,8 +512,11 @@ const Announcements = () => {
         )}
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-2xl rounded-lg border border-white/60 bg-white p-0">
+      <Dialog
+        open={isDialogOpen}
+        onOpenChange={(open) => (open ? setIsDialogOpen(true) : closeDialog())}
+      >
+        <DialogContent className="max-h-[90vh] overflow-y-auto rounded-lg border border-white/60 bg-white p-0 sm:max-w-2xl">
           <form onSubmit={handleSave}>
             <DialogHeader className="border-b border-slate-100 px-6 py-5">
               <DialogTitle>{dialogTitle}</DialogTitle>
@@ -604,9 +633,9 @@ const Announcements = () => {
                       <p className="mt-3 text-xs font-semibold text-primary">
                         Selected: {form.attachment.name}
                       </p>
-                    ) : editingAnnouncement?.pdf_url || editingAnnouncement?.image_url ? (
+                    ) : existingAttachmentUrl ? (
                       <p className="mt-3 text-xs font-semibold text-primary">
-                        Current attachment available
+                        Choose a file only if you want to replace the current attachment
                       </p>
                     ) : null}
                   </div>
@@ -623,6 +652,111 @@ const Announcements = () => {
                     PDF, JPG, PNG, GIF, or WEBP only, up to 10MB.
                   </p>
                   <FieldError>{formErrors.attachment}</FieldError>
+
+                  {form.attachment ? (
+                    <div className="rounded-lg border border-blue-200 bg-blue-50/50 p-4">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="flex min-w-0 items-center gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
+                            {selectedAttachmentIsImage ? (
+                              <ImageIcon className="h-5 w-5" />
+                            ) : (
+                              <FileText className="h-5 w-5" />
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-bold uppercase tracking-wide text-primary">
+                              {existingAttachmentUrl
+                                ? "Selected replacement"
+                                : "Selected attachment"}
+                            </p>
+                            <p className="mt-1 truncate text-sm font-semibold text-slate-700">
+                              {form.attachment.name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedAttachmentUrl ? (
+                            <a
+                              href={selectedAttachmentUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center rounded-lg border border-blue-200 bg-white px-3 py-2 text-xs font-semibold text-primary transition hover:bg-blue-50"
+                            >
+                              <ExternalLink className="mr-2 h-3.5 w-3.5" />
+                              {selectedAttachmentIsImage ? "View Image" : "View PDF"}
+                            </a>
+                          ) : null}
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="h-auto rounded-lg px-3 py-2 text-xs"
+                            onClick={clearSelectedAttachment}
+                          >
+                            Remove Selection
+                          </Button>
+                        </div>
+                      </div>
+                      {selectedAttachmentIsImage && selectedAttachmentUrl ? (
+                        <div className="mt-4 overflow-hidden rounded-lg border border-blue-100 bg-white">
+                          <img
+                            src={selectedAttachmentUrl}
+                            alt={`Selected attachment preview for ${form.title || "announcement"}`}
+                            className="max-h-64 w-full object-contain"
+                          />
+                        </div>
+                      ) : null}
+                      {existingAttachmentUrl ? (
+                        <p className="mt-3 text-xs text-slate-600">
+                          This file will replace the current attachment only after you save the announcement.
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
+
+                  {existingAttachmentUrl ? (
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="flex min-w-0 items-center gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-slate-600 shadow-sm">
+                            {existingAttachmentIsPdf ? (
+                              <FileText className="h-5 w-5" />
+                            ) : (
+                              <ImageIcon className="h-5 w-5" />
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
+                              Current {existingAttachmentIsPdf ? "PDF" : "image"}
+                            </p>
+                            <p className="mt-1 text-xs text-slate-600">
+                              {form.attachment
+                                ? "This remains active until the replacement is saved."
+                                : "This attachment will be kept if you do not select a replacement."}
+                            </p>
+                          </div>
+                        </div>
+                        <a
+                          href={existingAttachmentUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100"
+                        >
+                          <ExternalLink className="mr-2 h-3.5 w-3.5" />
+                          View {existingAttachmentIsPdf ? "PDF" : "Image"}
+                        </a>
+                      </div>
+                      {!existingAttachmentIsPdf ? (
+                        <div className="mt-4 overflow-hidden rounded-lg border border-slate-200 bg-white">
+                          <img
+                            src={existingAttachmentUrl}
+                            alt={`Current attachment for ${form.title || "announcement"}`}
+                            className="max-h-64 w-full object-contain"
+                          />
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>

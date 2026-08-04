@@ -12,6 +12,7 @@ import {
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import ImageUploadGuidance from "../common/ImageUploadGuidance";
 import { useAuthStore } from "../../context/AuthContext";
 import { hasPermission } from "../../lib/utils/permissions";
 import useToast from "../../hooks/useToast";
@@ -416,6 +417,11 @@ const EventFormPage = ({ mode }) => {
                 }
               />
               <FieldError>{formErrors.thumbnail_image}</FieldError>
+              <ImageUploadGuidance
+                requirementKey="eventThumbnail"
+                file={form.thumbnail_image}
+                src={thumbnailPreviewUrl}
+              />
             </div>
           </div>
 
@@ -476,6 +482,11 @@ const EventFormPage = ({ mode }) => {
                 onChange={(event) => handleGallerySelect(event.target.files)}
               />
               <FieldError>{formErrors.gallery_images}</FieldError>
+              <ImageUploadGuidance
+                requirementKey="eventGallery"
+                files={form.gallery_images}
+                sources={existingGalleryImages}
+              />
             </div>
 
             <div className="space-y-2">
@@ -492,7 +503,7 @@ const EventFormPage = ({ mode }) => {
                       <img
                         src={item.image_url}
                         alt={`Gallery preview ${index + 1}`}
-                        className="aspect-[4/3] w-full object-cover"
+                        className="aspect-[16/10] w-full object-cover"
                       />
                     </div>
                   ))}
