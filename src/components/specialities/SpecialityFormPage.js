@@ -393,7 +393,7 @@ const SpecialityFormPage = ({ mode }) => {
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Category</label>
               <Select value={form.category} onValueChange={(value) => handleInputChange("category", value)}>
-                <SelectTrigger className="rounded-lg">
+                <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>

@@ -403,7 +403,7 @@ const CreateOrEditUserForm = ({
                                                     defaultValue={field.value}
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger className='h-10 border-gray-300 focus:ring-0 focus:ring-offset-0 focus:border-[#3a5f9e] text-gray-900'>
+                                                    <SelectTrigger>
                                                         <SelectValue placeholder='Select Role' />
                                                     </SelectTrigger>
                                                     <SelectContent>
@@ -432,7 +432,7 @@ const CreateOrEditUserForm = ({
                                                     defaultValue={field.value}
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger className='h-10 border-gray-300 focus:ring-0 focus:ring-offset-0 focus:border-[#3a5f9e] text-gray-900'>
+                                                    <SelectTrigger>
                                                         <SelectValue placeholder='Select Status' />
                                                     </SelectTrigger>
                                                     <SelectContent>

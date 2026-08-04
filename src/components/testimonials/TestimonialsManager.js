@@ -440,7 +440,7 @@ const TestimonialsManager = ({
                   value={form.status}
                   onValueChange={(value) => handleInputChange("status", value)}
                 >
-                  <SelectTrigger className="rounded-lg">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>

@@ -126,7 +126,7 @@ const TeamCategoryFormPage = ({ mode }) => {
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Layout Type</label>
             <Select value={form.layout_type} onValueChange={(value) => handleInputChange("layout_type", value)}>
-              <SelectTrigger className="rounded-lg">
+              <SelectTrigger>
                 <SelectValue placeholder="Select layout type" />
               </SelectTrigger>
               <SelectContent>

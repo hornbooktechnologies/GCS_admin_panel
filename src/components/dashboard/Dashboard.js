@@ -450,7 +450,7 @@ const Dashboard = () => {
       <div className="flex justify-end mb-6">
         <div className="w-full md:w-48">
           <Select value={selectedYear} onValueChange={setSelectedYear}>
-            <SelectTrigger className="w-full h-11 bg-white border border-slate-200 hover:border-primary/50 hover:shadow-md focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-lg">
+            <SelectTrigger>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" />
                 <SelectValue placeholder="Select Year" />

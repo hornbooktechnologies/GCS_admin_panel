@@ -241,7 +241,7 @@ const TeamFormPage = ({ mode }) => {
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Team Category</label>
               <Select value={form.category_id} onValueChange={(value) => handleInputChange("category_id", value)}>
-                <SelectTrigger className="rounded-lg">
+                <SelectTrigger>
                   <SelectValue placeholder="Select team category" />
                 </SelectTrigger>
                 <SelectContent>

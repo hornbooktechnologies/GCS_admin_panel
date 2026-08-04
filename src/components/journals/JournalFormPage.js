@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, FileText, LoaderCircle, Plus, Save, Trash2, Upload } from "lucide-react";
+import { ArrowLeft, Eye, FileText, LoaderCircle, Plus, Save, Trash2, Upload } from "lucide-react";
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
@@ -9,6 +9,7 @@ import apiClient from "../../lib/utils/network-client";
 
 const SECTION_LABELS = {
   editorial: "Editorial",
+  review_article: "Review Article",
   original_article: "Original Article",
   case_report: "Case Report",
 };
@@ -23,16 +24,66 @@ const createEmptyItem = () => ({
 });
 
 const createEmptySections = () => ({
-  editorial: [createEmptyItem()],
-  original_article: [createEmptyItem()],
-  case_report: [createEmptyItem()],
+  editorial: [],
+  review_article: [],
+  original_article: [],
+  case_report: [],
 });
 
 const EMPTY_FORM = {
   volume: "",
   number: "",
   duration: "",
+  issue_pdf: null,
+  issue_pdf_url: "",
+  remove_issue_pdf: false,
   sections: createEmptySections(),
+};
+
+const PdfUploadedStatus = ({ file, url, onDelete }) => {
+  const handleView = () => {
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      window.open(objectUrl, "_blank", "noopener,noreferrer");
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+      return;
+    }
+
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-3 rounded-lg border border-emerald-200 bg-emerald-50/70 p-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-emerald-600 shadow-sm">
+          <FileText className="h-5 w-5" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-emerald-800">PDF uploaded</p>
+          <p className="truncate text-xs text-emerald-700/80">
+            {file?.name || "Current saved PDF"}
+          </p>
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <Button type="button" variant="outline" className="rounded-lg bg-white" onClick={handleView}>
+          <Eye className="mr-2 h-4 w-4" />
+          View
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="rounded-lg border-red-200 bg-white text-red-600 hover:bg-red-50"
+          onClick={onDelete}
+        >
+          <Trash2 className="mr-2 h-4 w-4" />
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 const JournalFormPage = ({ mode }) => {
@@ -44,9 +95,10 @@ const JournalFormPage = ({ mode }) => {
   const [isPageLoading, setIsPageLoading] = useState(mode === "edit");
   const [isSaving, setIsSaving] = useState(false);
   const fileInputRefs = useRef({});
+  const issuePdfInputRef = useRef(null);
 
   const isEditMode = mode === "edit";
-  const pageTitle = useMemo(() => (isEditMode ? "Edit Journal" : "Create Journal"), [isEditMode]);
+  const pageTitle = useMemo(() => (isEditMode ? "Edit Journal Issue" : "Create Journal Issue"), [isEditMode]);
 
   useEffect(() => {
     if (!isEditMode) {
@@ -68,22 +120,23 @@ const JournalFormPage = ({ mode }) => {
         const nextSections = createEmptySections();
         Object.keys(nextSections).forEach((section) => {
           const sectionItems = item.entries?.[section] || [];
-          nextSections[section] = sectionItems.length
-            ? sectionItems.map((entry) => ({
+          nextSections[section] = sectionItems.map((entry) => ({
                 id: entry.id,
                 title: entry.title || "",
                 author: entry.author || "",
                 pdf: null,
                 pdf_url: entry.pdf_url || "",
                 keepExisting: true,
-              }))
-            : [createEmptyItem()];
+              }));
         });
 
         setForm({
           volume: item.volume || "",
           number: item.number || "",
           duration: item.duration || "",
+          issue_pdf: null,
+          issue_pdf_url: item.issue_pdf_url || "",
+          remove_issue_pdf: false,
           sections: nextSections,
         });
       } catch (err) {
@@ -132,7 +185,7 @@ const JournalFormPage = ({ mode }) => {
   const handleRemoveSectionItem = (section, index) => {
     setForm((current) => {
       const items = current.sections[section];
-      const nextItems = items.length === 1 ? [createEmptyItem()] : items.filter((_, itemIndex) => itemIndex !== index);
+      const nextItems = items.filter((_, itemIndex) => itemIndex !== index);
       return {
         ...current,
         sections: {
@@ -169,6 +222,59 @@ const JournalFormPage = ({ mode }) => {
     setSectionError(section, "");
   };
 
+  const handleIssuePdfSelect = (file) => {
+    if (!file) return;
+    if (file.type !== "application/pdf") {
+      setFormErrors((current) => ({ ...current, content: "Only PDF files are allowed." }));
+      return;
+    }
+
+    setForm((current) => ({ ...current, issue_pdf: file }));
+    setFormErrors((current) => ({ ...current, content: "" }));
+  };
+
+  const handleDeleteEntryPdf = (section, index) => {
+    setForm((current) => ({
+      ...current,
+      sections: {
+        ...current.sections,
+        [section]: current.sections[section].map((item, itemIndex) => {
+          if (itemIndex !== index) return item;
+          if (item.pdf) {
+            return {
+              ...item,
+              pdf: null,
+              keepExisting: Boolean(item.pdf_url),
+            };
+          }
+          return { ...item, pdf: null, pdf_url: "", keepExisting: false };
+        }),
+      },
+    }));
+    if (fileInputRefs.current[`${section}-${index}`]) {
+      fileInputRefs.current[`${section}-${index}`].value = "";
+    }
+    setSectionError(section, "");
+  };
+
+  const handleDeleteIssuePdf = () => {
+    setForm((current) => {
+      if (current.issue_pdf) {
+        return { ...current, issue_pdf: null };
+      }
+      return {
+        ...current,
+        issue_pdf: null,
+        issue_pdf_url: "",
+        remove_issue_pdf: true,
+      };
+    });
+    if (issuePdfInputRef.current) {
+      issuePdfInputRef.current.value = "";
+    }
+    setFormErrors((current) => ({ ...current, content: "" }));
+  };
+
   const validateSection = (section) => {
     const items = form.sections[section] || [];
     for (const item of items) {
@@ -198,6 +304,11 @@ const JournalFormPage = ({ mode }) => {
       }
     });
 
+    const hasEntries = Object.values(form.sections).some((items) => items.length > 0);
+    if (!form.issue_pdf && !form.issue_pdf_url && !hasEntries) {
+      nextErrors.content = "Add a full issue PDF or at least one journal entry.";
+    }
+
     setFormErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -207,7 +318,9 @@ const JournalFormPage = ({ mode }) => {
     payload.append("volume", form.volume.trim());
     payload.append("number", form.number.trim());
     payload.append("duration", form.duration.trim());
-
+    if (form.issue_pdf) {
+      payload.append("issue_pdf", form.issue_pdf);
+    }
     Object.entries(form.sections).forEach(([section, items]) => {
       items.forEach((item) => {
         payload.append(`${section}_titles`, item.title.trim());
@@ -224,6 +337,12 @@ const JournalFormPage = ({ mode }) => {
     payload.append("volume", form.volume.trim());
     payload.append("number", form.number.trim());
     payload.append("duration", form.duration.trim());
+    if (form.issue_pdf) {
+      payload.append("issue_pdf", form.issue_pdf);
+    }
+    if (form.remove_issue_pdf) {
+      payload.append("remove_issue_pdf", "true");
+    }
 
     const entriesPayload = {};
     Object.entries(form.sections).forEach(([section, items]) => {
@@ -287,8 +406,14 @@ const JournalFormPage = ({ mode }) => {
       </div>
 
       <div className="space-y-4">
+        {form.sections[section].length === 0 ? (
+          <div className="rounded-lg border border-dashed border-slate-200 bg-white px-4 py-6 text-center text-sm text-slate-500">
+            No {SECTION_LABELS[section].toLowerCase()} entries added.
+          </div>
+        ) : null}
         {form.sections[section].map((item, index) => {
           const inputKey = `${section}-${index}`;
+          const hasPdf = Boolean(item.pdf || item.pdf_url);
           return (
             <div key={inputKey} className="rounded-lg border border-slate-200 bg-white p-4">
               <div className="grid gap-4 lg:grid-cols-[1fr_1fr_auto]">
@@ -310,17 +435,33 @@ const JournalFormPage = ({ mode }) => {
 
               <div className="mt-4 space-y-2">
                 <label className="text-sm font-semibold text-slate-700">PDF Upload</label>
-                <div role="button" tabIndex={0} onClick={() => fileInputRefs.current[inputKey]?.click()} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); fileInputRefs.current[inputKey]?.click(); } }} className="cursor-pointer rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-center transition-all hover:border-primary/40 hover:bg-white">
+                <div
+                  role="button"
+                  tabIndex={hasPdf ? -1 : 0}
+                  aria-disabled={hasPdf}
+                  onClick={() => {
+                    if (!hasPdf) fileInputRefs.current[inputKey]?.click();
+                  }}
+                  onKeyDown={(event) => {
+                    if (!hasPdf && (event.key === "Enter" || event.key === " ")) {
+                      event.preventDefault();
+                      fileInputRefs.current[inputKey]?.click();
+                    }
+                  }}
+                  className={`rounded-lg border border-dashed p-4 text-center transition-all ${
+                    hasPdf
+                      ? "cursor-not-allowed border-slate-200 bg-slate-100 opacity-60"
+                      : "cursor-pointer border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"
+                  }`}
+                >
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
                     <Upload className="h-5 w-5" />
                   </div>
-                  <p className="mt-3 text-sm font-semibold text-slate-700">Upload PDF</p>
+                  <p className="mt-3 text-sm font-semibold text-slate-700">
+                    {hasPdf ? "PDF upload disabled" : "Upload PDF"}
+                  </p>
                   <p className="mt-1 text-xs text-slate-500">
-                    {item.pdf
-                      ? item.pdf.name
-                      : item.keepExisting && item.pdf_url
-                        ? "Current PDF available"
-                        : "Only PDF files are allowed"}
+                    {hasPdf ? "Use View or Delete below" : "Only PDF files are allowed"}
                   </p>
                 </div>
                 <Input
@@ -330,13 +471,15 @@ const JournalFormPage = ({ mode }) => {
                   type="file"
                   accept="application/pdf"
                   className="hidden"
+                  disabled={hasPdf}
                   onChange={(event) => handlePdfSelect(section, index, event.target.files?.[0])}
                 />
-                {item.keepExisting && item.pdf_url ? (
-                  <a href={item.pdf_url} target="_blank" rel="noreferrer" className="inline-flex items-center text-xs font-semibold text-primary">
-                    <FileText className="mr-2 h-4 w-4" />
-                    Open current PDF
-                  </a>
+                {hasPdf ? (
+                  <PdfUploadedStatus
+                    file={item.pdf}
+                    url={item.pdf_url}
+                    onDelete={() => handleDeleteEntryPdf(section, index)}
+                  />
                 ) : null}
               </div>
             </div>
@@ -363,7 +506,7 @@ const JournalFormPage = ({ mode }) => {
       <div>
         <Button type="button" variant="ghost" className="-ml-3 mb-2 rounded-lg px-3 text-slate-500" onClick={() => navigate("/journals")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Journals
+          Back to Journal Issues
         </Button>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">{pageTitle}</h1>
       </div>
@@ -386,6 +529,62 @@ const JournalFormPage = ({ mode }) => {
               <Input value={form.duration} onChange={(event) => handleInputChange("duration", event.target.value)} className={`rounded-lg ${formErrors.duration ? "border-red-300 focus-visible:ring-red-500" : ""}`} />
               <FieldError>{formErrors.duration}</FieldError>
             </div>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-white/60 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">Full Issue PDF (optional)</label>
+            <p className="text-xs text-slate-500">
+              Upload this when the complete issue should open as one PDF. You can alternatively add individual entries below.
+            </p>
+            <div
+              role="button"
+              tabIndex={form.issue_pdf || form.issue_pdf_url ? -1 : 0}
+              aria-disabled={Boolean(form.issue_pdf || form.issue_pdf_url)}
+              onClick={() => {
+                if (!form.issue_pdf && !form.issue_pdf_url) issuePdfInputRef.current?.click();
+              }}
+              onKeyDown={(event) => {
+                if (!form.issue_pdf && !form.issue_pdf_url && (event.key === "Enter" || event.key === " ")) {
+                  event.preventDefault();
+                  issuePdfInputRef.current?.click();
+                }
+              }}
+              className={`rounded-lg border border-dashed p-4 text-center transition-all ${
+                form.issue_pdf || form.issue_pdf_url
+                  ? "cursor-not-allowed border-slate-200 bg-slate-100 opacity-60"
+                  : "cursor-pointer border-slate-200 bg-slate-50 hover:border-primary/40 hover:bg-white"
+              }`}
+            >
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
+                <Upload className="h-5 w-5" />
+              </div>
+              <p className="mt-3 text-sm font-semibold text-slate-700">
+                {form.issue_pdf || form.issue_pdf_url ? "PDF upload disabled" : "Upload full issue PDF"}
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                {form.issue_pdf || form.issue_pdf_url
+                  ? "Use View or Delete below"
+                  : "Only PDF files are allowed"}
+              </p>
+            </div>
+            <Input
+              ref={issuePdfInputRef}
+              type="file"
+              accept="application/pdf"
+              className="hidden"
+              disabled={Boolean(form.issue_pdf || form.issue_pdf_url)}
+              onChange={(event) => handleIssuePdfSelect(event.target.files?.[0])}
+            />
+            {form.issue_pdf || form.issue_pdf_url ? (
+              <PdfUploadedStatus
+                file={form.issue_pdf}
+                url={form.issue_pdf_url}
+                onDelete={handleDeleteIssuePdf}
+              />
+            ) : null}
+            <FieldError>{formErrors.content}</FieldError>
           </div>
         </div>
 

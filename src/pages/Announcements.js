@@ -14,6 +14,7 @@ import {
 import { Button } from "../components/ui/button";
 import { FieldError } from "../components/ui/field";
 import { Input } from "../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -531,18 +532,17 @@ const Announcements = () => {
                   <label className="text-sm font-semibold text-slate-700">
                     Category
                   </label>
-                  <select
-                    value={form.category}
-                    onChange={(event) =>
-                      handleInputChange("category", event.target.value)
-                    }
-                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700"
-                  >
-                    <option value="Notices">Notices</option>
-                    <option value="Admissions">Admissions</option>
-                    <option value="Opportunities">Opportunities</option>
-                    <option value="Events">Events</option>
-                  </select>
+                  <Select value={form.category} onValueChange={(value) => handleInputChange("category", value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Notices">Notices</SelectItem>
+                      <SelectItem value="Admissions">Admissions</SelectItem>
+                      <SelectItem value="Opportunities">Opportunities</SelectItem>
+                      <SelectItem value="Events">Events</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <label className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">

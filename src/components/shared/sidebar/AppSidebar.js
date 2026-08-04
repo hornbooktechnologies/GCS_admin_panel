@@ -121,6 +121,7 @@ const AppSidebar = () => {
                         {hasChildren ? (
                           <button
                             type="button"
+                            aria-label={item.title}
                             onClick={() => {
                               if (!isOpen) {
                                 setIsOpen(true);
@@ -171,6 +172,7 @@ const AppSidebar = () => {
                         ) : (
                           <Link
                             to={item.url}
+                            aria-label={item.title}
                             onClick={handleNavClick}
                             className={cn(
                               "flex items-center transition-all duration-300 group relative",
@@ -206,11 +208,9 @@ const AppSidebar = () => {
                           </Link>
                         )}
                       </TooltipTrigger>
-                      {!isOpen && (
-                        <TooltipContent side="right" sideOffset={12} className="bg-primary border-none text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-2xl">
-                          <p>{item.title}</p>
-                        </TooltipContent>
-                      )}
+                      <TooltipContent side="right" sideOffset={12} className="bg-primary border-none text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-2xl">
+                        <p>{item.title}</p>
+                      </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                   {hasChildren && isOpen && isExpanded ? (
@@ -221,18 +221,28 @@ const AppSidebar = () => {
                           location.pathname.startsWith(`${child.url}/`);
                         return (
                           <li key={child.title}>
-                            <Link
-                              to={child.url}
-                              onClick={handleNavClick}
-                              className={cn(
-                                "flex items-center rounded-lg px-4 py-2.5 text-sm transition-all duration-200",
-                                childIsActive
-                                  ? "bg-primary/10 text-primary font-semibold"
-                                  : "text-slate-500 hover:bg-white hover:text-primary",
-                              )}
-                            >
-                              <span className="truncate">{child.title}</span>
-                            </Link>
+                            <TooltipProvider disableHoverableContent>
+                              <Tooltip delayDuration={0}>
+                                <TooltipTrigger asChild>
+                                  <Link
+                                    to={child.url}
+                                    aria-label={child.title}
+                                    onClick={handleNavClick}
+                                    className={cn(
+                                      "flex items-center rounded-lg px-4 py-2.5 text-sm transition-all duration-200",
+                                      childIsActive
+                                        ? "bg-primary/10 text-primary font-semibold"
+                                        : "text-slate-500 hover:bg-white hover:text-primary",
+                                    )}
+                                  >
+                                    <span className="truncate">{child.title}</span>
+                                  </Link>
+                                </TooltipTrigger>
+                                <TooltipContent side="right" sideOffset={12} className="bg-primary border-none text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-2xl">
+                                  <p>{child.title}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                           </li>
                         );
                       })}
@@ -249,6 +259,7 @@ const AppSidebar = () => {
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <button
+                  aria-label="Log Out"
                   onClick={handleLogout}
                   className={cn(
                     "flex items-center transition-all duration-300 group relative",
@@ -270,11 +281,9 @@ const AppSidebar = () => {
                   </span>
                 </button>
               </TooltipTrigger>
-              {!isOpen && (
-                <TooltipContent side="right" sideOffset={12} className="bg-primary border-none text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-2xl">
-                  Log Out
-                </TooltipContent>
-              )}
+              <TooltipContent side="right" sideOffset={12} className="bg-primary border-none text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-2xl">
+                Log Out
+              </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>

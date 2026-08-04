@@ -401,7 +401,7 @@ export default function ReusableDataTable({
                 }
               }}
             >
-              <SelectTrigger className="w-[70px] h-8">
+              <SelectTrigger className="w-24">
                 <SelectValue placeholder={perPage} />
               </SelectTrigger>
               <SelectContent>

@@ -142,7 +142,7 @@ const CommitteeFormPage = ({ mode }) => {
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Department</label>
             <Select value={form.department} onValueChange={(v) => handleInputChange("department", v)}>
-              <SelectTrigger className={`rounded-lg ${formErrors.department ? "border-red-300" : ""}`}>
+              <SelectTrigger className={formErrors.department ? "border-red-300" : ""}>
                 <SelectValue placeholder="Select department" />
               </SelectTrigger>
               <SelectContent>

@@ -189,7 +189,7 @@ const CommitteeMembers = () => {
                       value={member.member_role}
                       onValueChange={(v) => updateLocalMember(member.id, "member_role", v)}
                     >
-                      <SelectTrigger className="h-9 rounded-lg border-slate-200 text-sm">
+                      <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -277,7 +277,7 @@ const CommitteeMembers = () => {
                 </td>
                 <td className="px-5 py-3">
                   <Select value={newRow.member_role} onValueChange={(v) => setNewRow((r) => ({ ...r, member_role: v }))}>
-                    <SelectTrigger className="h-9 rounded-lg border-slate-200 text-sm">
+                    <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

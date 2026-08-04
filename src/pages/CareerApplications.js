@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ExternalLink, FileText, RefreshCw } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import useToast from "../hooks/useToast";
 import apiClient from "../lib/utils/network-client";
 
@@ -100,18 +101,22 @@ const CareerApplications = () => {
                     <td className="px-5 py-4 text-sm text-slate-600">{item.position}</td>
                     <td className="px-5 py-4 text-sm text-slate-600">{item.city}</td>
                     <td className="px-5 py-4 text-sm">
-                      <select
+                      <Select
                         value={item.status || "pending"}
                         disabled={updatingStatus === item.id}
-                        onChange={(e) => handleStatusChange(item.id, e.target.value)}
-                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-700 outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50"
+                        onValueChange={(value) => handleStatusChange(item.id, value)}
                       >
-                        <option value="pending">Pending</option>
-                        <option value="reviewing">Reviewing</option>
-                        <option value="shortlisted">Shortlisted</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="hired">Hired</option>
-                      </select>
+                        <SelectTrigger className="min-w-36">
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="reviewing">Reviewing</SelectItem>
+                          <SelectItem value="shortlisted">Shortlisted</SelectItem>
+                          <SelectItem value="rejected">Rejected</SelectItem>
+                          <SelectItem value="hired">Hired</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </td>
                     <td className="px-5 py-4 text-sm text-slate-600"><div className="line-clamp-3">{item.message || "-"}</div></td>
                     <td className="px-5 py-4 text-sm text-slate-600">

@@ -420,7 +420,7 @@ const ActivityLogTable = () => {
                       value={pagination.per_page.toString()}
                       onValueChange={handlePerPageChange}
                     >
-                      <SelectTrigger className='w-[70px] h-8'>
+                      <SelectTrigger className='w-24'>
                         <SelectValue placeholder={pagination.per_page} />
                       </SelectTrigger>
                       <SelectContent>

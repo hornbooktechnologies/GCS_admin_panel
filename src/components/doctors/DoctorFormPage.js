@@ -14,8 +14,10 @@ import {
 } from "../ui/dropdown-menu";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import { selectTriggerStyles } from "../ui/select";
 import useToast from "../../hooks/useToast";
 import apiClient from "../../lib/utils/network-client";
+import { cn } from "../../lib/utils/utils";
 
 const EMPTY_FORM = {
   name: "",
@@ -271,16 +273,16 @@ const DoctorFormPage = ({ mode }) => {
               <label className="text-sm font-semibold text-slate-700">Specialities</label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button type="button" variant="outline" className={`w-full justify-between rounded-lg ${formErrors.speciality_ids ? "border-red-300 text-red-600" : ""}`}>
-                    <span className="truncate">
+                  <button type="button" className={cn(selectTriggerStyles, formErrors.speciality_ids && "border-red-300 text-red-600")}>
+                    <span className="min-w-0 flex-1 truncate">
                       {selectedSpecialities.length > 0
                         ? `${selectedSpecialities.length} selected`
                         : "Select specialities"}
                     </span>
-                    <ChevronDown className="ml-2 h-4 w-4" />
-                  </Button>
+                    <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                  </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-80">
+                <DropdownMenuContent align="start" className="w-[var(--radix-dropdown-menu-trigger-width)]">
                   <DropdownMenuLabel>Select specialities</DropdownMenuLabel>
                   {specialities.map((item) => (
                     <DropdownMenuCheckboxItem
@@ -289,8 +291,8 @@ const DoctorFormPage = ({ mode }) => {
                       onCheckedChange={() => toggleSpeciality(item.id)}
                       onSelect={(event) => event.preventDefault()}
                     >
-                      <div className="flex flex-col">
-                        <span>{item.title}</span>
+                      <div className="flex min-w-0 flex-col overflow-hidden">
+                        <span className="truncate" title={item.title}>{item.title}</span>
                         <span className="text-xs capitalize text-slate-500">{item.category}</span>
                       </div>
                     </DropdownMenuCheckboxItem>

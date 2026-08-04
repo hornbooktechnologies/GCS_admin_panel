@@ -4,6 +4,7 @@ import { ArrowLeft, LoaderCircle, Save } from "lucide-react";
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useAuthStore } from "../../context/AuthContext";
 import { hasPermission } from "../../lib/utils/permissions";
 import useToast from "../../hooks/useToast";
@@ -173,15 +174,16 @@ const CurrentOpeningFormPage = ({ mode }) => {
           {/* Status */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Status</label>
-            <select
-              value={form.status}
-              onChange={(e) => handleInputChange("status", e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
-            >
-              <option value="open">Open</option>
-              <option value="draft">Draft (hidden from public)</option>
-              <option value="closed">Closed</option>
-            </select>
+            <Select value={form.status} onValueChange={(value) => handleInputChange("status", value)}>
+              <SelectTrigger className={formErrors.status ? "border-red-300" : ""}>
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="open">Open</SelectItem>
+                <SelectItem value="draft">Draft (hidden from public)</SelectItem>
+                <SelectItem value="closed">Closed</SelectItem>
+              </SelectContent>
+            </Select>
             <FieldError>{formErrors.status}</FieldError>
           </div>
 

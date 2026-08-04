@@ -216,8 +216,8 @@ const Doctors = () => {
             </Button>
           </div>
           {canCreate && (
-            <Button type="button" className="rounded-lg" onClick={() => navigate("/doctors/new")}>
-              <Plus className="mr-2 h-4 w-4" />
+            <Button type="button" className="shrink-0 whitespace-nowrap rounded-lg px-5" onClick={() => navigate("/doctors/new")}>
+              <Plus className="mr-2 h-4 w-4 shrink-0" />
               Add Doctor
             </Button>
           )}
@@ -229,7 +229,7 @@ const Doctors = () => {
           <div className="space-y-1.5">
             <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Speciality</label>
             <Select value={selectedSpecialityId} onValueChange={setSelectedSpecialityId}>
-              <SelectTrigger className="rounded-lg bg-white/50">
+              <SelectTrigger>
                 <SelectValue placeholder="All Specialities" />
               </SelectTrigger>
               <SelectContent>
@@ -245,7 +245,7 @@ const Doctors = () => {
           <div className="space-y-1.5">
             <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Category</label>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="rounded-lg bg-white/50">
+              <SelectTrigger>
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
@@ -258,7 +258,7 @@ const Doctors = () => {
           <div className="space-y-1.5">
             <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">HOD Status</label>
             <Select value={selectedHod} onValueChange={setSelectedHod}>
-              <SelectTrigger className="rounded-lg bg-white/50">
+              <SelectTrigger>
                 <SelectValue placeholder="All Doctors" />
               </SelectTrigger>
               <SelectContent>
