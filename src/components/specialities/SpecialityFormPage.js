@@ -631,7 +631,7 @@ const SpecialityFormPage = ({ mode }) => {
               <label className="text-sm font-semibold text-slate-700">Main Department Image Preview</label>
               {displayMainBanners.length > 0 ? (
                 <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
-                  <img src={displayMainBanners[0].image_url} alt="Main department image preview" className="aspect-[16/10] w-full object-cover" />
+                  <img src={displayMainBanners[0].image_url} alt="Main department image preview" className="aspect-[3/2] w-full object-cover" />
                 </div>
               ) : (
                 <div className="flex min-h-48 items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50 text-slate-400">

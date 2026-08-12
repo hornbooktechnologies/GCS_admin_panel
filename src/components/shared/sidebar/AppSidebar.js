@@ -266,11 +266,11 @@ const AppSidebar = () => {
                     isOpen
                       ? "justify-start px-5 py-3 gap-3 rounded-lg w-full"
                       : "justify-center w-12 h-12 mx-auto rounded-full",
-                    "text-primary hover:text-red-600 hover:bg-red-50 hover:shadow-sm",
+                    "bg-red-50 text-red-600 ring-1 ring-inset ring-red-200 hover:bg-red-600 hover:text-white hover:ring-red-600 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2",
                   )}
                 >
                   <LogOut
-                    className="text-primary group-hover:text-red-600 transition-all duration-300 shrink-0 group-hover:scale-110"
+                    className="shrink-0 text-current transition-all duration-300 group-hover:scale-110"
                     size={isOpen ? 20 : 22}
                   />
                   <span className={cn(
@@ -281,7 +281,7 @@ const AppSidebar = () => {
                   </span>
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="right" sideOffset={12} className="bg-primary border-none text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-2xl">
+              <TooltipContent side="right" sideOffset={12} className="border-none bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-2xl">
                 Log Out
               </TooltipContent>
             </Tooltip>
