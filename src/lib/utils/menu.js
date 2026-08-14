@@ -29,6 +29,7 @@ import {
   UserRound,
   HeartHandshake,
   Milestone,
+  Recycle,
 } from "lucide-react";
 
 export const MenuItems = [
@@ -218,6 +219,13 @@ export const MenuItems = [
     url: "/health-camps",
     icon: HeartPulse,
     moduleKey: "health-camps",
+    allowedRoles: ["admin"],
+  },
+  {
+    title: "Biomedical Waste",
+    url: "/bio-medical-waste",
+    icon: Recycle,
+    moduleKey: "bio-medical-waste",
     allowedRoles: ["admin"],
   },
   {

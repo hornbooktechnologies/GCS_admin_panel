@@ -13,6 +13,9 @@ import AwardCreate from "../../pages/AwardCreate";
 import AwardEdit from "../../pages/AwardEdit";
 import Awards from "../../pages/Awards";
 import Banners from "../../pages/Banners";
+import BioMedicalWaste from "../../pages/BioMedicalWaste";
+import BioMedicalWasteCreate from "../../pages/BioMedicalWasteCreate";
+import BioMedicalWasteEdit from "../../pages/BioMedicalWasteEdit";
 import BlogCreate from "../../pages/BlogCreate";
 import BlogEdit from "../../pages/BlogEdit";
 import Blogs from "../../pages/Blogs";
@@ -165,6 +168,9 @@ const protectedRoutes = [
   { path: "/health-camps", Component: HealthCamps },
   { path: "/health-camps/new", Component: HealthCampCreate },
   { path: "/health-camps/:id/edit", Component: HealthCampEdit },
+  { path: "/bio-medical-waste", Component: BioMedicalWaste },
+  { path: "/bio-medical-waste/new", Component: BioMedicalWasteCreate },
+  { path: "/bio-medical-waste/:id/edit", Component: BioMedicalWasteEdit },
   { path: "/checkup-plans", Component: CheckupPlans },
   { path: "/checkup-plans/new", Component: CheckupPlanCreate },
   { path: "/checkup-plans/:id/edit", Component: CheckupPlanEdit },

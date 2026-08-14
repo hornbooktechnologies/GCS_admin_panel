@@ -206,7 +206,7 @@ export const IMAGE_REQUIREMENTS = Object.freeze({
     minWidth: 800,
     minHeight: 800,
     fit: "cover",
-    note: "Intended profile-photo format. Student testimonials are not currently rendered dynamically on the public site.",
+    note: "Profile photo shown dynamically in the public Student Testimonials section.",
   },
 });
 

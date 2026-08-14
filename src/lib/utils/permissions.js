@@ -19,6 +19,7 @@ export const PermissionModules = [
   { key: "awards", label: "Awards" },
   { key: "news", label: "News" },
   { key: "health-camps", label: "Health Camps" },
+  { key: "bio-medical-waste", label: "Biomedical Waste" },
   { key: "checkup-plans", label: "Checkup Plans" },
   { key: "results", label: "Results" },
   { key: "campus-life", label: "Campus Life" },

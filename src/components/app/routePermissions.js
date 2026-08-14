@@ -20,6 +20,7 @@ export const routePermissions = [
   { prefix: "/awards", moduleKey: "awards" },
   { prefix: "/news", moduleKey: "news" },
   { prefix: "/health-camps", moduleKey: "health-camps" },
+  { prefix: "/bio-medical-waste", moduleKey: "bio-medical-waste" },
   { prefix: "/checkup-plans", moduleKey: "checkup-plans" },
   { prefix: "/results", moduleKey: "results" },
   { prefix: "/campus-life", moduleKey: "campus-life" },
